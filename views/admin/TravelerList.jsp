@@ -33,8 +33,17 @@
 					<div class="col text-end">
 						<div class="row">
 			 				<div class="col text-end">
-			 					<a href="#"><img src="resources/se2/img/excel.png" width="50" height="50"></a>
-			 					<a href="#"><img src="resources/se2/img/printer.png" width="50" height="50"></a>
+			 					<a href="#" class="text-decoration-none">
+									<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="black" class="bi bi-file-earmark-excel-fill" viewBox="0 0 16 16">
+										<path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zM5.884 6.68L8 9.219l2.116-2.54a.5.5 0 1 1 .768.641L8.651 10l2.233 2.68a.5.5 0 0 1-.768.64L8 10.781l-2.116 2.54a.5.5 0 0 1-.768-.641L7.349 10 5.116 7.32a.5.5 0 1 1 .768-.64z" />
+									</svg>
+								</a>
+			 					<a href="#" class="text-decoration-none">
+									<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="black" class="bi bi-printer" viewBox="0 0 16 16">
+										<path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z" /> 
+										<path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z" />
+									</svg>
+								</a>
 			 				</div>
 			 			</div>
 					</div>

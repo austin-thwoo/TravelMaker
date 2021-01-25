@@ -25,8 +25,8 @@
 			<div class="col-3">
 				<%@ include file="../AdminNav.jsp" %>
 			</div>
-			<div class="col row h-100">
-				<div id="curve_chart"></div>
+			<div class="col row">
+				<div id="curve_chart" style="height: 800px"></div>
 				<div class="row container">
 		  			<div class="col text-center" role="group">
 		    			<button type="button" class="btn btn-dark btn-md">연별 매출</button>

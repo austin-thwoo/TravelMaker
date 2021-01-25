@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="Admin">
+ 	<insert id="boardCategoryInsert" parameterType="BoardCategory">
+ 		INSERT INTO BOARDCATEGORY(BCNUMBER, BCNAME)
+ 		VALUES(BCNUMBER_SEQ.NEXTVAL, #{BCNAME})
+ 	</insert>
+ 	
+ 	<select id="boardCategoryList" resultType="BoardCategory">
+ 		SELECT * FROM BOARDCATEGORY
+ 	</select>
+ 	
+ 	<insert id="packageInsert" parameterType="Package">
+ 		INSERT INTO PACKAGE(PNUMBER, PNAME, PIMG, PADULT, PCHILD, PINFANT, PPERIOD, PMIN, PMAX, PUPLOADDATE, PINFO)
+ 		VALUES(PNUMBER_SEQ.NEXTVAL, #{PNAME}, #{PIMG}, #{PADULT}, #{PCHILD}, #{PINFANT}, #{PPERIOD}, #{PMIN}, #{PMAX}, DEFAULT, #{PINFO})
+ 	</insert>
+ 	
+ 	<select id="adminJobList" parameterType="Member" resultType="AdminJobList">
+ 		SELECT *
+ 		FROM ADMINJOBLIST
+ 		WHERE MID = #{MID}
+ 	</select>
+ 	
+ 	<select id="categoryList" resultType="Category">
+ 		SELECT * FROM CATEGORY
+ 	</select>
+ 	
+ 	<insert id="categoryInsert" parameterType="Category">
+ 		INSERT INTO CATEGORY(CNUMBER, CNAME)
+ 		VALUES(CNUMBER_SEQ.NEXTVAL, #{CNAME})
+ 	</insert>
+ </mapper>

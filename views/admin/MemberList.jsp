@@ -16,40 +16,47 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<%@ include file="../Header.jsp" %>
+	<%@ include file="../Header.jsp"%>
 	<div class="my-1">
-		<%@ include file="../AdminNav.jsp" %>
+		<%@ include file="../MainNav.jsp" %>
 	</div>
-	<div class="justify-content-center text-center">
-		<h1>MemberList</h1>
-		<table class="table table-striped">
-			<tr>
-				<th>아이디</th>
-				<th>닉네임</th>
-				<th>이름</th>
-				<th>연락처</th>
-				<th>성별</th>
-				<th>상태</th>
-				<th>가입일</th>
-				<th>신고된 게시글 수</th>
-				<th>신고된 댓글 수</th>
-				<th>정지 횟수</th>
-				<th>정지</th>
-			</tr>
-			<tr>
-				<td><a href="#">testID</a></td>
-				<td>testNick</td>
-				<td>테스트</td>
-				<td>00000000000</td>
-				<td>남</td>
-				<td>활동</td>
-				<td>2021-01-20 00:00:00</td>
-				<td><a href="#">6</a></td>
-				<td><a href="#">15</a></td>
-				<td>0</td>
-				<td><button class="btn btn-primary btn-md">정지</button></td>
-			</tr>
-		</table>
+	<div class="container">
+		<div class="row">
+			<div class="col-3">
+				<%@ include file="../MyPageNav.jsp"%>
+			</div>
+			<div class="col">
+				<h1>MemberList</h1>
+				<table class="table table-striped">
+					<tr>
+						<th>아이디</th>
+						<th>닉네임</th>
+						<th>이름</th>
+						<th>연락처</th>
+						<th>성별</th>
+						<th>상태</th>
+						<th>가입일</th>
+						<th>신고 게시글</th>
+						<th>신고  댓글</th>
+						<th>정지 횟수</th>
+						<th>정지</th>
+					</tr>
+					<tr>
+						<td><a href="#">testID</a></td>
+						<td>testNick</td>
+						<td>테스트</td>
+						<td>00000000000</td>
+						<td>남</td>
+						<td>활동</td>
+						<td>2021-01-20 00:00:00</td>
+						<td><a href="#">6</a></td>
+						<td><a href="#">15</a></td>
+						<td>0</td>
+						<td><button class="btn btn-primary btn-md">정지</button></td>
+					</tr>
+				</table>
+			</div>
+		</div>
 	</div>
 	<%@ include file="../PageUp.jsp" %>
 </body>

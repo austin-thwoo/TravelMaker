@@ -26,17 +26,21 @@
 				<%@ include file="../MyPageNav.jsp"%>
 			</div>
 			<div class="col">	
-	<div class="justify-content-center text-start">
-		<h1>비밀번호를 찾는 페이지</h1>
-		<h1>아이디를 입력 받는다. 비밀번호는 api를 이용한다.</h1>
-		<form action="searchPassword" method="get" name="searchPasswordForm">
-			아이디: <input type="text" name=""><br>
-			전화번호: <input type="text" name=""><br>
-		<button onclick="">다음</button>
-		</form>
-		
+				<div class="justify-content-start text-start">
+					<h1>비밀번호 찾기</h1>
+					<div class="col-7">
+					<form action="searchPassword" method="get" name="searchPasswordForm">
+						<label for="MEMAIL" class="form-label">이메일</label>
+						<div class="input-group">
+							<input class="form-control" type="email" name="" id="MEMAIL" aria-describedby="emailButton">
+							<button class="btn btn-primary btm-md" id="emailButton">임시 비밀번호 전송</button>
+						</div>
+					</form>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-</div>
 	<%@ include file="../PageUp.jsp" %>
 </body>
 <footer>

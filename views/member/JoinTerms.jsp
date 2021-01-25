@@ -29,7 +29,7 @@
 					<div class="input-group justify-content-center">
 						<textarea rows="20" cols="100" class="textarea" style="resize: none;" readonly>여행약관 내용 이지롱</textarea>
 					</div>
-					<div class="text-center">
+					<div class="text-center mb-3">
 						<input type="checkbox"> 회원가입 약관에 동의합니다.
 					</div>
 					
@@ -37,7 +37,7 @@
 					<div class="input-group justify-content-center">
 						<textarea rows="20" cols="100" class="textarea" style="resize: none;" readonly>개인정보 취급 처리 내용이지로옹</textarea>
 					</div>
-					<div class="text-center">
+					<div class="text-center mb-3">
 						<input type="checkbox"> 개인정보취급방침에 동의합니다.
 					</div>
 					
@@ -45,7 +45,7 @@
 					<div class="input-group justify-content-center">
 						<textarea rows="20" cols="100" class="textarea" style="resize: none;" readonly>해외여행표준약관 내용이지로옹</textarea>
 					</div>
-					<div class="text-center">
+					<div class="text-center mb-3">
 						<input type="checkbox"> 해외여행표준약관 동의합니다.
 					</div>
 					
@@ -53,7 +53,7 @@
 					<div class="input-group justify-content-center">
 						<textarea rows="20" cols="100" class="textarea" style="resize: none;" readonly>국내여행표준약관 내용이지로옹</textarea>
 					</div>
-					<div class="text-center">
+					<div class="text-center mb-3">
 						<input type="checkbox"> 국내여행표준약관 동의합니다.
 					</div>
 					

@@ -22,25 +22,25 @@
 	</div>
 	<div class="row container-fluid justify-content-center">
 		<div class="col-md-4 text-center">
-			<form action="#">
+			<form action="login" method="POST">
 				<h1>LogIn</h1>
 				<div class="container-fluid text-start">
 					<label class="form-label" for="MID">Email</label>
 					<div class="input-group">
-						<input class="form-control" type="email" id="MID" name="" required="required">
+						<input class="form-control" type="email" id="MID" name="MID" required="required">
 					</div>
 					
 					<label class="form-label" for="MPW">비밀번호</label>
 					<div class="input-group mb-1">
-						<input class="form-control" type="password" id="MPW" name="" required="required">
+						<input class="form-control" type="password" id="MPW" name="MPW" required="required">
 					</div>
 					
 					<div class="text-center mb-1 mt-3">
-						<button class="btn btn-primary btn-md">LogIn</button>
+						<button class="btn btn-primary btn-md" type="submit">LogIn</button>
 					</div>
 					
 					<div class="text-center mb-2">
-						<a href="#">Join</a>
+						<a href="goJoinForm">Join</a>
 					</div>
 				</div>
 			</form>

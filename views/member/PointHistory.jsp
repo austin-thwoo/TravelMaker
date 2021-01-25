@@ -18,51 +18,52 @@
 <body>
 	<%@ include file="../Header.jsp"%>
 	<div class="my-1">
-		<%@ include file="../MyPageNav.jsp"%>
+		<%@ include file="../MainNav.jsp"%>
 	</div>
-	<div class="justify-content-center text-center container">
-	<h1>PointHistory</h1>
+	<div class="container">
 		<div class="row">
-			<table class="table table-striped text-center">
-				<tr>
-					<th>슈퍼마리오님</th>
-					<th>잔액 10,00p</th>
-				</tr>
-				<tr>
-					<th>미사용 포인트 쿠폰</th>
-					<th>1000P x 3</th>
-				</tr>
-				<tr>
-					<th>총 잔액</th>
-					<th>13,000P</th>
-				</tr>
-				<tr>
-					<th>현재까지 받은 총Point</th>
-					<th>20,000</th>
-				</tr>
-			</table>
-		</div>
-		<div class="row">
-			<table class="table table-striped text-center">
-				<tr>
-					<th>적립+</th>
-					<th>동남아 7일 버섯먹방 여행</th>
-					<th>1000P</th>
-				</tr>
-				<tr>
-					<th>사용+</th>
-					<th>대한민국 5일 김치먹방 여행</th>
-					<th>1000P</th>
-				</tr>
-				<tr>
-					<th>적립+</th>
-					<th>유럽 15일 치즈먹방 여행</th>
-					<th>2000P</th>
-				</tr>
-			</table>
+			<div class="col-3">
+				<%@ include file="../MyPageNav.jsp" %>
+			</div>
+			<div class="col">
+				<h1>PointHistory</h1>
+				<table class="table">
+					<tr>
+						<th>닉네임</th>
+						<th>포인트 잔액</th>
+					</tr>
+					<tr>
+						<td>닉네임</td>
+						<td>13,000P</td>
+					</tr>
+				</table>
+				<h3>사용 내역</h3>
+				<table class="table">
+					<tr>
+						<th>포인트 갱신</th>
+						<th>내용</th>
+						<th>금액</th>
+					</tr>
+					<tr class="table-primary">
+						<td>적립</td>
+						<td>동남아 7일 버섯먹방 여행</td>
+						<td>+ 1000P</td>
+					</tr>
+					<tr class="table-danger">
+						<td>사용</td>
+						<td>대한민국 5일 김치먹방 여행</td>
+						<td>- 1000P</td>
+					</tr>
+					<tr class="table-primary">
+						<td>적립</td>
+						<td>유럽 15일 치즈먹방 여행</td>
+						<td>+ 2000P</td>
+					</tr>
+				</table>
+			</div>
 		</div>
 	</div>
-	<%@ include file="../PageUp.jsp" %>
+	<%@ include file="../PageUp.jsp"%>
 </body>
 <footer>
 	<%@ include file="../Footer.jsp"%>

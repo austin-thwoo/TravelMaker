@@ -18,30 +18,34 @@
 <body>
 	<%@ include file="../Header.jsp"%>
 	<div class="my-1">
-		<%@ include file="../MyPageNav.jsp" %>
+		<%@ include file="../MainNav.jsp" %>
 	</div>
 	<div class="container">
-		<header>
-			<h1>CommentList</h1>
-		</header>
-		<table class="table table-striped">
-			<thead>
-				<tr>
-					<th>게시글 번호</th>
-					<th>게시글 제목</th>
-					<th>댓글내용</th>
-					<th>작성자</th>
-					<th>등록일</th>
-				</tr>
-			</thead>
-			<tr>
-				<td>1</td>
-				<td><a href="#">게시글 제목</a></td>
-				<td>퍼가요~</td>
-				<td>파이리</td>
-				<td>2021-01-19</td>
-			</tr>
-		</table>
+		<div class="row">
+			<div class="col-3">
+				<%@ include file="../MyPageNav.jsp" %>
+			</div>
+			<div class="col justify-content-start">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>게시글 번호</th>
+							<th>게시글 제목</th>
+							<th>댓글내용</th>
+							<th>작성자</th>
+							<th>등록일</th>
+						</tr>
+					</thead>
+					<tr>
+						<td>1</td>
+						<td><a href="#">게시글 제목</a></td>
+						<td>퍼가요~</td>
+						<td>파이리</td>
+						<td>2021-01-19</td>
+					</tr>
+				</table>
+			</div>
+		</div>
 	</div>
 	<%@ include file="../PageUp.jsp" %>
 </body>

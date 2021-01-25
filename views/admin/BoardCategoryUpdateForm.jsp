@@ -16,25 +16,23 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<%@ include file="../Header.jsp"%>
-	<div class="my-1">
-		<%@ include file="../AdminNav.jsp" %>
-	</div>
+<div class="row justify-content-center">
+	<div class="col-3">
 	<div class="container">
-	<h2>BoardCategoriUpdate</h2>
+	<h4>BoardCategoriUpdate</h4>
 	    <form action="/updateProc" method="post">
 	      <div class="form-group">
 	        <label for="subject">수정할 카테고리</label>
 	        <input type="text" class="form-control" id="subject" name="subject" value="">
 	      </div>
-	      
-	      <input type="hidden" name="bno" value=""/></br>
+	    
+	      <input type="hidden" name="bno" value=""/><br>
 	      <button type="submit" class="btn btn-primary">수정</button>
-	    </form>
+	      <button type="submit" class="btn btn-primary">취소</button>
+	    </form> 
+	     </div>
+	     </div>
 	</div>
-	<%@ include file="../PageUp.jsp" %>
 </body>
-<footer>
-	<%@ include file="../Footer.jsp"%>
-</footer>
+
 </html>

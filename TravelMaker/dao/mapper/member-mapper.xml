@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="Member">
+ 	<select id="login" parameterType="Member" resultType="Member">
+ 		SELECT MID,
+		MNICK,
+		MLEVEL
+		FROM MEMBER
+		WHERE MID = #{MID} AND MPW = #{MPW} AND MSTATE = 1
+ 	</select>
+ 	
+ 	<insert id="accessInsert" parameterType="Member">
+ 		INSERT INTO ACCESSHISTORY(MID, AHDATE)
+ 		VALUES(#{MID}, DEFAULT)
+ 	</insert>
+ 	
+ 	<select id="myPage" parameterType="Member" resultType="MyInfo">
+ 		SELECT *
+		FROM MEMBER
+		WHERE MID = #{MID}
+ 	</select>
+ 	
+ 	<select id="idCheck" parameterType="Member" resultType="String">
+ 		SELECT COUNT(MID)
+ 		FROM MEMBER
+ 		WHERE MID = #{MID}
+ 	</select>
+ 	
+ 	<select id="nickCheck" parameterType="Member" resultType="String">
+ 		SELECT COUNT(MID)
+ 		FROM MEMBER
+ 		WHERE MNICK = #{MNICK}
+ 	</select>
+ 	
+ 	<insert id="memberJoin" parameterType="Member">
+ 		INSERT INTO MEMBER(MID, MPW, MNAME, MPHONE, MGENDER, MBIRTH, MLEVEL, MSTATE, MNICK, MDATE)
+ 		VALUES(#{MID}, #{MPW}, #{MNAME}, #{MPHONE}, #{MGENDER}, #{MBIRTH}, #{MLEVEL}, 1, #{MNICK}, DEFAULT)
+ 	</insert>
+ </mapper>

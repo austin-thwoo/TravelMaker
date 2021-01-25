@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="Board">
+ 	<insert id="boardInsert">
+ 		INSERT INTO BOARD(BNUMBER, MID, BDATE, BTITLE, BCONTENT, BIMG, BCNUMBER)
+ 		VALUES(BNUMBER_SEQ.NEXTVAL, #{MID}, SYSDATE, #{BTITLE}, #{BCONTENT}, #{BIMG}, #{BCNUMBER})
+ 	</insert>
+ </mapper>

@@ -26,19 +26,26 @@
 				<%@ include file="../AdminNav.jsp" %>
 			</div>
 			<div class="col justify-content-center">
-				<h1>AdminPage 에 보일 내용</h1>
+				<h1>할 일 목록</h1>
 				<table class="table table-striped">
 					<tr>
 						<th>작성일</th>
 						<th>할 일</th>
 					</tr>
-					<tr>
-						<th>2021-01-22</th>
-						<th>프론트 레이아웃 완성 및 취합</th>
-					</tr>
+					<c:forEach items="${jobList}" var="i">
+						<tr>
+							<th>${i.getADATE()}</th>
+							<th>${i.getAJOB()}</th>
+						</tr>
+					</c:forEach>
 				</table>
+				<div class="input-group mb-1">
+			<input type="text" name="" class="form-control" aria-describedby="button-addon2">
+			<button type="button" id="button-addon2" class="btn btn-primary">작성</button>
+		</div>
 			</div>
 		</div>
+		
 	</div>
 	<%@ include file="../PageUp.jsp" %>
 </body>

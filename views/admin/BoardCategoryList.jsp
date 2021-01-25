@@ -35,37 +35,23 @@
 				      <th class="text-end">상태</th>
 				    </tr>
 				  </thead>
-				  <tbody>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>자유게시판</td>
-				      <td class="text-end">
-				      	<button type="submit" class="btn btn-primary btn-md">수정</button>
-				      	<button type="button" class="btn btn-primary btn-md">잠금</button>
-				      </td>
-				    </tr>
-				    <tr>
-				      <th scope="row">2</th>
-				      <td>후기게시판</td>
-				      <td class="text-end">
-				      	<button type="submit" class="btn btn-primary btn-md">수정</button>
-				      	<button type="button" class="btn btn-primary btn-md">잠금</button>
-				      </td>
-				    </tr>
-				    <tr>
-				      <th scope="row">3</th>
-				      <td>ㅇㅇ게시판</td>
-				      <td class="text-end">
-				      	<button type="submit" class="btn btn-primary btn-md">수정</button>
-				      	<button type="button" class="btn btn-primary btn-md">잠금</button>
-				      </td>
-				    </tr>
+				  <tbody id="boardCategoryInsertResult">
+				  	<c:forEach items="${boardCategoryList}" var="i">
+					    <tr>
+					      <th>${i.getBCNUMBER()}</th>
+					      <td>${i.getBCNAME()}</td>
+					      <td class="text-end">
+					      	<button class="btn btn-primary btn-md me-1">수정</button>
+					      	<button class="btn btn-primary btn-md">잠금</button>
+					      </td>
+					    </tr>
+				  	</c:forEach>
 				  </tbody>
 				</table>
 				<div class="row justify-content-end text-end">
 					<div class="input-group w-25">
-						<input class="form-control" type="text"aria-describedby="button-addon">
-						<button type="submit" class="btn btn-success" id="button-addon">등록하기</button>
+						<input class="form-control" type="text"aria-describedby="button-addon" id="BCNAME">
+						<button class="btn btn-primary" id="button-addon" onclick="boardCategoryInsert()">등록하기</button>
 					</div>
 				</div>
 			</div>
@@ -76,4 +62,32 @@
 <footer>
 	<%@ include file="../Footer.jsp"%>
 </footer>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+	function boardCategoryInsert(){
+		$.ajax({
+			url : "boardCategoryInsert",
+			data : {"BCNAME" : $("#BCNAME").val()},
+			type : "get",
+			dataType : "json",
+			success : function(result){
+						var htmlResult = "";
+						for (var i in result) {
+							htmlResult += "<tr>" +
+											"<th>" + result[i].BCNUMBER + "</th>" +
+											"<td>" + result[i].BCNAME + "</td>" +
+											"<td class='text-end'>" +
+												"<button class='btn btn-primary btn-md me-1'>수정</button>" +
+					    	  					"<button class='btn btn-primary btn-md'>잠금</button>" +
+      										"</td>" +
+    									"</tr>";
+						}
+						$("#boardCategoryInsertResult").html(htmlResult);
+			}
+		})
+		.done(function(result){
+			console.log(result);
+		});
+	}
+</script>
 </html>

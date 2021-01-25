@@ -60,27 +60,27 @@
 				<table class="table table-striped text-center">
 					<tr>
 						<th>이메일</th>
-						<th>test@test.com</th>
+						<th>${myInfo.getMID()}</th>
 					</tr>
 					<tr>
 						<th>이름</th>
-						<th>김수한무거북이와두루미</th>
+						<th>${myInfo.getMNAME()}</th>
 					</tr>
 					<tr>
 						<th>닉네임</th>
-						<th>슈퍼마리오</th>
+						<th>${myInfo.getMNICK()}</th>
 					</tr>
 					<tr>
 						<th>전화번호</th>
-						<th>010-2874-1388</th>
+						<th>${myInfo.getMPHONE()}</th>
 					</tr>
 					<tr>
 						<th>성별</th>
-						<th>자웅동체</th>
+						<th>${myInfo.getMGENDER()}</th>
 					</tr>
 					<tr>
 						<th>생일</th>
-						<th>01.25입니다 뭐 딱히 바라는건 아니구요ㅋㅁㅋ</th>
+						<th>${myInfo.getMBIRTH()}</th>
 					</tr>
 					<tr>
 						<th>잔여 포인트</th>

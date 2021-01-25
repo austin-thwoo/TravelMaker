@@ -26,6 +26,7 @@
 							<label for="content">신고사유</label>
 							<textarea class="form-control"></textarea>
 							<button type="submit" class="btn btn-danger">신고</button>
+													<button type="submit" class="btn btn-danger">취소</button>
 						</div>
 					</div>
 				</div>

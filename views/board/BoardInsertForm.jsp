@@ -21,25 +21,24 @@
 		<%@ include file="../MainNav.jsp"%>
 	</div>
 	<div class="container">
-		<form action="#" method="post">
+		<form action="boardInsert" method="post" id="boardInsertform" enctype="multipart/form-data">
 			<div class="input-group mb-1">
-				<select class="from-select-sm rounded-start" id="BTITLE">
-					<option>공지</option>
-					<option>후기</option>
-					<option>자유</option>
-					<option>이벤트</option>
-				</select> <input type="text" class="form-control" name=""
-					placeholder="제목을 입력하세요." aria-describedby="BTITLE">
+				<select class="from-select-sm rounded-start" id="BTITLE" name="BCNUMBER">
+					<option value="1">공지</option>
+					<option value="2">자유</option>
+					<option value="3">후기</option>
+				</select>
+				<input type="text" class="form-control" name="BTITLE" placeholder="제목을 입력하세요." aria-describedby="BTITLE">
 			</div>
 			<div class="input-group mb-1">
-				<!-- 크기 내 노트복 화면에 맞춘거라 다시 조절 필요 -->
-				<textarea name="" id="ir1" rows="20" cols="100"> 이 곳에 글을 작성해보아요~~~</textarea>
+				<textarea name="BCONTENT" id="ir1" rows="20" cols="181"></textarea>
 			</div>
-	      	<!-- <div class="input-group mb-1">
-	      		<input type="file" class="form-control" name="" accept="image/*">
-	      	</div> -->
+	      	<div class="input-group mb-1">
+	      		<input type="file" class="form-control" name="BIMGFILE" accept="image/*">
+	      	</div>
 			<div class="text-end">
-				<button type="submit" class="btn btn-primary">작성</button>
+				<input type="hidden" name="MID" value="${sessionScope.loginInfo.getMID()}">
+				<button class="btn btn-primary" onclick="submitContents()">작성</button>
 			</div>
 		</form>
 	</div>
@@ -48,31 +47,21 @@
 <footer>
 	<%@ include file="../Footer.jsp"%>
 </footer>
-
-</html>
-<!-- 이거 경로를 잘 맞춰 줘야함 나는 이미지폴더와 같은 레벨에 se2폴더를 만들어서 넣었음  -->
-<script type="text/javascript" src="resources/se2/js/HuskyEZCreator.js"
-	charset="utf-8"></script>
+<script type="text/javascript" src="resources/se2/js/HuskyEZCreator.js" charset="utf-8"></script>
 <script>
-//‘저장’ 버튼을 누르는 등 저장을 위한 액션을 했을 때 submitContents가 호출된다고 가정한다.
-function submitContents(elClickedObj) {
- // 에디터의 내용이 textarea에 적용된다.
- oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", [/* 이게 무엇일까...? */]);
+    function submitContents() {
+        oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", []);
+         try {
+             document.getElementById("boardInsertform").submit();
+         } catch(e) {}
+    }
 
- // 에디터의 내용에 대한 값 검증은 이곳에서
- // document.getElementById("ir1").value를 이용해서 처리한다.
-
- try {
-     elClickedObj.form.submit();
- } catch(e) {}
+    var oEditors = [];
+    nhn.husky.EZCreator.createInIFrame({
+         oAppRef: oEditors,
+         elPlaceHolder: "ir1",
+         sSkinURI: "resources/se2/SmartEditor2Skin.html",
+         fCreator: "createSEditor2"
+    });
 </script>
-<!-- 종원아 이거는 textarea밑에 있어야 오류가 안난대 html 태그 밖에 써야한대-->
-<script type="text/javascript">
-var oEditors = [];
-nhn.husky.EZCreator.createInIFrame({
- oAppRef: oEditors,
- elPlaceHolder: "ir1",
- sSkinURI: "resources/se2/SmartEditor2Skin.html",
- fCreator: "createSEditor2"
-});
-</script>
+</html>

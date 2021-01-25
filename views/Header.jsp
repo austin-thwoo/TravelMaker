@@ -11,28 +11,28 @@
 			<div>
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 				<c:choose>
-					<c:when test="${empty sessionScope.signInInfo}">
+					<c:when test="${empty sessionScope.loginInfo}">
 						<li class="nav-item">
-							<a class="nav-link" href="#">LogIn</a>
+							<a class="nav-link" href="goLoginForm">LogIn</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#">Join</a>
+							<a class="nav-link" href="goJoinForm">Join</a>
 						</li>
 					</c:when>
 					<c:otherwise>
 						<li class="nav-item">
-							<span class="nav-link">${sessionScope.signInId}님</span>
+							<span class="nav-link">${sessionScope.loginInfo.getMNICK()}님</span>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#">MyPage</a>
+							<a class="nav-link" href="myPage?MID=${sessionScope.loginInfo.getMID()}">MyPage</a>
 						</li>
-						<c:if test="${sessionScope.signInInfo.getMlevel() ne 1}">
+						<c:if test="${sessionScope.loginInfo.getMLEVEL() eq 0}">
 							<li class="nav-item">
-								<a class="nav-link" href="#">AdminPage</a>
+								<a class="nav-link" href="adminPage?MID=${sessionScope.loginInfo.getMID()}">AdminPage</a>
 							</li>
 						</c:if>
 						<li class="nav-item">
-							<a class="nav-link" href="#">LogOut</a>
+							<a class="nav-link" href="logout">LogOut</a>
 						</li>
 					</c:otherwise>
 				</c:choose>
