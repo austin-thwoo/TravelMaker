@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <html>
@@ -28,20 +29,25 @@
 			<div class="col justify-content-center">
 				<h1>할 일 목록</h1>
 				<table class="table table-striped">
-					<tr>
-						<th>작성일</th>
-						<th>할 일</th>
-					</tr>
-					<c:forEach items="${jobList}" var="i">
+					<thead>
 						<tr>
-							<th>${i.getADATE()}</th>
-							<th>${i.getAJOB()}</th>
+							<th>작성일</th>
+							<th>할 일</th>
 						</tr>
-					</c:forEach>
+					</thead>
+					<tbody id="jobListInsertResult">
+						<c:forEach items="${jobList}" var="i">
+							<tr>
+								<th>${fn:substring(i.getADATE(),0,16)}</th>
+								<th>${i.getAJOB()}</th>
+							</tr>
+						</c:forEach>
+					</tbody>
 				</table>
 				<div class="input-group mb-1">
-			<input type="text" name="" class="form-control" aria-describedby="button-addon2">
-			<button type="button" id="button-addon2" class="btn btn-primary">작성</button>
+			<input type="text" id="AJOB" class="form-control" aria-describedby="button-addon2">
+			<input type="hidden" id="MID" value="${sessionScope.loginInfo.getMID()}">
+			<button type="button" id="button-addon2" class="btn btn-primary" onclick="jobListInsert()">작성</button>
 		</div>
 			</div>
 		</div>
@@ -52,4 +58,29 @@
 <footer style="clear: both;">
 	<%@ include file="../Footer.jsp" %>
 </footer>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+	function jobListInsert(){
+		$.ajax({
+			url : "jobListInsert",
+			data : {
+				"AJOB" : $("#AJOB").val(),
+				"MID" : $("#MID").val()
+				},
+			method : "get",
+			dataType : "json",
+			success : function(result){
+				var htmlResult = "";
+				for ( var i in result) {
+					htmlResult += "<tr>" +
+									"<th>" + result[i].ADATE + "</th>" +
+									"<th>" + result[i].AJOB + "</th>" +
+								"</tr>";
+				}
+				$("#AJOB").val("");
+				$("#jobListInsertResult").html(htmlResult);
+			}
+		});
+	}
+</script>
 </html>

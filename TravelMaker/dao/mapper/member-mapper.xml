@@ -38,4 +38,81 @@
  		INSERT INTO MEMBER(MID, MPW, MNAME, MPHONE, MGENDER, MBIRTH, MLEVEL, MSTATE, MNICK, MDATE)
  		VALUES(#{MID}, #{MPW}, #{MNAME}, #{MPHONE}, #{MGENDER}, #{MBIRTH}, #{MLEVEL}, 1, #{MNICK}, DEFAULT)
  	</insert>
+ 	
+ 	<select id="preferenceList" parameterType="Member" resultType="Category">
+ 		SELECT MEMBERPREFERENCE.CNUMBER,
+    		CATEGORY.CNAME
+		FROM MEMBERPREFERENCE INNER JOIN CATEGORY ON MEMBERPREFERENCE.CNUMBER = CATEGORY.CNUMBER
+		WHERE MID = #{MID}
+		ORDER BY CNUMBER
+ 	</select>
+ 	
+ 	<select id="cartList" parameterType="Member" resultType="CartList">
+ 		SELECT PACKAGECART.MID,
+			PACKAGE.PIMG,
+			PACKAGE.PNAME,
+			PACKAGECART.PNUMBER,
+			PACKAGECART.PSPNUMBER,
+			PACKAGECART.PSSTART,
+			PACKAGECART.PSEND,
+			ORDERS.OSTATE
+		FROM PACKAGECART INNER JOIN PACKAGE ON PACKAGECART.PNUMBER = PACKAGE.PNUMBER
+						INNER JOIN ORDERS ON PACKAGECART.PSPNUMBER = ORDERS.PSPNUMBER
+		WHERE PACKAGECART.MID=#{MID}
+ 	</select>
+ 	
+ 	<select id="likeList" parameterType="Member" resultType="LikeList">
+ 		SELECT PACKAGE.PNAME,
+		    PACKAGE.PINFO,
+		    PACKAGELIKE.PNUMBER,
+		    PACKAGELIKE.MID,
+		    PACKAGE.PIMG
+		FROM PACKAGELIKE INNER JOIN PACKAGE ON PACKAGELIKE.PNUMBER = PACKAGE.PNUMBER
+		WHERE PACKAGELIKE.MID = #{MID}
+ 	</select>
+ 	
+ 	<select id="myBoardList" parameterType="java.util.Map" resultType="BoardList">
+	 	SELECT BOARD.BNUMBER,
+	    			BOARD.BTITLE,
+	    			BOARD.BDATE,
+	    			BOARD.BIMG,
+	    			BOARDCATEGORY.BCNAME,
+	    			MEMBER.MNICK,
+	    			BV.BOARDVIEWS,
+	    			BL.BOARDLIKE,
+	    			BC.BOARDCOMPLAINT
+		FROM BOARD INNER JOIN MEMBER ON BOARD.MID = MEMBER.MID
+	            	INNER JOIN BOARDCATEGORY ON BOARD.BCNUMBER = BOARDCATEGORY.BCNUMBER
+	           		LEFT OUTER JOIN (SELECT BNUMBER,
+	                                		COUNT(MID) AS "BOARDVIEWS"
+	                        		FROM BOARDVIEWS
+	                        		GROUP BY BNUMBER) BV ON BOARD.BNUMBER = BV.BNUMBER
+	            	LEFT OUTER JOIN (SELECT BNUMBER,
+	                                    	COUNT(MID) AS "BOARDLIKE"
+	                            	FROM BOARDLIKE
+	                            	GROUP BY BNUMBER) BL ON BOARD.BNUMBER = BL.BNUMBER
+	            	LEFT OUTER JOIN (SELECT BNUMBER,
+	                                    	COUNT(MID) AS "BOARDCOMPLAINT"
+	                            	FROM BOARDCOMPLAINT
+	                            	GROUP BY BNUMBER) BC ON BOARD.BNUMBER = BC.BNUMBER
+	    <include refid="search"></include>
+	    ORDER BY BNUMBER DESC
+ 	</select>
+ 	
+ 	<sql id="search">
+ 		<choose>
+ 			<when test="search == 0">
+ 				WHERE BOARD.MID = #{member.MID} AND BOARD.BCNUMBER != 3
+ 			</when>
+ 			<otherwise>
+ 				WHERE BOARD.MID = #{member.MID} AND BOARD.BCNUMBER = 3
+ 			</otherwise>
+ 		</choose>
+ 	</sql>
+ 	
+ 	<select id="pointHistory" parameterType="Member" resultType="Point">
+ 		SELECT *
+ 		FROM POINT
+ 		WHERE MID = #{MID}
+ 	</select>
  </mapper>

@@ -9,7 +9,9 @@
  	</insert>
  	
  	<select id="boardCategoryList" resultType="BoardCategory">
- 		SELECT * FROM BOARDCATEGORY
+ 		SELECT *
+		FROM BOARDCATEGORY
+		ORDER BY BCNUMBER
  	</select>
  	
  	<insert id="packageInsert" parameterType="Package">
@@ -18,17 +20,94 @@
  	</insert>
  	
  	<select id="adminJobList" parameterType="Member" resultType="AdminJobList">
- 		SELECT *
+ 		SELECT MID,
+ 			ADATE,
+ 			AJOB
  		FROM ADMINJOBLIST
  		WHERE MID = #{MID}
+ 		ORDER BY ADATE DESC
  	</select>
  	
  	<select id="categoryList" resultType="Category">
- 		SELECT * FROM CATEGORY
+ 		SELECT *
+		FROM CATEGORY
+		ORDER BY CNUMBER
  	</select>
  	
  	<insert id="categoryInsert" parameterType="Category">
  		INSERT INTO CATEGORY(CNUMBER, CNAME)
  		VALUES(CNUMBER_SEQ.NEXTVAL, #{CNAME})
  	</insert>
+ 	
+ 	<insert id="jobListInsert" parameterType="AdminJobList">
+ 		INSERT INTO ADMINJOBLIST(MID, ADATE, AJOB)
+ 		VALUES(#{MID}, DEFAULT, #{AJOB})
+ 	</insert>
+ 	
+ 	<select id="complaintBoardList" resultType="BoardList">
+ 		SELECT BOARD.BNUMBER,
+    			BOARD.BTITLE,
+    			BOARD.BDATE,
+    			BOARD.BIMG,
+    			BOARDCATEGORY.BCNAME,
+    			MEMBER.MNICK,
+    			BV.BOARDVIEWS,
+    			BL.BOARDLIKE,
+    			BC.BOARDCOMPLAINT
+		FROM BOARD INNER JOIN MEMBER ON BOARD.MID = MEMBER.MID
+            		INNER JOIN BOARDCATEGORY ON BOARD.BCNUMBER = BOARDCATEGORY.BCNUMBER
+           			LEFT OUTER JOIN (SELECT BNUMBER,
+                                			COUNT(MID) AS "BOARDVIEWS"
+                        			FROM BOARDVIEWS
+                        			GROUP BY BNUMBER) BV ON BOARD.BNUMBER = BV.BNUMBER
+            		LEFT OUTER JOIN (SELECT BNUMBER,
+                                    		COUNT(MID) AS "BOARDLIKE"
+                            		FROM BOARDLIKE
+                            		GROUP BY BNUMBER) BL ON BOARD.BNUMBER = BL.BNUMBER
+            		LEFT OUTER JOIN (SELECT BNUMBER,
+                                    		COUNT(MID) AS "BOARDCOMPLAINT"
+                            		FROM BOARDCOMPLAINT
+                            		GROUP BY BNUMBER) BC ON BOARD.BNUMBER = BC.BNUMBER
+ 		ORDER BY BNUMBER DESC
+ 	</select>
+ 	
+ 	<select id="travelerList" resultType="TravelerList">
+ 		SELECT TRAVELER.OPNUMBER,
+		    TRAVELER.ODATE,
+		    PACKAGE.PNAME,
+		    TRAVELER.TNAME,
+		    TRAVELER.TENNAME,
+		    TRAVELER.TBIRTH,
+		    TRAVELER.TEMAIL,
+		    TRAVELER.TPHONE,
+		    ORDERS.PSSTART,
+		    ORDERS.PSEND
+		FROM TRAVELER INNER JOIN PACKAGE ON TRAVELER.OPNUMBER = PACKAGE.PNUMBER
+		                INNER JOIN ORDERS ON TRAVELER.OPNUMBER = ORDERS.PNUMBER AND TRAVELER.ODATE = ORDERS.ODATE AND TRAVELER.OMID = ORDERS.MID
+		ORDER BY ODATE DESC
+ 	</select>
+ 	
+ 	<select id="complaintCommentsList" resultType="CommentsList">
+ 		SELECT COMMENTS.BNUMBER,
+			    BOARD.BTITLE,
+			    COMMENTS.MID,
+			    COMMENTS.CMDATE,
+			    COMMENTS.CMCONTENT,
+			    CC.COMMENTSCOMPLAINT,
+			    CL.COMMENTSLIKE
+			FROM COMMENTS LEFT OUTER JOIN (SELECT CMBNUMBER,
+			                                    CMMID,
+			                                    CMDATE,
+			                                    COUNT(MID) AS "COMMENTSCOMPLAINT"
+			                                FROM COMMENTSCOMPLAINT
+			                                GROUP BY CMBNUMBER, CMMID, CMDATE) CC ON COMMENTS.BNUMBER = CC.CMBNUMBER AND COMMENTS.MID = CC.CMMID AND COMMENTS.CMDATE = CC.CMDATE
+			            LEFT OUTER JOIN (SELECT CMBNUMBER,
+			                                    CMMID,
+			                                    CMDATE,
+			                                    COUNT(MID) AS "COMMENTSLIKE"
+			                                FROM COMMENTSLIKE
+			                                GROUP BY CMBNUMBER, CMMID, CMDATE) CL ON COMMENTS.BNUMBER = CL.CMBNUMBER AND COMMENTS.MID = CL.CMMID AND COMMENTS.CMDATE = CL.CMDATE
+			            INNER JOIN BOARD ON COMMENTS.BNUMBER = BOARD.BNUMBER
+		WHERE CC.COMMENTSCOMPLAINT > 0
+ 	</select>
  </mapper>

@@ -28,50 +28,19 @@
 			<div class="col container">
 				<h1>LikeLIst</h1>
 				<div class="row row-cols-1 row-cols-md-3 g-4">
-					<div class="col">
-						<div class="card">
-							<img src="" class="card-img-top" alt="패키지이미지">
-							<div class="card-body">
-								<h5 class="card-title">코카서스 3국 완전일주 18일</h5>
-								<p class="card-text">동서양 문화의 교충지, 실크로드 중심지 코카서스 3국 일주</p>
-								<a href="#" class="btn btn-primary">상세보기</a>
-								<a href="#" class="btn btn-primary">좋아요 취소</a>
+					<c:forEach items="${likeList}" var="i">
+						<div class="col">
+							<div class="card">
+								<img src="resources/packageFile/${i.getPIMG()}" class="card-img-top" alt="패키지이미지">
+								<div class="card-body">
+									<h5 class="card-title">${i.getPNAME() }</h5>
+									<p class="card-text">${i.getPINFO() }</p>
+									<a href="#" class="btn btn-primary">상세보기</a>
+									<a href="#" class="btn btn-primary">좋아요 취소</a>
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="col">	
-						<div class="card">
-							<img src="" class="card-img-top" alt="패키지이미지">
-							<div class="card-body">
-								<h5 class="card-title">코카서스 3국 완전일주 18일</h5>
-								<p class="card-text">동서양 문화의 교충지, 실크로드 중심지 코카서스 3국 일주</p>
-								<a href="#" class="btn btn-primary">상세보기</a>
-								<a href="#" class="btn btn-primary">좋아요 취소</a>
-							</div>
-						</div>
-					</div>
-					<div class="col">
-						<div class="card">
-							<img src="" class="card-img-top" alt="패키지이미지">
-							<div class="card-body">
-								<h5 class="card-title">코카서스 3국 완전일주 18일</h5>
-								<p class="card-text">동서양 문화의 교충지, 실크로드 중심지 코카서스 3국 일주</p>
-								<a href="#" class="btn btn-primary">상세보기</a>
-								<a href="#" class="btn btn-primary">좋아요 취소</a>
-							</div>
-						</div>
-					</div>
-					<div class="col">
-						<div class="card">
-							<img src="" class="card-img-top" alt="패키지이미지">
-							<div class="card-body">
-								<h5 class="card-title">코카서스 3국 완전일주 18일</h5>
-								<p class="card-text">동서양 문화의 교충지, 실크로드 중심지 코카서스 3국 일주</p>
-								<a href="#" class="btn btn-primary">상세보기</a>
-								<a href="#" class="btn btn-primary">좋아요 취소</a>
-							</div>
-						</div>
-					</div>
+					</c:forEach>
 				</div>
 			</div>
 		</div>

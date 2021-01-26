@@ -1,7 +1,5 @@
 package com.icia.TravelMaker.controller;
 
-import java.io.Writer;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +55,7 @@ public class MemberConroller {
 	}
 	
 	@RequestMapping(value="/logout")
-	public ModelAndView memberLogout() {
+	private ModelAndView memberLogout() {
 		mav();
 		session.invalidate();
 		mav.setViewName("Main");
@@ -65,7 +63,7 @@ public class MemberConroller {
 	}
 
 	@RequestMapping(value = "/myPage")
-	public ModelAndView myPage(@ModelAttribute MemberDTO dto) {
+	private ModelAndView myPage(@ModelAttribute MemberDTO dto) {
 		mav();
 		mav.addObject("myInfo", service.myPage(dto));
 		mav.setViewName("member/MyPage");
@@ -73,23 +71,63 @@ public class MemberConroller {
 	}
 
 	@RequestMapping(value = "/idCheck")
-	public @ResponseBody String idCheck(@ModelAttribute MemberDTO dto) {
+	private @ResponseBody String idCheck(@ModelAttribute MemberDTO dto) {
 		return service.idCheck(dto);
 	}
 
 	@RequestMapping(value = "/nickCheck")
-	public @ResponseBody String nickCheck(@ModelAttribute MemberDTO dto) {
+	private @ResponseBody String nickCheck(@ModelAttribute MemberDTO dto) {
 		return service.nickCheck(dto);
 	}
 	
 	@RequestMapping(value = "/memberJoin")
-	public ModelAndView signup(@ModelAttribute MemberDTO dto){
+	private ModelAndView signup(@ModelAttribute MemberDTO dto){
 		mav();
 		if(service.memberJoin(dto) == 1) {
 			mav.setViewName("member/LoginForm");
 		}else {
 			mav.setViewName("member/JoinForm");
 		}
+		return mav;
+	}
+
+	@RequestMapping(value = "/goPreferenceList")
+	private ModelAndView goPreferenceList(@ModelAttribute MemberDTO dto) {
+		mav();
+		mav.addObject("preferenceList", service.preferenceList(dto)); 
+		mav.setViewName("member/PreferenceList");
+		return mav;
+	}
+
+	@RequestMapping(value = "/goCartList")
+	private ModelAndView goCartList(@ModelAttribute MemberDTO dto) {
+		mav();
+		mav.addObject("cartList", service.cartList(dto));
+		mav.setViewName("member/CartList");
+		return mav;
+	}
+
+	@RequestMapping(value = "/likeList")
+	private ModelAndView likeList(@ModelAttribute MemberDTO dto) {
+		mav();
+		mav.addObject("likeList", service.listList(dto));
+		mav.setViewName("member/LikeList");
+		return mav;
+	}
+
+	@RequestMapping(value = "/myBoardList")
+	private ModelAndView myBoardList(@ModelAttribute MemberDTO dto) {
+		mav();
+		mav.addObject("boardList", service.myBoardList(dto, 0));
+		mav.setViewName("member/MyBoardList");
+		return mav;
+	}
+
+	@RequestMapping(value = "/goPointHistory")
+	public ModelAndView goPointHistory(@ModelAttribute MemberDTO dto) {
+		mav();
+		mav.addObject("pointHistory", service.pointHistory(dto));
+		mav.setViewName("member/PointHistory");
 		return mav;
 	}
 

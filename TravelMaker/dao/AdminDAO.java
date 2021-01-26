@@ -8,9 +8,12 @@ import org.springframework.stereotype.Repository;
 
 import com.icia.TravelMaker.dto.AdminJobListDTO;
 import com.icia.TravelMaker.dto.BoardCategoryDTO;
+import com.icia.TravelMaker.dto.BoardListDTO;
 import com.icia.TravelMaker.dto.CategoryDTO;
+import com.icia.TravelMaker.dto.CommentsListDTO;
 import com.icia.TravelMaker.dto.MemberDTO;
 import com.icia.TravelMaker.dto.PackageDTO;
+import com.icia.TravelMaker.dto.TravelerListDTO;
 
 @Repository
 public class AdminDAO {
@@ -40,6 +43,22 @@ public class AdminDAO {
 
 	public void categoryInsert(CategoryDTO dto) {
 		sql.insert("Admin.categoryInsert", dto);
+	}
+
+	public void jobListInsert(AdminJobListDTO dto) {
+		sql.insert("Admin.jobListInsert", dto);
+	}
+
+	public List<BoardListDTO> complaintBoardList() {
+		return sql.selectList("Admin.complaintBoardList");
+	}
+
+	public List<TravelerListDTO> travelerList() {
+		return sql.selectList("Admin.travelerList");
+	}
+
+	public List<CommentsListDTO> complaintCommentsList() {
+		return sql.selectList("Admin.complaintCommentsList");
 	}
 
 }

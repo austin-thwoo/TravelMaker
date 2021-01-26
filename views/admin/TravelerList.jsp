@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <html>
@@ -59,16 +60,18 @@
 						<th>이메일</th>
 						<th>연락처</th>
 					</tr>
-					<tr>
-						<td>미국001</td>
-						<td>우주여행</td>
-						<td>21.01.25-22.01.25</td>
-						<td>임형준</td>
-						<td>Lim HJ</td>
-						<td>1999.09.09</td>
-						<td>aa@aa.com</td>
-						<td>00000000000</td>
-					</tr>
+					<c:forEach items="${travelerList}" var="i">
+						<tr>
+							<td>${i.getOPNUMBER()}</td>
+							<td>${i.getPNAME()}</td>
+							<td>${fn:substring(i.getPSSTART(),0,10)} ~ ${fn:substring(i.getPSEND(),0,10)}</td>
+							<td>${i.getTNAME()}</td>
+							<td>${i.getTENNAME()}</td>
+							<td>${fn:substring(i.getTBIRTH(),0,10)}</td>
+							<td>${i.getTEMAIL()}</td>
+							<td>${i.getTPHONE()}</td>
+						</tr>
+					</c:forEach>
 				</table>
 			</div>
 		</div>

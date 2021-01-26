@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.icia.TravelMaker.dto.BoardCategoryDTO;
 import com.icia.TravelMaker.dto.BoardDTO;
 import com.icia.TravelMaker.service.BoardService;
 
@@ -25,8 +26,10 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = "/boardList")
-	public ModelAndView boardList() {
+	private ModelAndView boardList(@ModelAttribute BoardCategoryDTO dto) {
 		mav();
+		mav.addObject("boardList", service.boardList(dto));
+		mav.addObject("boardCategory", service.boardCategory(dto));
 		mav.setViewName("board/BoardList");
 		return mav;
 	}
@@ -39,13 +42,20 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = "/boardInsert")
-	public ModelAndView boardInsert(@ModelAttribute BoardDTO dto) throws IllegalStateException, IOException {
+	private ModelAndView boardInsert(@ModelAttribute BoardDTO dto) throws IllegalStateException, IOException {
 		mav();
 		if(service.boardInsert(dto) == 1) {
 			mav.setViewName("redirect:/boardList");
 		}else{
 			mav.setViewName("redirect:/goBoardInsertForm");
 		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/boardDetail")
+	private ModelAndView boardDetail() {
+		mav();
+		mav.setViewName("board/BoardDetail");
 		return mav;
 	}
 

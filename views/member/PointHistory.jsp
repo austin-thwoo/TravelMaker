@@ -33,8 +33,14 @@
 						<th>포인트 잔액</th>
 					</tr>
 					<tr>
-						<td>닉네임</td>
-						<td>13,000P</td>
+						<td>${sessionScope.loginInfo.getMNICK()}</td>
+						<td>
+							<c:set var="sum" value="0"></c:set>
+							<c:forEach  items="${pointHistory}" var="i">
+								<c:set var="sum" value="${sum + i.getPOAMOUNT() * i.getPOSTATE()}"></c:set>
+							</c:forEach>
+							${sum}
+						</td>
 					</tr>
 				</table>
 				<h3>사용 내역</h3>
@@ -44,21 +50,24 @@
 						<th>내용</th>
 						<th>금액</th>
 					</tr>
-					<tr class="table-primary">
-						<td>적립</td>
-						<td>동남아 7일 버섯먹방 여행</td>
-						<td>+ 1000P</td>
-					</tr>
-					<tr class="table-danger">
-						<td>사용</td>
-						<td>대한민국 5일 김치먹방 여행</td>
-						<td>- 1000P</td>
-					</tr>
-					<tr class="table-primary">
-						<td>적립</td>
-						<td>유럽 15일 치즈먹방 여행</td>
-						<td>+ 2000P</td>
-					</tr>
+					<c:forEach items="${pointHistory}" var="i">
+						<c:choose>
+							<c:when test="${i.getPOSTATE() eq 1}">
+								<tr class="table-primary">
+									<td>적립</td>
+									<td>${i.getPOINFO()}</td>
+									<td>${i.getPOAMOUNT() * i.getPOSTATE()}</td>
+								</tr>
+							</c:when>
+							<c:otherwise>
+								<tr class="table-danger">
+									<td>사용</td>
+									<td>${i.getPOINFO()}</td>
+									<td>${i.getPOAMOUNT() * i.getPOSTATE()}</td>
+								</tr>
+							</c:otherwise>
+						</c:choose>
+					</c:forEach>
 				</table>
 			</div>
 		</div>

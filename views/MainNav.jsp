@@ -9,29 +9,24 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 	<div class="container">
 		<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-			<li class="nav-item dropdown"><a
-				class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-				role="button" aria-expanded="false"> Package </a>
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="goPackageList" id="navbarDropdown" role="button" aria-expanded="false"> Package </a>
 				<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 					<li><a class="dropdown-item" href="#">Package</a></li>
 					<li><a class="dropdown-item" href="#">Review</a></li>
-				</ul></li>
-			<li class="nav-item dropdown"><a
-				class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-				role="button" aria-expanded="false"> Board </a>
-				<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<li><a class="dropdown-item" href="#">Notice</a></li>
-					<li><a class="dropdown-item" href="#">Humor</a></li>
-					<li><a class="dropdown-item" href="#">Event</a></li>
-				</ul></li>
-			<li class="nav-item dropdown"><a
-				class="nav-link dropdown-toggle" href="#"
-				id="navbarDropdown" role="button" aria-expanded="false">
-					Information </a>
+				</ul>
+			</li>
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="boardList" id="navbarDropdown" role="button" aria-expanded="false"> Board </a>
+				<ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="boardCategoryList"></ul>
+			</li>
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" aria-expanded="false"> Information </a>
 				<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 					<li><a class="dropdown-item" href="#">QnA</a></li>
 					<li><a class="dropdown-item" href="#">Request</a></li>
-				</ul></li>
+				</ul>
+			</li>
 		</ul>
 		<form action="#" class="mb-0">
 			<div class="container-fluid">
@@ -51,3 +46,23 @@
 		</form>
 	</div>
 </nav>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script>
+	$(document).ready(function() {
+		$.ajax({
+			url : "boardCategoryList",
+			type : "get",
+			dataType : "json",
+			success : function(result){
+						var htmlResult = "";
+						for (var i in result) {
+							htmlResult += "<li><a class='dropdown-item' href='boardList?BCNUMBER=" + result[i].BCNUMBER + "'>" + result[i].BCNAME + "</a></li>";
+						}
+						$("#boardCategoryList").html(htmlResult);
+			}
+		})
+		.done(function(result){
+			console.log(result);
+		});
+	});
+</script>

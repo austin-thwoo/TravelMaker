@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <html>
@@ -16,36 +17,46 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<%@ include file="../Header.jsp" %>
+	<%@ include file="../Header.jsp"%>
 	<div class="my-1">
 		<%@ include file="../MainNav.jsp" %>
 	</div>
 	<div class="container">
 		<div class="row">
 			<div class="col-3">
-				<%@ include file="../MyPageNav.jsp" %>
+				<%@ include file="../AdminNav.jsp" %>
 			</div>
-			<div class="col-6 justify-content-center text-start">
-				<h1>선호 카테고리 목록</h1>
-				<form name="#">
-					<div class="list-group">
-						<c:forEach items="${preferenceList}" var="i">
-							<label class="list-group-item">
-								<input class="form-check-input me-1" type="checkbox" name="CNUMBER" value="${i.getCNUMBER()}">${i.getCNAME()}
-							</label>
-						</c:forEach>
-					</div>
-					<div class="mt-1 text-end">
-						<input type="hidden" name="MID" value="${sessionScope.loginInfo.getMID()}">
-						<button class="btn btn-primary btn-md">삭제</button>
-					</div>
-				</form>
+			<div class="col justify-content-start">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>게시글 번호</th>
+							<th>게시글 제목</th>
+							<th>댓글내용</th>
+							<th>작성자</th>
+							<th>등록일</th>
+							<th>신고횟수</th>
+						</tr>
+					</thead>
+				
+				<c:forEach items="${commentsList}" var = "i">	
+					<tr>
+						<td>${i.getBNUMBER()}</td>
+						<td><a href="#">${i.getBTITLE()}</a></td>
+						<td>${i.getCMCONTENT()}</td>
+						<td>${i.getMID()}</td>
+						<td>${fn:substring(i.getCMDATE(),5,16)}</td>
+						<td>${i.getCOMMENTSCOMPLAINT()}</td>
+					</tr>
+				</c:forEach>
+				
+				</table>
 			</div>
 		</div>
 	</div>
 	<%@ include file="../PageUp.jsp" %>
 </body>
 <footer>
-	<%@ include file="../Footer.jsp" %>
+	<%@ include file="../Footer.jsp"%>
 </footer>
 </html>

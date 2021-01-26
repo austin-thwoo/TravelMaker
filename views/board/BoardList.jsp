@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <html>
@@ -21,30 +22,61 @@
 		<%@ include file="../MainNav.jsp" %>
 	</div>
 	<div class="container mt-2">
-		<table class="table table-hover text-center">
-			<thead>
-				<tr>
-					<th>카테고리</th>
-				</tr>
-				<tr class="table-secondary">
-					<th>번호</th>
-					<th>제목</th>
-					<th>작성자</th>
-					<th>등록일</th>
-					<th>조회수</th>
-					<th>추천수</th>
-				</tr>
-			</thead>
-			<tr>
-				<td>1</td>
-				<td><a href="#">글제목</a></td>
-				<td>닉네임</td>
-				<td>01/20 12:27</td>
-				<td>10</td>
-				<td>5</td>
-			</tr>
-		</table>
-		
+		<c:choose>
+			<c:when test="${!empty boardCategory.getBCNAME()}">
+				<h1>${boardCategory.getBCNAME()}</h1>
+			</c:when>
+			<c:otherwise>
+				<h1>전체</h1>
+			</c:otherwise>
+		</c:choose>
+		<c:choose>
+			<c:when test="${boardCategory.getBCNUMBER() != 3}">
+				<table class="table table-hover text-center">
+					<thead>
+						<tr class="table-secondary">
+							<th>번호</th>
+							<th>제목</th>
+							<th>작성자</th>
+							<th>등록일</th>
+							<th>조회수</th>
+							<th>추천수</th>
+							<c:if test="${sessionScope.loginInfo.getMLEVEL() == 0}">
+								<th>신고수</th>
+							</c:if>
+						</tr>
+					</thead>
+					<c:forEach items="${boardList}" var="i">
+						<tr>
+							<td>${i.getBNUMBER()}</td>
+							<td><a href="#">${i.getBTITLE()}</a></td>
+							<td>${i.getMNICK()}</td>
+							<td>${fn:substring(i.getBDATE(),5,16)}</td>
+							<td>${i.getBOARDVIEWS()}</td>
+							<td>${i.getBOARDLIKE()}</td>
+							<c:if test="${sessionScope.loginInfo.getMLEVEL() == 0}">
+								<th>${i.getBOARDCOMPLAINT()}</th>
+							</c:if>
+						</tr>
+					</c:forEach>
+				</table>
+			</c:when>
+			<c:otherwise>
+				<div class="row row-cols-1 row-cols-md-3 g-4">
+					<c:forEach items="${boardList}" var="i">
+						<div class="col">
+							<div class="card">
+								<img src="resources/boardFile/${i.getBIMG()}" class="card-img-top" alt="패키지이미지">
+								<div class="card-body">
+									<h5 class="card-title">${i.getBTITLE()}</h5>
+									<a href="#" class="btn btn-primary">상세보기</a>
+								</div>
+							</div>
+						</div>
+					</c:forEach>
+				</div>
+			</c:otherwise>
+		</c:choose>
 		<div class="row container-fluid mb-1">
 			<div class="text-end">
 				<button class="btn btn-primary btn-md">글쓰기</button>

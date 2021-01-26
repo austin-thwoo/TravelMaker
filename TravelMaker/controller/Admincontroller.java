@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.icia.TravelMaker.dto.AdminJobListDTO;
 import com.icia.TravelMaker.dto.BoardCategoryDTO;
 import com.icia.TravelMaker.dto.CategoryDTO;
 import com.icia.TravelMaker.dto.MemberDTO;
@@ -30,22 +31,35 @@ public class Admincontroller {
 	}
 
 	@RequestMapping(value = "/adminPage")
-	public ModelAndView adminPage(@ModelAttribute MemberDTO dto) {
+	private ModelAndView adminPage(@ModelAttribute MemberDTO dto) {
 		mav();
 		mav.addObject("jobList", service.jobList(dto));
 		mav.setViewName("admin/AdminPage");
 		return mav;
 	}
 	
+	@RequestMapping(value = "/jobListInsert")
+	private ModelAndView jobListInsert(@ModelAttribute AdminJobListDTO dto){
+		mav();
+		service.jobListInsert(dto);
+		mav.setViewName("redirect:/jobList?MID=" + dto.getMID());
+		return mav;
+	}
+	
+	@RequestMapping(value = "/jobList")
+	private @ResponseBody List<AdminJobListDTO> jobList(@ModelAttribute MemberDTO dto){
+		return service.jobList(dto);
+	}
+	
 	@RequestMapping(value = "/goAdminJoinForm")
-	public ModelAndView goAdminJoinForm() {
+	private ModelAndView goAdminJoinForm() {
 		mav();
 		mav.setViewName("admin/AdminJoinForm");
 		return mav;
 	}
 
 	@RequestMapping(value = "/goPackageInsertForm")
-	public ModelAndView goPackageInsertForm() {
+	private ModelAndView goPackageInsertForm() {
 		mav();
 		mav.setViewName("sales/PackageInsertForm");
 		return mav;
@@ -80,7 +94,7 @@ public class Admincontroller {
 	}
 
 	@RequestMapping(value = "/goCategoryList")
-	public ModelAndView goCategoryList() {
+	private ModelAndView goCategoryList() {
 		mav();
 		mav.addObject("categoryList", service.categoryList());
 		mav.setViewName("admin/CategoryList");
@@ -88,7 +102,7 @@ public class Admincontroller {
 	}
 	
 	@RequestMapping(value="categoryInsert")
-	public ModelAndView categoryInsert(@ModelAttribute CategoryDTO dto){
+	private ModelAndView categoryInsert(@ModelAttribute CategoryDTO dto){
 		mav();
 		service.categoryInsert(dto);
 		mav.setViewName("redirect:/CategoryList");
@@ -96,7 +110,31 @@ public class Admincontroller {
 	}
 
 	@RequestMapping(value = "/CategoryList")
-	public @ResponseBody List<CategoryDTO> CategoryList() {
+	private @ResponseBody List<CategoryDTO> CategoryList() {
 		return service.categoryList();
+	}
+	
+	@RequestMapping(value = "/goComplaintBoardList")
+	private ModelAndView goComplaintBoardList() {
+		mav();
+		mav.addObject("boardList", service.complaintBoardList());
+		mav.setViewName("admin/ComplaintBoardList");
+		return mav;
+	}
+
+	@RequestMapping(value = "/goTravelerList")
+	private ModelAndView goTravelerList() {
+		mav();
+		mav.addObject("travelerList", service.travelerList());
+		mav.setViewName("admin/TravelerList");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/goComplaintCommentsList")
+	private ModelAndView goComplaintCommentsList() {
+		mav();
+		mav.addObject("commentsList", service.complaintCommentsList());
+		mav.setViewName("admin/ComplaintCommentsList");
+		return mav;
 	}
 }

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -33,35 +34,36 @@
 							<td>이미지</td>
 							<td>상품명</td>
 							<td>여행기간</td>
-							<td>성인</td>
-							<td>아동</td>
-							<td>유아</td>
-							<td>가격</td>
 							<td>상태</td>
 							<td>결제</td>
 							<td>삭제</td>
 						</tr>
-						<tr>
-							<td>
-								<img src="" id="cartimage" width="100" height="80" alt="패키지이미지" />
-							</td>
-							<td>보라카이</td>
-							<td>2021.03.15 - 2021.03.27</td>
-							<!-- 성인 -->
-							<td>2</td>
-							<!-- 청소년 -->
-							<td>0</td>
-							<!-- 유아 -->
-							<td>0</td>
-							<!-- 총금액 -->
-							<td>5,000,000</td>
-							<td>계약금완료</td>
-							<td><button class="btn btn-primary btn-sm">결제하기</button></td>
-							<td><button class="btn btn-primary btn-sm">삭제</button></td>
-						</tr>
-						<tr>
-							<td colspan="11" style="text-align: center;">총금액: 원</td>
-						</tr>
+						<c:forEach items="${cartList}" var="i">
+							<tr>
+								<td>
+									<img src="resources/packageFile/${i.getPIMG()}" id="cartimage" width="100" height="80" alt="패키지이미지" />
+								</td>
+								<td>${i.getPNAME()}</td>
+								<td>${fn:substring(i.getPSSTART(),0,10)} - ${fn:substring(i.getPSEND(),0,10)}</td>
+								
+								<c:if test="${i.getOSTATE()==0}">
+									<td>계약금필요</td>
+									<td>
+										<button class="btn btn-primary btn-sm">계약금결제</button>
+										<button class="btn btn-primary btn-sm">전액결제</button>
+									</td>
+								</c:if>
+								<c:if test="${i.getOSTATE()==1}">
+									<td>계약금완료</td>
+									<td>
+										<button class="btn btn-primary btn-sm">잔금결제하기</button>
+									</td>
+								</c:if>
+								<td>
+									<button class="btn btn-primary btn-sm">삭제</button>
+								</td>
+							</tr>
+						</c:forEach>
 					</table>
 				</form>
 			</div>

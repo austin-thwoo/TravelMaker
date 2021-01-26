@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <html>
@@ -31,7 +32,7 @@
 					<div class="col">
 						<svg class="bd-placeholder-img rounded-circle" width="100" height="100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
 		        			<rect width="100%" height="100%" style="fill: gray;"></rect>
-		        			<a href="#" class="text-decoration-none"><text text-anchor="middle" alignment-baseline="middle" x="50%" y="50%" style="fill: white;">5</text></a>
+		        			<a href="myBoardList?MID=${sessionScope.loginInfo.getMID()}" class="text-decoration-none"><text text-anchor="middle" alignment-baseline="middle" x="50%" y="50%" style="fill: white;">5</text></a>
 		        		</svg>
 						<h2>내 게시글</h2>
 					</div>
@@ -80,11 +81,11 @@
 					</tr>
 					<tr>
 						<th>생일</th>
-						<th>${myInfo.getMBIRTH()}</th>
+						<th>${fn:substring(myInfo.getMBIRTH(),0,10)}</th>
 					</tr>
 					<tr>
 						<th>잔여 포인트</th>
-						<th><a href="#">1,500 P</a></th>
+						<th><a href="goPointHistory?MID=${sessionScope.loginInfo.getMID()}">1,500 P</a></th>
 					</tr>
 					<tr>
 						<th>정지 횟수</th>

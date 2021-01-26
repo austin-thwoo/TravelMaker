@@ -2,12 +2,15 @@ package com.icia.TravelMaker.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.icia.TravelMaker.dao.BoardDAO;
+import com.icia.TravelMaker.dto.BoardCategoryDTO;
 import com.icia.TravelMaker.dto.BoardDTO;
+import com.icia.TravelMaker.dto.BoardListDTO;
 
 @Service
 public class BoardService {
@@ -23,6 +26,14 @@ public class BoardService {
 			dto.setBIMG("test");
 		}
 		return dao.boardInsert(dto);
+	}
+
+	public List<BoardListDTO> boardList(BoardCategoryDTO dto) {
+		return dao.boardList(dto);
+	}
+
+	public BoardCategoryDTO boardCategory(BoardCategoryDTO dto) {
+		return dao.boardCategory(dto);
 	}
 
 }

@@ -17,11 +17,6 @@ public class HomeController {
 	public String home() {
 		return "Main";
 	}
-	
-	@RequestMapping(value = "/boardDetail")
-	public String boardDetail() {
-		return "board/BoardDetail";
-	}
 
 	@RequestMapping(value = "/goBoardUpdateForm")
 	public String goBoardUpdateForm() {
@@ -53,11 +48,6 @@ public class HomeController {
 		return "member/PasswordUpdateForm";
 	}
 
-	@RequestMapping(value = "/likeList")
-	public String likeList() {
-		return "member/LikeList";
-	}
-
 	@RequestMapping(value = "/goShoppingList")
 	public String goShoppingList() {
 		return "member/ShoppingList";
@@ -83,16 +73,6 @@ public class HomeController {
 		return "member/ReviewList";
 	}
 
-	@RequestMapping(value = "/goPreferenceList")
-	public String goPreferenceList() {
-		return "member/PreferenceList";
-	}
-
-	@RequestMapping(value = "/goCartList")
-	public String goCartList() {
-		return "member/CartList";
-	}
-
 	@RequestMapping(value = "/goSearchResult")
 	public String goSearchResult() {
 		return "member/SearchResult";
@@ -103,11 +83,6 @@ public class HomeController {
 		return "member/CommentsList";
 	}
 
-	@RequestMapping(value = "/goPackageList")
-	public String goPackageList() {
-		return "sales/PackageList";
-	}
-
 	@RequestMapping(value = "/goBoardComplaint")
 	public String goBoardComplaint() {
 		return "board/BoardComplaintForm";
@@ -116,11 +91,6 @@ public class HomeController {
 	@RequestMapping(value = "/goCommentsComplaint")
 	public String goCommentsComplaint() {
 		return "board/CommentsComplaintForm";
-	}
-
-	@RequestMapping(value = "/goPointHistory")
-	public String goPointHistory() {
-		return "member/PointHistory";
 	}
 
 	@RequestMapping(value = "/goPackageDetail")
@@ -141,11 +111,6 @@ public class HomeController {
 	@RequestMapping(value = "/goRefundList")
 	public String goRefundList() {
 		return "admin/RefundList";
-	}
-
-	@RequestMapping(value = "/goTravelerList")
-	public String goTravelerList() {
-		return "admin/TravelerList";
 	}
 
 	@RequestMapping(value = "/goSalesManagement")

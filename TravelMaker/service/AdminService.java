@@ -10,9 +10,12 @@ import org.springframework.stereotype.Service;
 import com.icia.TravelMaker.dao.AdminDAO;
 import com.icia.TravelMaker.dto.AdminJobListDTO;
 import com.icia.TravelMaker.dto.BoardCategoryDTO;
+import com.icia.TravelMaker.dto.BoardListDTO;
 import com.icia.TravelMaker.dto.CategoryDTO;
+import com.icia.TravelMaker.dto.CommentsListDTO;
 import com.icia.TravelMaker.dto.MemberDTO;
 import com.icia.TravelMaker.dto.PackageDTO;
+import com.icia.TravelMaker.dto.TravelerListDTO;
 
 @Service
 public class AdminService {
@@ -48,6 +51,22 @@ public class AdminService {
 
 	public void categoryInsert(CategoryDTO dto) {
 		dao.categoryInsert(dto);
+	}
+
+	public void jobListInsert(AdminJobListDTO dto) {
+		dao.jobListInsert(dto);
+	}
+
+	public List<BoardListDTO> complaintBoardList() {
+		return dao.complaintBoardList();
+	}
+
+	public List<TravelerListDTO> travelerList() {
+		return dao.travelerList();
+	}
+
+	public List<CommentsListDTO> complaintCommentsList() {
+		return dao.complaintCommentsList();
 	}
 
 }

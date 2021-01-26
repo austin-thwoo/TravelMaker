@@ -27,7 +27,7 @@
 				<div class="container-fluid text-start">
 					<label class="form-label" for="MID">Email</label>
 					<div class="input-group">
-						<input class="form-control" type="email" id="MID" name="MID" required="required">
+						<input class="form-control" type="text" id="MID" name="MID" required="required">
 					</div>
 					
 					<label class="form-label" for="MPW">비밀번호</label>
