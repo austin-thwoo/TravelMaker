@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="Board">
+ 	<insert id="boardInsert">
+ 		INSERT INTO BOARD(BNUMBER, MID, BDATE, BTITLE, BCONTENT, BIMG, BCNUMBER, BSTATE)
+ 		VALUES(BNUMBER_SEQ.NEXTVAL, #{MID}, SYSDATE, #{BTITLE}, #{BCONTENT}, #{BIMG}, #{BCNUMBER}, 1)
+ 	</insert>
+ 	
+ 	<select id="boardList" parameterType="BoardCategory" resultType="BoardList">
+ 		SELECT B.BNUMBER,
+    			B.BTITLE,
+    			B.BDATE,
+    			B.BIMG,
+    			B.BSTATE,
+    			BC.BCNAME,
+    			M.MNICK,
+    			BV.BOARDVIEWS,
+    			BL.BOARDLIKE,
+    			BC.BOARDCOMPLAINT
+		FROM BOARD B INNER JOIN MEMBER M ON B.MID = M.MID
+            		INNER JOIN BOARDCATEGORY BC ON B.BCNUMBER = BC.BCNUMBER
+           			LEFT OUTER JOIN (SELECT BNUMBER,
+                                			COUNT(MID) AS "BOARDVIEWS"
+                        			FROM BOARDVIEWS
+                        			GROUP BY BNUMBER) BV ON B.BNUMBER = BV.BNUMBER
+            		LEFT OUTER JOIN (SELECT BNUMBER,
+                                    		COUNT(MID) AS "BOARDLIKE"
+                            		FROM BOARDLIKE
+                            		GROUP BY BNUMBER) BL ON B.BNUMBER = BL.BNUMBER
+            		LEFT OUTER JOIN (SELECT BNUMBER,
+                                    		COUNT(MID) AS "BOARDCOMPLAINT"
+                            		FROM BOARDCOMPLAINT
+                            		GROUP BY BNUMBER) BC ON B.BNUMBER = BC.BNUMBER
+ 		<include refid="boardCategory"></include>
+ 		ORDER BY BNUMBER DESC
+ 	</select>
+ 	
+ 	<sql id="boardCategory">
+ 		<choose>
+ 			<when test="BCNUMBER != 0">
+ 				WHERE B.BCNUMBER = #{BCNUMBER}
+ 			</when>
+ 		</choose>
+ 	</sql>
+ 	
+ 	<select id="boardCategory" parameterType="BoardCategory" resultType="BoardCategory">
+ 		SELECT *
+ 		FROM BOARDCATEGORY
+ 		WHERE BCNUMBER = #{BCNUMBER}
+ 	</select>
+ 	
+ 	<select id="boardDetail" parameterType="Board" resultType="BoardDetail">
+ 		SELECT B.BNUMBER,
+		    B.MID,
+		    B.BDATE,
+		    B.BTITLE,
+		    B.BCONTENT,
+		    B.BIMG,
+		    M.MNICK,
+		    BV.BOARDVIEWS,
+		    BL.BOARDLIKE
+		FROM BOARD B INNER JOIN MEMBER M ON B.MID = M.MID
+		            LEFT OUTER JOIN (SELECT BNUMBER,
+		                                COUNT(*) AS "BOARDVIEWS"
+		                            FROM BOARDVIEWS
+		                            GROUP BY BNUMBER) BV ON B.BNUMBER = BV.BNUMBER
+		            LEFT OUTER JOIN (SELECT BNUMBER,
+		                                COUNT(MID) AS "BOARDLIKE"
+		                            FROM BOARDLIKE
+		                            GROUP BY BNUMBER) BL ON B.BNUMBER = BL.BNUMBER
+		WHERE B.BNUMBER = #{BNUMBER}
+ 	</select>
+ </mapper>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="Admin">
+ 	<insert id="boardCategoryInsert" parameterType="BoardCategory">
+ 		INSERT INTO BOARDCATEGORY(BCNUMBER, BCNAME)
+ 		VALUES(BCNUMBER_SEQ.NEXTVAL, #{BCNAME})
+ 	</insert>
+ 	
+ 	<select id="boardCategoryList" resultType="BoardCategory">
+ 		SELECT *
+		FROM BOARDCATEGORY
+		ORDER BY BCNUMBER
+ 	</select>
+ 	
+ 	<insert id="packageInsert" parameterType="Package">
+ 		INSERT INTO PACKAGE(PNUMBER, PNAME, PIMG, PADULT, PCHILD, PINFANT, PPERIOD, PMIN, PMAX, PUPLOADDATE, PINFO)
+ 		VALUES(PNUMBER_SEQ.NEXTVAL, #{PNAME}, #{PIMG}, #{PADULT}, #{PCHILD}, #{PINFANT}, #{PPERIOD}, #{PMIN}, #{PMAX}, DEFAULT, #{PINFO})
+ 	</insert>
+ 	
+ 	<select id="adminJobList" parameterType="Member" resultType="AdminJobList">
+ 		SELECT MID,
+ 			ADATE,
+ 			AJOB
+ 		FROM ADMINJOBLIST
+ 		WHERE MID = #{MID}
+ 		ORDER BY ADATE DESC
+ 	</select>
+ 	
+ 	<select id="categoryList" resultType="Category">
+ 		SELECT *
+		FROM CATEGORY
+		ORDER BY CNUMBER
+ 	</select>
+ 	
+ 	<insert id="categoryInsert" parameterType="Category">
+ 		INSERT INTO CATEGORY(CNUMBER, CNAME)
+ 		VALUES(CNUMBER_SEQ.NEXTVAL, #{CNAME})
+ 	</insert>
+ 	
+ 	<insert id="jobListInsert" parameterType="AdminJobList">
+ 		INSERT INTO ADMINJOBLIST(MID, ADATE, AJOB)
+ 		VALUES(#{MID}, DEFAULT, #{AJOB})
+ 	</insert>
+ 	
+ 	<select id="complaintBoardList" resultType="BoardList">
+ 		SELECT B.BNUMBER,
+    			B.BTITLE,
+    			B.BDATE,
+    			B.BIMG,
+    			B.BSTATE,
+    			BC.BCNAME,
+    			M.MNICK,
+    			BV.BOARDVIEWS,
+    			BL.BOARDLIKE,
+    			BC.BOARDCOMPLAINT
+		FROM BOARD B INNER JOIN MEMBER M ON B.MID = M.MID
+            		INNER JOIN BOARDCATEGORY BC ON B.BCNUMBER = BC.BCNUMBER
+           			LEFT OUTER JOIN (SELECT BNUMBER,
+                                			COUNT(MID) AS "BOARDVIEWS"
+                        			FROM BOARDVIEWS
+                        			GROUP BY BNUMBER) BV ON B.BNUMBER = BV.BNUMBER
+            		LEFT OUTER JOIN (SELECT BNUMBER,
+                                    		COUNT(MID) AS "BOARDLIKE"
+                            		FROM BOARDLIKE
+                            		GROUP BY BNUMBER) BL ON B.BNUMBER = BL.BNUMBER
+            		LEFT OUTER JOIN (SELECT BNUMBER,
+                                    		COUNT(MID) AS "BOARDCOMPLAINT"
+                            		FROM BOARDCOMPLAINT
+                            		GROUP BY BNUMBER) BC ON B.BNUMBER = BC.BNUMBER
+ 		ORDER BY BNUMBER DESC
+ 	</select>
+ 	
+ 	<select id="travelerList" resultType="TravelerList">
+ 		SELECT T.OPNUMBER,
+		    T.ODATE,
+		    P.PNAME,
+		    T.TNAME,
+		    T.TENNAME,
+		    T.TBIRTH,
+		    T.TEMAIL,
+		    T.TPHONE,
+		    O.PSSTART,
+		    O.PSEND
+		FROM TRAVELER T INNER JOIN PACKAGE P ON T.OPNUMBER = P.PNUMBER
+		                INNER JOIN ORDERS O ON T.OPNUMBER = O.PNUMBER AND T.ODATE = O.ODATE AND T.OMID = O.MID
+		ORDER BY ODATE DESC
+ 	</select>
+ 	
+ 	<select id="complaintCommentsList" resultType="CommentsList">
+ 		SELECT CM.BNUMBER,
+			    B.BTITLE,
+			    CM.MID,
+			    CM.CMDATE,
+			    CM.CMCONTENT,
+			    CM.CMSTATE,
+			    M.MNICK,
+			    CC.COMMENTSCOMPLAINT,
+			    CL.COMMENTSLIKE
+			FROM COMMENTS CM LEFT OUTER JOIN (SELECT CMBNUMBER,
+			                                    CMMID,
+			                                    CMDATE,
+			                                    COUNT(MID) AS "COMMENTSCOMPLAINT"
+			                                FROM COMMENTSCOMPLAINT
+			                                GROUP BY CMBNUMBER, CMMID, CMDATE) CC ON CM.BNUMBER = CC.CMBNUMBER AND CM.MID = CC.CMMID AND CM.CMDATE = CC.CMDATE
+			            LEFT OUTER JOIN (SELECT CMBNUMBER,
+			                                    CMMID,
+			                                    CMDATE,
+			                                    COUNT(MID) AS "COMMENTSLIKE"
+			                                FROM COMMENTSLIKE
+			                                GROUP BY CMBNUMBER, CMMID, CMDATE) CL ON CM.BNUMBER = CL.CMBNUMBER AND CM.MID = CL.CMMID AND CM.CMDATE = CL.CMDATE
+			            INNER JOIN BOARD B ON CM.BNUMBER = B.BNUMBER
+			            INNER JOIN MEMBER M ON CM.MID = M.MID
+		WHERE CC.COMMENTSCOMPLAINT > 0
+ 	</select>
+ 	
+ 	<select id="memberList" parameterType="Member" resultType="MemberList">
+ 		SELECT M.MID,
+		    M.MNICK,
+		    M.MNAME,
+		    M.MPHONE,
+		    M.MGENDER,
+		    M.MSTATE,
+		    M.MDATE,
+		    BC.BOARDCOMPLAINT,
+		    CC.COMMENTSCOMPLAINT,
+		    AB.ACCOUNTBAN
+		FROM MEMBER M LEFT OUTER JOIN (SELECT MID,
+		                                    COUNT(BNUMBER) AS "BOARDCOMPLAINT"
+		                                FROM(SELECT B.BNUMBER,
+		                                            B.MID,
+		                                            COUNT(BC.MID) AS "BOARDCOMPLAINT"
+		                                        FROM BOARD B LEFT OUTER JOIN BOARDCOMPLAINT BC ON B.BNUMBER = BC.BNUMBER
+		                                        GROUP BY B.BNUMBER, B.MID)
+		                                WHERE BOARDCOMPLAINT > 0
+		                                GROUP BY MID) BC ON M.MID = BC.MID
+		                LEFT OUTER JOIN (SELECT MID,
+		                                        COUNT(*) AS "COMMENTSCOMPLAINT"
+		                                FROM (SELECT CM.BNUMBER,
+		                                                CM.MID,
+		                                                CM.CMDATE,
+		                                                COUNT(CC.MID) AS "COMMENTSCOMPLAINT"
+		                                        FROM COMMENTS CM LEFT OUTER JOIN COMMENTSCOMPLAINT CC ON CM.BNUMBER = CC.CMBNUMBER AND CM.MID = CC.CMMID AND CM.CMDATE = CC.CMDATE
+		                                        GROUP BY CM.BNUMBER, CM.MID, CM.CMDATE)
+		                                WHERE COMMENTSCOMPLAINT > 0
+		                                GROUP BY MID) CC ON M.MID = CC.MID
+		                LEFT OUTER JOIN (SELECT MID,
+		                                    COUNT(ABDATE) AS "ACCOUNTBAN"
+		                                FROM ACCOUNTBAN
+		                                GROUP BY MID) AB ON M.MID = AB.MID
+		 WHERE M.MLEVEL = #{MLEVEL}
+ 	</select>
+ 	
+ 	<update id="memberStateUpdate" parameterType="Member">
+ 		UPDATE MEMBER SET MSTATE = #{MSTATE} WHERE MID = #{MID}
+ 	</update>
+ 	
+ 	<update id="commentsLock" parameterType="Comments">
+ 		UPDATE COMMENTS
+		SET CMSTATE = #{CMSTATE}
+		WHERE BNUMBER = #{BNUMBER} AND MID = #{MID} AND CMDATE = TO_DATE(#{CMDATE}, 'YYYY-MM-DD HH24:MI:SS')
+ 	</update>
+ 	
+ 	<update id="boardLock" parameterType="Board">
+ 		UPDATE BOARD
+ 		SET BSTATE = #{BSTATE}
+ 		WHERE BNUMBER = #{BNUMBER}
+ 	</update>
+ 	
+ 	<select id="packageDetail" parameterType="Package" resultType="Package">
+ 		SELECT * FROM PACKAGE WHERE PNUMBER = #{PNUMBER}
+ 	</select>
+ 	
+ 	<update id="packageUpdate">
+ 		UPDATE PACKAGE
+ 		SET PNAME = #{PNAME}, PADULT = #{PADULT}, PCHILD = #{PCHILD}, PINFANT = #{PINFANT}, PMIN = #{PMIN}, PMAX = #{PMAX},	PINFO = #{PINFO}, PPERIOD = #{PPERIOD}
+ 		WHERE PNUMBER = #{PNUMBER}
+ 	</update>
+ </mapper>
