@@ -17,9 +17,45 @@
  	</insert>
  	
  	<select id="myPage" parameterType="Member" resultType="MyInfo">
- 		SELECT *
-		FROM MEMBER
-		WHERE MID = #{MID}
+ 		SELECT M.MID,
+				M.MNAME,
+				M.MNICK,
+				M.MPHONE,
+				M.MGENDER,
+				M.MBIRTH,
+				PO.POAMOUNT,
+		        AB.ABCOUNT,
+		        B.BCOUNT,
+		        CM.CMCOUNT,
+		        RV.RVCOUNT,
+		        RVB.RVBCOUNT
+		FROM MEMBER M LEFT OUTER JOIN (SELECT MID,
+		                            SUM(POAMOUNT * POSTATE) AS "POAMOUNT"
+		                        FROM POINT
+		                        GROUP BY MID) PO ON M.MID = PO.MID
+		            LEFT OUTER JOIN (SELECT MID,
+		                                COUNT(ABDATE) AS "ABCOUNT"
+		                            FROM ACCOUNTBAN
+		                            GROUP BY MID) AB ON M.MID = AB.MID
+		            LEFT OUTER JOIN (SELECT MID,
+		                                COUNT(BNUMBER) AS "BCOUNT"
+		                            FROM BOARD
+		                            WHERE BCNUMBER != 3
+		                            GROUP BY MID) B ON M.MID = B.MID
+		            LEFT OUTER JOIN (SELECT MID,
+		                                COUNT(*) AS "CMCOUNT"
+		                            FROM COMMENTS
+		                            GROUP BY MID) CM ON M.MID = CM.MID
+		            LEFT OUTER JOIN (SELECT MID,
+		                                COUNT(PNUMBER) AS "RVCOUNT"
+		                            FROM REVIEW
+		                            GROUP BY MID) RV ON M.MID = RV.MID
+		            LEFT OUTER JOIN (SELECT MID,
+		                                COUNT(BNUMBER) AS "RVBCOUNT"
+		                            FROM BOARD
+		                            WHERE BCNUMBER = 3
+		                            GROUP BY MID) RVB ON M.MID = RVB.MID
+		WHERE M.MID = #{MID}
  	</select>
  	
  	<select id="idCheck" parameterType="Member" resultType="String">
@@ -40,72 +76,74 @@
  	</insert>
  	
  	<select id="preferenceList" parameterType="Member" resultType="Category">
- 		SELECT MEMBERPREFERENCE.CNUMBER,
-    		CATEGORY.CNAME
-		FROM MEMBERPREFERENCE INNER JOIN CATEGORY ON MEMBERPREFERENCE.CNUMBER = CATEGORY.CNUMBER
+ 		SELECT MP.CNUMBER,
+    		C.CNAME
+		FROM MEMBERPREFERENCE MP INNER JOIN CATEGORY C ON MP.CNUMBER = C.CNUMBER
 		WHERE MID = #{MID}
-		ORDER BY CNUMBER
+		ORDER BY MP.CNUMBER
  	</select>
  	
  	<select id="cartList" parameterType="Member" resultType="CartList">
- 		SELECT PACKAGECART.MID,
-			PACKAGE.PIMG,
-			PACKAGE.PNAME,
-			PACKAGECART.PNUMBER,
-			PACKAGECART.PSPNUMBER,
-			PACKAGECART.PSSTART,
-			PACKAGECART.PSEND,
-			ORDERS.OSTATE
-		FROM PACKAGECART INNER JOIN PACKAGE ON PACKAGECART.PNUMBER = PACKAGE.PNUMBER
-						INNER JOIN ORDERS ON PACKAGECART.PSPNUMBER = ORDERS.PSPNUMBER
-		WHERE PACKAGECART.MID=#{MID}
+ 		SELECT PC.MID,
+			P.PIMG,
+			P.PNAME,
+			PC.PNUMBER,
+			PC.PSPNUMBER,
+			PC.PSSTART,
+			PS.PSEND,
+			O.OSTATE
+		FROM PACKAGECART PC INNER JOIN PACKAGE P ON PC.PNUMBER = P.PNUMBER
+						INNER JOIN ORDERS O ON PC.PSPNUMBER = O.PSPNUMBER
+						INNER JOIN PACKAGESCHEDULE PS ON PC.PSPNUMBER = PS.PNUMBER AND PC.PSSTART = PS.PSSTART
+		WHERE PC.MID=#{MID}
  	</select>
  	
  	<select id="likeList" parameterType="Member" resultType="LikeList">
- 		SELECT PACKAGE.PNAME,
-		    PACKAGE.PINFO,
-		    PACKAGELIKE.PNUMBER,
-		    PACKAGELIKE.MID,
-		    PACKAGE.PIMG
-		FROM PACKAGELIKE INNER JOIN PACKAGE ON PACKAGELIKE.PNUMBER = PACKAGE.PNUMBER
-		WHERE PACKAGELIKE.MID = #{MID}
+ 		SELECT P.PNAME,
+		    P.PINFO,
+		    PL.PNUMBER,
+		    PL.MID,
+		    P.PIMG
+		FROM PACKAGELIKE PL INNER JOIN PACKAGE P ON PL.PNUMBER = P.PNUMBER
+		WHERE PL.MID = #{MID}
  	</select>
  	
  	<select id="myBoardList" parameterType="java.util.Map" resultType="BoardList">
-	 	SELECT BOARD.BNUMBER,
-	    			BOARD.BTITLE,
-	    			BOARD.BDATE,
-	    			BOARD.BIMG,
-	    			BOARDCATEGORY.BCNAME,
-	    			MEMBER.MNICK,
+	 	SELECT B.BNUMBER,
+	    			B.BTITLE,
+	    			B.BDATE,
+	    			B.BIMG,
+	    			B.BSTATE,
+	    			BC.BCNAME,
+	    			M.MNICK,
 	    			BV.BOARDVIEWS,
 	    			BL.BOARDLIKE,
 	    			BC.BOARDCOMPLAINT
-		FROM BOARD INNER JOIN MEMBER ON BOARD.MID = MEMBER.MID
-	            	INNER JOIN BOARDCATEGORY ON BOARD.BCNUMBER = BOARDCATEGORY.BCNUMBER
+		FROM BOARD B INNER JOIN MEMBER M ON B.MID = M.MID
+	            	INNER JOIN BOARDCATEGORY BC ON B.BCNUMBER = BC.BCNUMBER
 	           		LEFT OUTER JOIN (SELECT BNUMBER,
 	                                		COUNT(MID) AS "BOARDVIEWS"
 	                        		FROM BOARDVIEWS
-	                        		GROUP BY BNUMBER) BV ON BOARD.BNUMBER = BV.BNUMBER
+	                        		GROUP BY BNUMBER) BV ON B.BNUMBER = BV.BNUMBER
 	            	LEFT OUTER JOIN (SELECT BNUMBER,
 	                                    	COUNT(MID) AS "BOARDLIKE"
 	                            	FROM BOARDLIKE
-	                            	GROUP BY BNUMBER) BL ON BOARD.BNUMBER = BL.BNUMBER
+	                            	GROUP BY BNUMBER) BL ON B.BNUMBER = BL.BNUMBER
 	            	LEFT OUTER JOIN (SELECT BNUMBER,
 	                                    	COUNT(MID) AS "BOARDCOMPLAINT"
 	                            	FROM BOARDCOMPLAINT
-	                            	GROUP BY BNUMBER) BC ON BOARD.BNUMBER = BC.BNUMBER
+	                            	GROUP BY BNUMBER) BC ON B.BNUMBER = BC.BNUMBER
 	    <include refid="search"></include>
-	    ORDER BY BNUMBER DESC
+	    ORDER BY B.BNUMBER DESC
  	</select>
  	
  	<sql id="search">
  		<choose>
  			<when test="search == 0">
- 				WHERE BOARD.MID = #{member.MID} AND BOARD.BCNUMBER != 3
+ 				WHERE B.MID = #{member.MID} AND B.BCNUMBER != 3
  			</when>
  			<otherwise>
- 				WHERE BOARD.MID = #{member.MID} AND BOARD.BCNUMBER = 3
+ 				WHERE B.MID = #{member.MID} AND B.BCNUMBER = 3
  			</otherwise>
  		</choose>
  	</sql>
@@ -114,5 +152,83 @@
  		SELECT *
  		FROM POINT
  		WHERE MID = #{MID}
+ 	</select>
+ 	
+ 	<select id="shoppingList" parameterType="Member" resultType="ShoppingList">
+ 		SELECT P.PIMG,
+		    O.ODATE,
+		    O.PSSTART,
+		    PS.PSEND,
+		    O.OADULT,
+		    P.PADULT,
+		    O.OCHILD,
+		    P.PCHILD,
+		    O.OINFANT,
+		    P.PINFANT,
+		    PLO.PLONAME
+		FROM ORDERS O INNER JOIN PACKAGE P ON O.PNUMBER = P.PNUMBER
+					INNER JOIN PACKAGESCHEDULE PS ON O.PSPNUMBER = PS.PNUMBER AND O.PSSTART = PS.PSSTART
+		            INNER JOIN (SELECT PNUMBER,
+		                                LISTAGG(PLONAME, ',') WITHIN GROUP (ORDER BY PLONAME) AS "PLONAME"
+		                            FROM PACKAGELOCATION
+		                            GROUP BY PNUMBER) PLO ON O.PNUMBER = PLO.PNUMBER
+		WHERE O.OSTATE = 2 AND O.MID = #{MID}
+ 	</select>
+ 	
+ 	<select id="passwordCheck" parameterType="Member" resultType="String">
+ 		SELECT COUNT(MID)
+ 		FROM MEMBER
+ 		WHERE MID = #{MID} AND MPW = #{MPW}
+ 	</select>
+ 	
+ 	<update id="passwordUpdate" parameterType="Member">
+ 		UPDATE MEMBER SET MPW = #{MPW} WHERE MID = #{MID}
+ 	</update>
+ 	
+ 	<select id="memberInfo" parameterType="Member" resultType="Member">
+ 		SELECT *
+		FROM MEMBER
+		WHERE MID = #{MID} 
+ 	</select>
+ 	
+ 	<update id="memberUpdate" parameterType="Member">
+ 		UPDATE MEMBER
+		SET MPHONE = #{MPHONE}, MNICK = #{MNICK}
+		WHERE MID = #{MID}
+ 	</update>
+ 	
+ 	<select id="myCommentsList" parameterType="Member" resultType="CommentsList">
+ 		SELECT CM.BNUMBER,
+		    CM.MID,
+		    CM.CMDATE,
+		    CM.CMCONTENT,
+		    B.BTITLE,
+		    M.MNICK,
+		    CL.COMMENTSLIKE,
+		    CC.COMMENTSCOMPLAINT
+		FROM COMMENTS CM INNER JOIN BOARD B ON CM.BNUMBER = B.BNUMBER
+		                INNER JOIN MEMBER M ON CM.MID = M.MID
+		                LEFT OUTER JOIN (SELECT CMBNUMBER,
+		                                    CMMID,
+		                                    CMDATE,
+		                                    COUNT(MID) AS "COMMENTSLIKE"
+		                                FROM COMMENTSLIKE
+		                                GROUP BY CMBNUMBER, CMMID, CMDATE) CL ON CM.BNUMBER = CL.CMBNUMBER AND CM.MID = CL.CMMID AND CM.CMDATE = CL.CMDATE
+		                LEFT OUTER JOIN (SELECT CMBNUMBER,
+		                                    CMMID,
+		                                    CMDATE,
+		                                    COUNT(MID) AS "COMMENTSCOMPLAINT"
+		                                FROM COMMENTSCOMPLAINT
+		                                GROUP BY CMBNUMBER, CMMID, CMDATE) CC ON CM.BNUMBER = CC.CMBNUMBER AND CM.MID = CC.CMMID AND CM.CMDATE = CC.CMDATE
+		WHERE CM.MID = #{MID}
+ 	</select>
+ 	
+ 	<select id="myReviewList" parameterType="Member" resultType="ReviewList">
+ 		SELECT RV.*,
+		    P.PNAME,
+		    M.MNICK
+		FROM REVIEW RV INNER JOIN PACKAGE P ON RV.PNUMBER = P.PNUMBER
+		            INNER JOIN MEMBER M ON RV.MID = M.MID
+		WHERE RV.MID = #{MID}
  	</select>
  </mapper>

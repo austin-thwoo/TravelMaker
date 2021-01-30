@@ -10,7 +10,7 @@
 	<div class="container">
 		<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" href="goPackageList" id="navbarDropdown" role="button" aria-expanded="false"> Package </a>
+				<a class="nav-link dropdown-toggle" href="goPackageList?to=sales" id="navbarDropdown" role="button" aria-expanded="false"> Package </a>
 				<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 					<li><a class="dropdown-item" href="#">Package</a></li>
 					<li><a class="dropdown-item" href="#">Review</a></li>
@@ -60,9 +60,6 @@
 						}
 						$("#boardCategoryList").html(htmlResult);
 			}
-		})
-		.done(function(result){
-			console.log(result);
 		});
 	});
 </script>

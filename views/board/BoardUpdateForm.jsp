@@ -21,20 +21,22 @@
 		<%@ include file="../MainNav.jsp" %>
 	</div>
 	<div class="container">
-	    <form action="#" method="post">
+	    <form action="boardUpdate" method="post" id="boardUpdateForm" enctype="multipart/form-data">
 	      <div class="input-group mb-1">
-	      	<select class="from-select-sm rounded-start" id="BTITLE">
-	      		<option>공지</option>
-	      		<option>후기</option>
-	      		<option>자유</option>
-	      		<option>이벤트</option>
+	      	<select class="from-select-sm rounded-start" id="BTITLE" name="BCNUMBER">
+	      		<option>선택하세요</option>
+	      		<c:forEach items="${boardCategoryList}" var="i">
+	      		<option value="${i.getBCNUMBER()}">${i.getBCNAME()}</option>
+	      		</c:forEach>
+	      		
+	      		
 	      	</select>
-	        <input type="text" class="form-control" name="" placeholder="제목을 입력하세요." aria-describedby="BTITLE" value="기존제목">
+	        <input type="text" class="form-control" name="BTITLE" placeholder="제목을 입력하세요." aria-describedby="BTITLE" value="${boardDetail.getBTITLE()}">
 	      </div>
 	      
 	    <div class="input-group mb-1">
 				<!-- 크기 내 노트복 화면에 맞춘거라 다시 조절 필요 -->
-				<textarea name="ir1" id="ir1" rows="20" cols="181"> 이 곳에 글을 작성해보아요~~~</textarea>
+				<textarea name="BCONTENT" id="ir1" rows="20" cols="181">${boardDetail.getBCONTENT()} </textarea>
 
 			</div>
 	      
@@ -42,6 +44,10 @@
 	      	<input type="file" class="form-control" name="" value="기존파일" disabled="disabled">
 	      </div> -->
 	      <div class="text-end">
+	      	<input type="hidden" name="BNUMBER" value="${boardDetail.getBNUMBER()}">
+	      	
+	      	
+	      	
 	      	<button type="submit" class="btn btn-primary">수정</button>
 	      	<button type="submit" class="btn btn-danger">취소</button>
 	      </div>

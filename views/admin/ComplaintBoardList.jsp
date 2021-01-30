@@ -38,6 +38,7 @@
 							<th>조회수</th>
 							<th>추천수</th>
 							<th>신고수</th>
+							<th>잠금</th>
 						</tr>
 					</thead>
 					<c:forEach items="${boardList}" var="i">
@@ -49,7 +50,17 @@
 								<td>${fn:substring(i.getBDATE(),0,16)}</td>
 								<td>${i.getBOARDVIEWS()}</td>
 								<td>${i.getBOARDLIKE()}</td>
-								<td><a href="#">${i.getBOARDCOMPLAINT()}</a></td>
+								<td><a href="javascript:complaintBoardDetail('${i.getBNUMBER()}')">${i.getBOARDCOMPLAINT()}</a></td>
+								<c:if test="${i.getBSTATE()==1}">
+									<td>
+										<button class="btn btn-primary btn-sm" type="button" onclick="boardLock('${i.getBNUMBER()}', '${i.getBSTATE()}')">잠금</button>
+									</td>
+								</c:if>
+								<c:if test="${i.getBSTATE()==-1}">
+									<td>
+										<button class="btn btn-primary btn-sm" type="button" onclick="boardLock('${i.getBNUMBER()}', '${i.getBSTATE()}')">복구</button>
+									</td>
+								</c:if>
 							</tr>
 						</c:if>
 					</c:forEach>
@@ -62,25 +73,13 @@
 <footer>
 	<%@ include file="../Footer.jsp" %>
 </footer>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 <script>
-	function categoryInsert(){
-		$.ajax({
-			type : "get",
-			url : "categoryInsert",
-			data : {"CNAME" : $("#CNAME").val()},
-			dataType: "json",
-			success: function(result){
-						var htmlResult = "";
-						for(var i in result){
-							htmlResult += "<div class='input-group mb-1'>" +
-										"<label class='list-group-item form-control' aria-describedby=" + result[i].CNAME  + ">" + result[i].CNAME + "</label>" +
-										"<button class='btn btn-primary' id=" + result[i].CNAME  + " onclick=>수정하기</button>" +
-									"</div>";
-						}
-						$("#categoryInsertResult").html(htmlResult);
-					}
-		});
+	function boardLock(BNUMBER, BSTATE){
+		location.href = "boardLock?BNUMBER="+BNUMBER+"&BSTATE="+(BSTATE * -1);
+	}
+	
+	function complaintBoardDetail(BNUMBER){
+		window.open("complaintBoardDetail?BNUMBER="+BNUMBER, "_blank", "menubar=0, scrollbars=1, status=0, titlebar=0, toolbar=0, left=30, top=30, width=700, height=500");
 	}
 </script>
 </html>

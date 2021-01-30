@@ -72,9 +72,9 @@
 
 					<label for="MPHONE" class="form-label">연락처</label>
 					<div class="input-group">
-						<input type="text" class="form-control" id="MPHONE" name="MPHONE" placeholder="'-'제외" onkeyup="phoneCheck()" required>
+						<input type="text" class="form-control" id="MPHONE" name="MPHONE" placeholder="'-'제외" onkeyup="phoneRegex()" required>
 					</div>
-					<span id="phoneCheckResult" class="d-block"></span>
+					<span id="phoneRegexResult" class="d-block"></span>
 
 					<div class="mt-3 text-center mb-1">
 						<input type="hidden" name="MLEVEL" value="0">
@@ -100,14 +100,14 @@
 	var pwRegexResult = false;
 	var pwCheckResult = false;
 	var nickCheckResult = false;
-	var phoneCheckResult = false;
+	var phoneRegexResult = false;
 	
 	function memberjoin(){
 		if (idCheckResult) {
 			if(pwRegexResult){
 				if(pwCheckResult){
 					if(nickCheckResult){
-						if(phoneCheckResult){
+						if(phoneRegexResult){
 							return true;
 						}else{
 							alert("연락처를 형식에 맞게 입력해 주세요");
@@ -177,8 +177,6 @@
 		 pwCheck();
 	}	
 	function pwCheck(){
-		console.log($("#MPWC").val());
-		console.log($("#MPW").val());
 		 if($("#MPWC").val() == $("#MPW").val()){
 			 $("#pwCheckResult").css("color", "blue");
 			 $("#pwCheckResult").html("비밀번호가 일치합니다.");
@@ -215,12 +213,12 @@
 		}
 	}
 		
-	function phoneCheck(){
+	function phoneRegex(){
 		var num = /\d{11}/g;
 		if(num.test($("#MPHONE").val())){
-			phoneCheckResult = true;
+			phoneRegexResult = true;
 		}else{
-			phoneCheckResult = false;
+			phoneRegexResult = false;
 		}
 	}
 </script>

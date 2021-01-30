@@ -10,10 +10,13 @@ import org.springframework.stereotype.Repository;
 import com.icia.TravelMaker.dto.BoardListDTO;
 import com.icia.TravelMaker.dto.CartListDTO;
 import com.icia.TravelMaker.dto.CategoryDTO;
+import com.icia.TravelMaker.dto.CommentsListDTO;
 import com.icia.TravelMaker.dto.LikeListDTO;
 import com.icia.TravelMaker.dto.MemberDTO;
 import com.icia.TravelMaker.dto.MyInfoDTO;
 import com.icia.TravelMaker.dto.PointDTO;
+import com.icia.TravelMaker.dto.ReviewListDTO;
+import com.icia.TravelMaker.dto.ShoppingListDTO;
 
 @Repository
 public class MemberDAO {
@@ -63,6 +66,34 @@ public class MemberDAO {
 
 	public List<PointDTO> pointHistory(MemberDTO dto) {
 		return sql.selectList("Member.pointHistory", dto);
+	}
+
+	public List<ShoppingListDTO> shoppingList(MemberDTO dto) {
+		return sql.selectList("Member.shoppingList", dto);
+	}
+
+	public String passwordCheck(MemberDTO dto) {
+		return sql.selectOne("Member.passwordCheck", dto);
+	}
+
+	public void passwordUpdate(MemberDTO dto) {
+		sql.update("Member.passwordUpdate", dto);
+	}
+
+	public MemberDTO memberInfo(MemberDTO dto) {
+		return sql.selectOne("Member.memberInfo", dto);
+	}
+
+	public void memberUpdate(MemberDTO dto) {
+		sql.update("Member.memberUpdate", dto);
+	}
+
+	public List<CommentsListDTO> myCommentsList(MemberDTO dto) {
+		return sql.selectList("Member.myCommentsList", dto);
+	}
+
+	public List<ReviewListDTO> myReviewList(MemberDTO dto) {
+		return sql.selectList("Member.myReviewList", dto);
 	}
 
 }

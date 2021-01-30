@@ -27,29 +27,55 @@
 				<%@ include file="../MyPageNav.jsp" %>
 			</div>
 			<div class="col justify-content-center text-start">
-				<h1>내 게시글 목록</h1>
-				<table class="table table-hover text-center">
-					<thead>
-						<tr class="table-secondary">
-							<th>번호</th>
-							<th>제목</th>
-							<th>작성자</th>
-							<th>등록일</th>
-							<th>조회수</th>
-							<th>추천수</th>
-						</tr>
-					</thead>
-					<c:forEach items="${boardList}" var="i">
-						<tr>
-							<td>${i.getBNUMBER()}</td>
-							<td><a href="#">${i.getBTITLE()}</a></td>
-							<td>${i.getMNICK()}</td>
-							<td>${fn:substring(i.getBDATE(),5,16)}</td>
-							<td>${i.getBOARDVIEWS()}</td>
-							<td>${i.getBOARDLIKE()}</td>
-						</tr>
-					</c:forEach>
-				</table>
+				<c:choose>
+					<c:when test="${state == 0}">
+						<h1>내 게시글 목록</h1>
+					</c:when>
+					<c:when test="${state == 1}">
+						<h1>내 후기 목록</h1>
+					</c:when>
+				</c:choose>
+				<c:choose>
+					<c:when test="${state == 0}">
+						<table class="table table-hover text-center">
+							<thead>
+								<tr class="table-secondary">
+									<th>번호</th>
+									<th>제목</th>
+									<th>작성자</th>
+									<th>등록일</th>
+									<th>조회수</th>
+									<th>추천수</th>
+								</tr>
+							</thead>
+							<c:forEach items="${boardList}" var="i">
+								<tr>
+									<td>${i.getBNUMBER()}</td>
+									<td><a href="#">${i.getBTITLE()}</a></td>
+									<td>${i.getMNICK()}</td>
+									<td>${fn:substring(i.getBDATE(),5,16)}</td>
+									<td>${i.getBOARDVIEWS()}</td>
+									<td>${i.getBOARDLIKE()}</td>
+								</tr>
+							</c:forEach>
+						</table>
+					</c:when>
+					<c:when test="${state == 1}">
+						<div class="row row-cols-1 row-cols-md-3 g-4">
+							<c:forEach items="${boardList}" var="i">
+								<div class="col">
+									<div class="card">
+										<img src="resources/boardFile/${i.getBIMG()}" class="card-img-top" alt="패키지이미지">
+										<div class="card-body">
+											<h5 class="card-title">${i.getBTITLE()}</h5>
+											<a href="#" class="btn btn-primary">상세보기</a>
+										</div>
+									</div>
+								</div>
+							</c:forEach>
+						</div>
+					</c:when>
+				</c:choose>
 
 				<div class="row container-fluid mb-1">
 					<div class="text-end">

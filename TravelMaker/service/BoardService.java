@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 import com.icia.TravelMaker.dao.BoardDAO;
 import com.icia.TravelMaker.dto.BoardCategoryDTO;
 import com.icia.TravelMaker.dto.BoardDTO;
+import com.icia.TravelMaker.dto.BoardDetailDTO;
 import com.icia.TravelMaker.dto.BoardListDTO;
+import com.icia.TravelMaker.dto.CommentsDTO;
+import com.icia.TravelMaker.dto.CommentsListDTO;
 
 @Service
 public class BoardService {
@@ -34,6 +37,35 @@ public class BoardService {
 
 	public BoardCategoryDTO boardCategory(BoardCategoryDTO dto) {
 		return dao.boardCategory(dto);
+	}
+
+	public BoardDetailDTO boardDetail(BoardDTO dto) {
+		return dao.boardDetail(dto);
+	}
+
+	public List<CommentsListDTO> commentsList(BoardDTO dto) {
+		return dao.commentsList(dto);
+	}
+
+	public void commentsInsert(CommentsDTO dto) {
+		dao.commentsInsert(dto);
+	}
+
+	public List<BoardCategoryDTO> boardCategoryList() {
+
+		return dao.boardCategoryList();
+	}
+
+	public int boardUpdate(BoardDTO dto) throws IllegalStateException, IOException {
+		System.out.println("여기는 서비스입니다.");
+		/*
+		 * if(!dto.getBIMGFILE().equals(obj)) {
+		 * dto.setBIMG(System.currentTimeMillis()+"_"+dto.getBIMGFILE().
+		 * getOriginalFilename()); dto.getBIMGFILE().transferTo(new
+		 * File("D:\\ICIA\\Jong Won\\Team_404\\TravelMaker_Proj\\TravelMaker\\src\\main\\webapp\\resources\\boardFile\\"
+		 * +dto.getBIMG())); }else { dto.setBIMG("Not Exist"); }
+		 */
+		return dao.boardUdate(dto);
 	}
 
 }

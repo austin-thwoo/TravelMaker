@@ -8,10 +8,15 @@ import org.springframework.stereotype.Repository;
 
 import com.icia.TravelMaker.dto.AdminJobListDTO;
 import com.icia.TravelMaker.dto.BoardCategoryDTO;
+import com.icia.TravelMaker.dto.BoardComplaintDetailDTO;
+import com.icia.TravelMaker.dto.BoardDTO;
 import com.icia.TravelMaker.dto.BoardListDTO;
 import com.icia.TravelMaker.dto.CategoryDTO;
+import com.icia.TravelMaker.dto.CommentsComplaintDetailDTO;
+import com.icia.TravelMaker.dto.CommentsDTO;
 import com.icia.TravelMaker.dto.CommentsListDTO;
 import com.icia.TravelMaker.dto.MemberDTO;
+import com.icia.TravelMaker.dto.MemberListDTO;
 import com.icia.TravelMaker.dto.PackageDTO;
 import com.icia.TravelMaker.dto.TravelerListDTO;
 
@@ -59,6 +64,59 @@ public class AdminDAO {
 
 	public List<CommentsListDTO> complaintCommentsList() {
 		return sql.selectList("Admin.complaintCommentsList");
+	}
+
+	public List<MemberListDTO> memberList(MemberDTO dto) {
+		return sql.selectList("Admin.memberList", dto);
+	}
+
+	public int memberStateUpdate(MemberDTO dto) {
+		return sql.update("Admin.memberStateUpdate", dto);
+	}
+
+	public void commentsLock(CommentsDTO dto) {
+		sql.update("Admin.commentsLock", dto);
+	}
+
+	public void boardLock(BoardDTO dto) {
+		sql.update("Admin.boardLock", dto);
+	}
+
+	public PackageDTO packageDetail(PackageDTO dto) {
+		return sql.selectOne("Admin.packageDetail", dto);
+	}
+
+	public void packageUpdate(PackageDTO dto) {
+		sql.update("Admin.packageUpdate", dto);
+	}
+
+	public void accountBanInsert(MemberDTO dto) {
+		sql.insert("Admin.accountBanInsert", dto);
+	}
+
+	public List<BoardComplaintDetailDTO> complaintBoardDetail(BoardDTO dto) {
+		return sql.selectList("Admin.complaintBoardDetail", dto);
+	}
+
+	public List<CommentsComplaintDetailDTO> complaintCommentsDetail(CommentsDTO dto) {
+		System.out.println(dto.getCMDATE());
+		return sql.selectList("Admin.complaintCommentsDetail", dto);
+	}
+
+	public String boardCategoryCheck(BoardCategoryDTO dto) {
+		return sql.selectOne("Admin.boardCategoryCheck", dto);
+	}
+
+	public void boardCategoryUpdate(BoardCategoryDTO dto) {
+		sql.update("Admin.boardCategoryUpdate", dto);
+	}
+
+	public void categoryUpdate(CategoryDTO dto) {
+		sql.update("Admin.categoryUpdate", dto);
+	}
+
+	public String categoryCheck(CategoryDTO dto) {
+		return sql.selectOne("Admin.categoryCheck", dto);
 	}
 
 }

@@ -1,11 +1,14 @@
 package com.icia.TravelMaker.controller;
 
+import java.io.InputStream;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -115,19 +118,112 @@ public class MemberConroller {
 		return mav;
 	}
 
-	@RequestMapping(value = "/myBoardList")
-	private ModelAndView myBoardList(@ModelAttribute MemberDTO dto) {
+	@RequestMapping(value = "/goMyBoardList")
+	private ModelAndView goMyBoardList(@ModelAttribute MemberDTO dto) {
 		mav();
 		mav.addObject("boardList", service.myBoardList(dto, 0));
+		mav.addObject("state", 0);
 		mav.setViewName("member/MyBoardList");
 		return mav;
 	}
 
 	@RequestMapping(value = "/goPointHistory")
-	public ModelAndView goPointHistory(@ModelAttribute MemberDTO dto) {
+	private ModelAndView goPointHistory(@ModelAttribute MemberDTO dto) {
 		mav();
 		mav.addObject("pointHistory", service.pointHistory(dto));
 		mav.setViewName("member/PointHistory");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/goMyPostList")
+	private ModelAndView goMyPostList(@ModelAttribute MemberDTO dto) {
+		mav();
+		mav.addObject("boardList", service.myBoardList(dto, 1));
+		mav.addObject("state", 1);
+		mav.setViewName("member/MyBoardList");
+		return mav;
+	}
+
+	@RequestMapping(value = "/goShoppingList")
+	private ModelAndView goShoppingList(@ModelAttribute MemberDTO dto) {
+		mav();
+		mav.addObject("shoppingList", service.shoppingList(dto)); 
+		mav.setViewName("member/ShoppingList");
+		return mav;
+	}
+
+	@RequestMapping(value = "/goPasswordUpdateForm")
+	private ModelAndView goPasswordUpdateForm() {
+		mav();
+		mav.setViewName("member/PasswordUpdateForm");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/passwordUpdate")
+	private ModelAndView passwordUpdate(@ModelAttribute MemberDTO dto,
+										@RequestParam("UPMPW") String MPW) {
+		mav();
+		if(service.passwordCheck(dto).equals("1")) {
+			dto.setMPW(MPW);
+			service.passwordUpdate(dto);
+			session.invalidate();
+			mav.setViewName("redirect:/goLoginForm");
+		}else {
+			mav.setViewName("redirect:/goPasswordUpdateForm");
+		}
+		return mav;
+	}
+
+	@RequestMapping(value = "/goPasswordCheckForm")
+	private ModelAndView goPasswordCheckForm(@RequestParam("to") String to) {
+		mav();
+		mav.addObject("to", to);
+		mav.setViewName("member/PasswordCheckForm");
+		return mav;
+	}
+	
+	@RequestMapping(value="/passwordCheck")
+	private ModelAndView passwordCheck(@ModelAttribute MemberDTO dto,
+										@RequestParam("to") String to) {
+		mav();
+		if(service.passwordCheck(dto).equals("1")) {
+			mav.setViewName("redirect:/"+to+"?MID="+dto.getMID());
+		}else {
+			mav.setViewName("redirect:/goPasswordCheckForm");
+		}
+		return mav;
+	}
+
+	@RequestMapping(value = "/goMemberUpdateForm")
+	private ModelAndView goMemberUpdateForm(@ModelAttribute MemberDTO dto) {
+		mav();
+		mav.addObject("memberInfo", service.memberInfo(dto));
+		mav.setViewName("member/MemberUpdateForm");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/memberUpdate")
+	private ModelAndView memberUpdate(@ModelAttribute MemberDTO dto) {
+		mav();
+		service.memberUpdate(dto);
+		mav.setViewName("redirect:/myPage?MID="+dto.getMID());
+		return mav;
+		
+	}
+
+	@RequestMapping(value = "/goMyCommentsList")
+	private ModelAndView goMyCommentsList(@ModelAttribute MemberDTO dto) {
+		mav();
+		mav.addObject("commentsList", service.myCommentsList(dto));
+		mav.setViewName("member/MyCommentsList");
+		return mav;
+	}
+
+	@RequestMapping(value = "/goMyReviewList")
+	private ModelAndView goMyReviewList(@ModelAttribute MemberDTO dto) {
+		mav();
+		mav.addObject("reviewList", service.myReviewList(dto));
+		mav.setViewName("member/ReviewList");
 		return mav;
 	}
 

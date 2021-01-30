@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <div class="container">
@@ -9,8 +10,10 @@
       		<div class="collapse" id="getting-member-collapse">
 				<ul class="list-unstyled fw-normal pb-1 small">
 					<li><a class="dropdown-item" href="adminPage?MID=${sessionScope.loginInfo.getMID()}">할 일 목록</a></li>
-					<li><a class="dropdown-item" href="#">회원 목록</a></li>
-					<li><a class="dropdown-item" href="#">관리자 목록</a></li>
+					<li><a class="dropdown-item" href="goMemberList?MLEVEL=1">회원 목록</a></li>
+					<c:if test="${sessionScope.loginInfo.getMID() eq 'admin'}">
+						<li><a class="dropdown-item" href="goMemberList?MLEVEL=0">관리자 목록</a></li>
+					</c:if>
 				</ul>
 			</div>
 		</li>
@@ -35,8 +38,10 @@
 				<ul class="list-unstyled fw-normal pb-1 small">
 					<li><a class="dropdown-item" href="goCategoryList">상품 카테고리 목록</a></li>
 					<li><a class="dropdown-item" href="goPackageInsertForm">상품 등록</a></li>
+					<li><a class="dropdown-item" href="goPackageList?to=admin">상품 목록</a></li>
 					<li><a class="dropdown-item" href="#">판매 관리</a></li>
 					<li><a class="dropdown-item" href="goTravelerList">여행객 목록</a></li>
+					<li><a class="dropdown-item" href="goRefundList">환불신청 목록</a></li>
 				</ul>
 			</div>
 		</li>

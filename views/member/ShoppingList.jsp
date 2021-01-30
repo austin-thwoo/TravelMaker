@@ -1,4 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <html>
@@ -36,36 +38,44 @@
 				    </tr>
 				  </thead>
 				  <tbody>
-				    <tr>
-				      <th scope="row">꽤나 이쁜 사진</th>
-				      <th> 	
-				      	<table class="table table-borderless">
-				      		<tr>
-				      			<th>기간</th>
-				      			<td>0000</td>
-				      		</tr>
-				      		<tr>
-				      			<th>지역</th>
-				      			<td>아르헨티나,뉴욕, 한국, 브라질, 조선민주주의인민공화국, 인도, 화성, 미래도시인천</td>
-				      		</tr>
-				      		<tr>
-				      			<th>가격</th>
-				      			<td>38,500원</td>
-				      		</tr>
-				      		<tr>
-				      			<th>인원</th>
-				      			<td>2명</td>
-				      		</tr>
-				      	</table>
-					  </th>
-				      <td class="text-end">
-				      	<div class="btn-group-vertical">
-					      	<button class="btn btn-outline-primary btn-sm">리뷰쓰러가기</button>
-					      	<button class="btn btn-outline-primary btn-sm">환불하기 or 환불불가</button>
-					      	<button class="btn btn-outline-primary btn-sm">상품 상세보기</button>
-				      	</div>
-				      </td>
-				    </tr>
+				  	<c:forEach items="${shoppingList}" var="i">
+					    <tr>
+					      <th><img alt="상품 이미지" src="resources/packageFile/${i.getPIMG()}"></th>
+					      <th> 	
+					      	<table class="table table-borderless">
+					      		<tr>
+					      			<th>기간</th>
+					      			<td>${fn:substring(i.getPSSTART(),0,10)} ~ ${fn:substring(i.getPSEND(),0,10)}</td>
+					      		</tr>
+					      		<tr>
+					      			<th>지역</th>
+					      			<td>${i.getPLONAME()}</td>
+					      		</tr>
+					      		<tr>
+					      			<th>가격</th>
+					      			<td>${i.getOADULT() * i.getPADULT() + i.getOCHILD() * i.getPCHILD() + i.getOINFANT() * i.getPINFANT()}</td>
+					      		</tr>
+					      		<tr>
+					      			<th>인원</th>
+					      			<td>${i.getOADULT() + i.getOCHILD() + i.getOINFANT()}명</td>
+					      		</tr>
+					      	</table>
+						  </th>
+					      <td class="text-end">
+					      	<div class="btn-group-vertical">
+						      	<button class="btn btn-outline-primary btn-sm">리뷰쓰러가기</button>
+								<jsp:useBean id="sysdate" class="java.util.Date" />
+								<fmt:formatDate value='${sysdate}' pattern='yyyyMMdd' var="sysdate"/>
+								<c:choose>
+									<c:when test="${i.getPSSTART() > sysdate}">
+										<button class="btn btn-outline-primary btn-sm">환불하기 or 환불불가</button>
+									</c:when>
+								</c:choose>
+						      	<button class="btn btn-outline-primary btn-sm">상품 상세보기</button>
+					      	</div>
+					      </td>
+					    </tr>
+				  	</c:forEach>
 				  </tbody>
 				</table>
 				<div class="row justify-content-end text-end">

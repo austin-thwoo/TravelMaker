@@ -18,27 +18,30 @@
 <body>
 	<%@ include file="../Header.jsp"%>
 	<div class="my-1">
-		<%@ include file="../MainNav.jsp"%>
+		<%@ include file="../MainNav.jsp" %>
 	</div>
-	<div class="justify-content-center text-center">
-		<div class="container">
-			<div class="row row-cols-1 row-cols-md-3 g-4">
-				<c:forEach items="${packageList}" var="i">
-					<div class="col">
-						<div class="card">
-							<img src="resources/packageFile/${i.getPIMG()}" class="card-img-top" alt="패키지이미지">
-							<div class="card-body">
-								<h5 class="card-title">${i.getPNAME()}</h5>
-								<p class="card-text">${i.getPINFO()}</p>
-								<a href="goPackageDetail?PNUMBER=${i.getPNUMBER()}" class="btn btn-primary">상세보기</a>
-							</div>
-						</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-3">
+				<%@ include file="../MyPageNav.jsp" %>
+			</div>
+			<div class="row col container-fluid justify-content-start" >
+				<div class="col-6">
+				<h1>비밀번호 확인</h1>
+					<form action="passwordCheck" method="get" name="searchPasswordForm">
+					<label class="form-label" for="MPW">비밀번호</label>
+					<div class="input-group mb-1">
+						<input class="form-control" type="password" aria-describedby="MPW" name="MPW">
+						<input type="hidden" name="MID" value="${sessionScope.loginInfo.getMID()}">
+						<input type="hidden" name="to" value="${to}">
+						<button class="btn btn-primary btn-md" id="MPW">확인</button>
 					</div>
-				</c:forEach>
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>
-	<%@ include file="../PageUp.jsp"%>
+	<%@ include file="../PageUp.jsp" %>
 </body>
 <footer>
 	<%@ include file="../Footer.jsp"%>

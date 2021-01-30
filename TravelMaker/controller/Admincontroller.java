@@ -12,7 +12,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.icia.TravelMaker.dto.AdminJobListDTO;
 import com.icia.TravelMaker.dto.BoardCategoryDTO;
+import com.icia.TravelMaker.dto.BoardDTO;
 import com.icia.TravelMaker.dto.CategoryDTO;
+import com.icia.TravelMaker.dto.CommentsDTO;
 import com.icia.TravelMaker.dto.MemberDTO;
 import com.icia.TravelMaker.dto.PackageDTO;
 import com.icia.TravelMaker.service.AdminService;
@@ -80,17 +82,25 @@ public class Admincontroller {
 		mav.setViewName("admin/BoardCategoryList");
 		return mav;
 	}
+
+	@RequestMapping(value = "/boardCategoryList")
+	private @ResponseBody List<BoardCategoryDTO> boardCategoryList() {
+		return service.boardCategoryList();
+	}
 	
 	@RequestMapping(value = "/boardCategoryInsert")
 	private ModelAndView boardCategoryInsert(@ModelAttribute BoardCategoryDTO dto) {
 		service.boardCategoryInsert(dto);
-		mav.setViewName("redirect:/boardCategoryList");
+		mav.setViewName("redirect:/goBoardCategoryList");
 		return mav;
 	}
-	
-	@RequestMapping(value = "/boardCategoryList")
-	private @ResponseBody List<BoardCategoryDTO> boardCategoryList() {
-		return service.boardCategoryList();
+
+	@RequestMapping(value = "/boardCategoryUpdate")
+	private ModelAndView boardCategoryUpdate(@ModelAttribute BoardCategoryDTO dto) {
+		mav();
+		service.boardCategoryUpdate(dto);
+		mav.setViewName("redirect:/goBoardCategoryList");
+		return mav;
 	}
 
 	@RequestMapping(value = "/goCategoryList")
@@ -100,18 +110,26 @@ public class Admincontroller {
 		mav.setViewName("admin/CategoryList");
 		return mav;
 	}
+
+	@RequestMapping(value = "/CategoryList")
+	private @ResponseBody List<CategoryDTO> CategoryList() {
+		return service.categoryList();
+	}
 	
 	@RequestMapping(value="categoryInsert")
 	private ModelAndView categoryInsert(@ModelAttribute CategoryDTO dto){
 		mav();
 		service.categoryInsert(dto);
-		mav.setViewName("redirect:/CategoryList");
+		mav.setViewName("redirect:/goCategoryList");
 		return mav;
 	}
-
-	@RequestMapping(value = "/CategoryList")
-	private @ResponseBody List<CategoryDTO> CategoryList() {
-		return service.categoryList();
+	
+	@RequestMapping(value="categoryUpdate")
+	private ModelAndView categoryUpdate(@ModelAttribute CategoryDTO dto ){
+		mav();
+		service.categoryUpdate(dto);
+		mav.setViewName("redirect:/goCategoryList");
+		return mav;
 	}
 	
 	@RequestMapping(value = "/goComplaintBoardList")
@@ -136,5 +154,80 @@ public class Admincontroller {
 		mav.addObject("commentsList", service.complaintCommentsList());
 		mav.setViewName("admin/ComplaintCommentsList");
 		return mav;
+	}
+
+	@RequestMapping(value = "/goMemberList")
+	private ModelAndView goMemberList(@ModelAttribute MemberDTO dto) {
+		mav();
+		mav.addObject("memberList", service.memberList(dto));
+		mav.addObject("MLEVEL", dto.getMLEVEL());
+		mav.setViewName("admin/MemberList");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/memberStateUpdate")
+	private ModelAndView memberStateUpdate(@ModelAttribute MemberDTO dto) {
+		mav();
+		service.memberStateUpdate(dto);
+		mav.setViewName("redirect:/goMemberList?MLEVEL="+dto.getMLEVEL());
+		return mav;
+	}
+	
+	@RequestMapping(value = "/commentsLock")
+	private ModelAndView commentsLock(@ModelAttribute CommentsDTO dto) {
+		mav();
+		service.commentsLock(dto);
+		mav.setViewName("redirect:/goComplaintCommentsList");
+		return mav;
+	}
+	
+	@RequestMapping(value = "boardLock")
+	private ModelAndView boardLock(@ModelAttribute BoardDTO dto) {
+		mav();
+		service.boardLock(dto);
+		mav.setViewName("redirect:/goComplaintBoardList");
+		return mav;
+	}
+
+	@RequestMapping(value = "/goPackageUpdateForm")
+	private ModelAndView goPackageUpdateForm(@ModelAttribute PackageDTO dto) {
+		mav();
+		mav.addObject("packageDetail", service.packageDetail(dto));
+		mav.setViewName("sales/PackageUpdateForm");
+		return mav;
+	}
+
+	@RequestMapping(value = "/packageUpdate")
+	public ModelAndView packageUpdate(@ModelAttribute PackageDTO dto) {
+		mav();
+		service.packageUpdate(dto);
+		mav.setViewName("redirect:/goPackageList?to=admin");
+		return mav;
+	}
+
+	@RequestMapping(value = "/complaintBoardDetail")
+	public ModelAndView complaintBoardDetail(@ModelAttribute BoardDTO dto) {
+		mav();
+		mav.addObject("complaintBoardDetail", service.complaintBoardDetail(dto));
+		mav.setViewName("admin/ComplaintBoardDetail");
+		return mav;
+	}
+
+	@RequestMapping(value = "/complaintCommentsDetail")
+	public ModelAndView complaintCommentsDetail(@ModelAttribute CommentsDTO dto) {
+		mav();
+		mav.addObject("complaintCommentsDetail", service.complaintCommentsDetail(dto));
+		mav.setViewName("admin/ComplaintCommentsDetail");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/boardCategoryCheck")
+	private @ResponseBody String boardCategoryCheck(@ModelAttribute BoardCategoryDTO dto) {
+		return service.boardCategoryCheck(dto);
+	}
+	
+	@RequestMapping(value = "/categoryCheck")
+	private @ResponseBody String categoryCheck(@ModelAttribute CategoryDTO dto) {
+		return service.categoryCheck(dto);
 	}
 }

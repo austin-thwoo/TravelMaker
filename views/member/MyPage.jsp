@@ -32,28 +32,28 @@
 					<div class="col">
 						<svg class="bd-placeholder-img rounded-circle" width="100" height="100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
 		        			<rect width="100%" height="100%" style="fill: gray;"></rect>
-		        			<a href="myBoardList?MID=${sessionScope.loginInfo.getMID()}" class="text-decoration-none"><text text-anchor="middle" alignment-baseline="middle" x="50%" y="50%" style="fill: white;">5</text></a>
+		        			<a href="goMyBoardList?MID=${sessionScope.loginInfo.getMID()}" class="text-decoration-none"><text text-anchor="middle" alignment-baseline="middle" x="50%" y="50%" style="fill: white;">${myInfo.getBCOUNT()}</text></a>
 		        		</svg>
 						<h2>내 게시글</h2>
 					</div>
 					<div class="col">
 						<svg class="bd-placeholder-img rounded-circle" width="100" height="100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
 		        			<rect width="100%" height="100%" style="fill: gray;"></rect>
-		        			<a href="#" class="text-decoration-none"><text text-anchor="middle" alignment-baseline="middle" x="50%" y="50%" style="fill: white;">5</text></a>
+		        			<a href="goMyCommentsList?MID=${sessionScope.loginInfo.getMID()}" class="text-decoration-none"><text text-anchor="middle" alignment-baseline="middle" x="50%" y="50%" style="fill: white;">${myInfo.getCMCOUNT()}</text></a>
 		        		</svg>
 						<h2>내 댓글</h2>
 					</div>
 					<div class="col">
 						<svg class="bd-placeholder-img rounded-circle" width="100" height="100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
 		        			<rect width="100%" height="100%" style="fill: gray;"></rect>
-		        			<a href="#" class="text-decoration-none"><text text-anchor="middle" alignment-baseline="middle" x="50%" y="50%" style="fill: white;">5</text></a>
+		        			<a href="goMyReviewList?MID=${sessionScope.loginInfo.getMID()}" class="text-decoration-none"><text text-anchor="middle" alignment-baseline="middle" x="50%" y="50%" style="fill: white;">${myInfo.getRVCOUNT()}</text></a>
 		        		</svg>
 						<h2>내 리뷰</h2>
 					</div>
 					<div class="col">
 						<svg class="bd-placeholder-img rounded-circle" width="100" height="100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
 		        			<rect width="100%" height="100%" style="fill: gray;"></rect>
-		        			<a href="#" class="text-decoration-none"><text text-anchor="middle" alignment-baseline="middle" x="50%" y="50%" style="fill: white;">10</text></a>
+		        			<a href="goMyPostList?MID=${sessionScope.loginInfo.getMID()}" class="text-decoration-none"><text text-anchor="middle" alignment-baseline="middle" x="50%" y="50%" style="fill: white;">${myInfo.getRVBCOUNT()}</text></a>
 		        		</svg>
 						<h2>내 여행후기</h2>
 					</div>
@@ -85,11 +85,11 @@
 					</tr>
 					<tr>
 						<th>잔여 포인트</th>
-						<th><a href="goPointHistory?MID=${sessionScope.loginInfo.getMID()}">1,500 P</a></th>
+						<th><a href="goPointHistory?MID=${sessionScope.loginInfo.getMID()}">${myInfo.getPOAMOUNT()}</a></th>
 					</tr>
 					<tr>
 						<th>정지 횟수</th>
-						<th>5</th>
+						<th>${myInfo.getABCOUNT()}</th>
 					</tr>
 				</table>
 			</div>

@@ -25,33 +25,29 @@
 			<div class="col-3">
 				<%@ include file="../AdminNav.jsp" %>
 			</div>
-			<div class="col">
-				<h2>BoardCategoriList</h2>		
-				<table class="table">
-				  <thead>
-				    <tr>
-				      <th>#</th>
-				      <th>게시판 명</th>
-				      <th class="text-end">상태</th>
-				    </tr>
-				  </thead>
-				  <tbody id="boardCategoryInsertResult">
-				  	<c:forEach items="${boardCategoryList}" var="i">
-					    <tr>
-					      <th>${i.getBCNUMBER()}</th>
-					      <td>${i.getBCNAME()}</td>
-					      <td class="text-end">
-					      	<button class="btn btn-primary btn-md me-1">수정</button>
-					      	<button class="btn btn-primary btn-md">잠금</button>
-					      </td>
-					    </tr>
-				  	</c:forEach>
-				  </tbody>
-				</table>
-				<div class="row justify-content-end text-end">
-					<div class="input-group w-25">
-						<input class="form-control" type="text"aria-describedby="button-addon" id="BCNAME">
-						<button class="btn btn-primary" id="button-addon" onclick="boardCategoryInsert()">등록하기</button>
+			<div class="col-6 justify-content-center text-start">
+				<h1>게시판 카테고리 목록</h1>
+				<div class="list-group">
+					<c:forEach items="${boardCategoryList}" var="i">
+						<div class="input-group mb-1">
+							<label class="list-group-item form-control" aria-describedby="${i.getBCNAME()}">${i.getBCNAME()}</label>
+							<button class="btn btn-primary" id="${i.getBCNAME()}" data-bs-toggle="collapse" data-bs-target="#CategoryUpdateForm${i.getBCNUMBER()}">수정하기</button>
+						</div>
+						<div class="collapse multi-collapse input-group mb-1" id="CategoryUpdateForm${i.getBCNUMBER()}">
+							<input class="form-control" type="text" aria-describedby="button-addon" id="CNAME_${i.getBCNAME()}" onkeyup="boardCategoryCheck(this, document.getElementById('boardCategoryCheckResult${i.getBCNUMBER()}'))">
+							<button class="btn btn-primary" id="button-addon" onclick="boardCategoryUpdate('${i.getBCNUMBER()}', document.getElementById('CNAME_${i.getBCNAME()}'))">저장</button>
+						</div>
+						<span id="boardCategoryCheckResult${i.getBCNUMBER()}" class="d-block"></span>
+					</c:forEach>
+				</div>
+				
+				<div class="row justify-content-end">
+					<div class="col-5">
+						<div class="input-group">
+							<input class="form-control" type="text"aria-describedby="button-addon" id="BCNAME" onkeyup="boardCategoryCheck(this, document.getElementById('boardCategoryCheckResult'))">
+							<button class="btn btn-primary" id="button-addon" onclick="boardCategoryInsert()">등록하기</button>
+						</div>
+						<span id="boardCategoryCheckResult" class="d-block"></span>
 					</div>
 				</div>
 			</div>
@@ -64,30 +60,49 @@
 </footer>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 <script type="text/javascript">
+	var boardCategoryCheckResult = false;
+	
 	function boardCategoryInsert(){
-		$.ajax({
-			url : "boardCategoryInsert",
-			data : {"BCNAME" : $("#BCNAME").val()},
-			type : "get",
-			dataType : "json",
-			success : function(result){
-						var htmlResult = "";
-						for (var i in result) {
-							htmlResult += "<tr>" +
-											"<th>" + result[i].BCNUMBER + "</th>" +
-											"<td>" + result[i].BCNAME + "</td>" +
-											"<td class='text-end'>" +
-												"<button class='btn btn-primary btn-md me-1'>수정</button>" +
-					    	  					"<button class='btn btn-primary btn-md'>잠금</button>" +
-      										"</td>" +
-    									"</tr>";
-						}
-						$("#boardCategoryInsertResult").html(htmlResult);
-			}
-		})
-		.done(function(result){
-			console.log(result);
-		});
+		if(boardCategoryCheckResult){
+			location.href = "boardCategoryInsert?BCNAME=" + $("#BCNAME").val();
+		}else{
+			alert("이미 존재 하는 카테고리 입니다.");
+		}
+	}
+	
+	function boardCategoryCheck(BCNAME, output){
+		if(BCNAME.value != ""){
+			$.ajax({	
+				type : "post",
+				url : "boardCategoryCheck",
+				data : {
+						"BCNAME" : BCNAME.value
+						},
+				dataType : "text",
+				success : function(result){
+							if (result == "0") {
+								output.style.color = "blue";
+								output.innerHTML = "사용 가능한 카테고리 입니다.";
+								boardCategoryCheckResult = true;
+							}else{
+								output.style.color = "red";
+								output.innerHTML = "이미 존재 하는 카테고리 입니다.";
+								boardCategoryCheckResult = false;
+							}
+				}
+			});
+		}else{
+			output.innerHTML = "";
+			boardCategoryCheckResult = false;
+		}
+	}
+	
+	function boardCategoryUpdate(BCNUMBER, BCNAME){
+		if(boardCategoryCheckResult){
+			location.href = "boardCategoryUpdate?BCNUMBER=" + BCNUMBER + "&BCNAME=" + BCNAME.value;
+		}else{
+			alert("이미 존재 하는 카테고리 입니다.");
+		}
 	}
 </script>
 </html>

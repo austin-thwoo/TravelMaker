@@ -9,6 +9,7 @@ public class BoardListDTO {
 	private String BTITLE;
 	private String BDATE;
 	private String BIMG;
+	private int BSTATE;
 	private String BCNAME;
 	private String MNICK;
 	private int BOARDVIEWS;

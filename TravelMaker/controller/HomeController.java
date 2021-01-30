@@ -18,15 +18,10 @@ public class HomeController {
 		return "Main";
 	}
 
-	@RequestMapping(value = "/goBoardUpdateForm")
-	public String goBoardUpdateForm() {
-		return "board/BoardUpdateForm";
-	}
-
-	@RequestMapping(value = "/goPasswordCheck")
-	public String goPasswordCheck() {
-		return "member/PasswordCheck";
-	}
+	/*
+	 * @RequestMapping(value = "/goBoardUpdateForm") public String
+	 * goBoardUpdateForm() { return "board/BoardUpdateForm"; }
+	 */
 
 	@RequestMapping(value = "/goPreferenceForm")
 	public String goPreferenceForm() {
@@ -43,44 +38,14 @@ public class HomeController {
 		return "member/PasswordSearch";
 	}
 
-	@RequestMapping(value = "/goPasswordUpdateForm")
-	public String goPasswordUpdateForm() {
-		return "member/PasswordUpdateForm";
-	}
-
-	@RequestMapping(value = "/goShoppingList")
-	public String goShoppingList() {
-		return "member/ShoppingList";
-	}
-
-	@RequestMapping(value = "/goMemberList")
-	public String goMemberList() {
-		return "admin/MemberList";
-	}
-
 	@RequestMapping(value = "/goBoardCategoryUpdateForm")
 	public String goBoardCategoryUpdateForm() {
 		return "admin/BoardCategoryUpdateForm";
 	}
 
-	@RequestMapping(value = "/goMemberUpdateForm")
-	public String goMemberUpdateForm() {
-		return "member/MemberUpdateForm";
-	}
-
-	@RequestMapping(value = "/goReviewList")
-	public String goReviewList() {
-		return "member/ReviewList";
-	}
-
 	@RequestMapping(value = "/goSearchResult")
 	public String goSearchResult() {
 		return "member/SearchResult";
-	}
-
-	@RequestMapping(value = "/goCommentsList")
-	public String goCommentsList() {
-		return "member/CommentsList";
 	}
 
 	@RequestMapping(value = "/goBoardComplaint")
@@ -93,25 +58,15 @@ public class HomeController {
 		return "board/CommentsComplaintForm";
 	}
 
-	@RequestMapping(value = "/goPackageDetail")
-	public String goPackageDetail() {
-		return "sales/PackageDetail";
-	}
-
-	@RequestMapping(value = "/goPackageUpdateForm")
-	public String goPackageUpdateForm() {
-		return "sales/PackageUpdateForm";
-	}
-
 	@RequestMapping(value = "/goPayApi")
 	public String goPayApi() {
 		return "sales/PayApi";
 	}
 
-	@RequestMapping(value = "/goRefundList")
-	public String goRefundList() {
-		return "admin/RefundList";
-	}
+	//@RequestMapping(value = "/goRefundList")
+	//public String goRefundList() {
+	//	return "admin/RefundList";
+	//}
 
 	@RequestMapping(value = "/goSalesManagement")
 	public String goSalesManagement() {
@@ -121,11 +76,6 @@ public class HomeController {
 	@RequestMapping(value = "/goJoinTerms")
 	public String goJoinTerms() {
 		return "member/JoinTerms";
-	}
-
-	@RequestMapping(value = "/goAfterBoardList")
-	public String goAfterBoardList() {
-		return "board/AfterBoardList";
 	}
 
 	@RequestMapping(value = "/goPackageCategoryForm")

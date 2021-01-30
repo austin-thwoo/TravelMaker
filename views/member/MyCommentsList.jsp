@@ -24,7 +24,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-3">
-				<%@ include file="../AdminNav.jsp" %>
+				<%@ include file="../MyPageNav.jsp" %>
 			</div>
 			<div class="col justify-content-start">
 				<table class="table table-striped">
@@ -34,32 +34,19 @@
 							<th>게시글 제목</th>
 							<th>댓글내용</th>
 							<th>작성자</th>
-							<th>등록일</th>
 							<th>추천수</th>
-							<th>신고횟수</th>
-							<th>잠금</th>
+							<th>등록일</th>
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${commentsList}" var = "i">	
+						<c:forEach items="${commentsList}" var="i">				
 							<tr>
 								<td>${i.getBNUMBER()}</td>
 								<td><a href="#">${i.getBTITLE()}</a></td>
 								<td>${i.getCMCONTENT()}</td>
 								<td>${i.getMNICK()}</td>
-								<td>${fn:substring(i.getCMDATE(),5,16)}</td>
 								<td>${i.getCOMMENTSLIKE()}</td>
-								<td><a href="javascript:complaintCommentsDetail('${i.getBNUMBER()}', '${i.getMID()}', '${i.getCMDATE()}')">${i.getCOMMENTSCOMPLAINT()}</a></td>
-								<td>
-									<c:choose>
-										<c:when test="${i.getCMSTATE() == 1}">
-											<button class="btn btn-primary btn-sm" onclick="commentsLock('${i.getBNUMBER()}', '${i.getMID()}', '${i.getCMDATE()}', '${i.getCMSTATE()}')">잠금</button>
-										</c:when>
-										<c:when test="${i.getCMSTATE() == -1}">
-											<button class="btn btn-primary btn-sm" onclick="commentsLock('${i.getBNUMBER()}', '${i.getMID()}', '${i.getCMDATE()}', '${i.getCMSTATE()}')">복구</button>
-										</c:when>
-									</c:choose>
-								</td>
+								<td>${fn:substring(i.getCMDATE(),5,16)}</td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -72,13 +59,4 @@
 <footer>
 	<%@ include file="../Footer.jsp"%>
 </footer>
-<script type="text/javascript">
-	function commentsLock(BNUMBER, MID, CMDATE, CMSTATE){
-		location.href = "commentsLock?BNUMBER="+BNUMBER+"&MID="+MID+"&CMDATE="+CMDATE+"&CMSTATE="+(CMSTATE * -1);
-	}
-	
-	function complaintCommentsDetail(BNUMBER, MID, CMDATE){
-		window.open("complaintCommentsDetail?BNUMBER="+BNUMBER+"&MID="+MID+"&CMDATE="+CMDATE, "_blank", "menubar=0, scrollbars=1, status=0, titlebar=0, toolbar=0, left=30, top=30, width=700, height=500");
-	}
-</script>
 </html>

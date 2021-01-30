@@ -14,7 +14,7 @@ public class MyInfoDTO {
 	private int POAMOUNT;
 	private int ABCOUNT;
 	private int BCOUNT;
-	private int CCOUNT;
+	private int CMCOUNT;
 	private int RVCOUNT;
 	private int RVBCOUNT;
 }

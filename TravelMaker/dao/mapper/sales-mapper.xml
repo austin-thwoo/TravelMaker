@@ -6,4 +6,65 @@
  	<select id="packageList" resultType="Package">
  		SELECT * FROM PACKAGE
  	</select>
+ 	
+ 	<select id="packageDetail" parameterType="Package" resultType="PackageDetail">
+ 		SELECT P.*,
+		    PLO.PLONAME,
+		    C.CNAME
+		FROM PACKAGE P LEFT OUTER JOIN (SELECT PNUMBER,
+		                                LISTAGG(PLONAME, ', ') WITHIN GROUP (ORDER BY PLONAME) "PLONAME"
+		                            FROM PACKAGELOCATION
+		                            GROUP BY PNUMBER) PLO ON P.PNUMBER = PLO.PNUMBER
+		               LEFT OUTER JOIN (SELECT PC.PNUMBER,
+		                                LISTAGG(C.CNAME, '; ') WITHIN GROUP (ORDER BY C.CNAME) "CNAME"
+		                            FROM PACKAGECATEGORY PC INNER JOIN CATEGORY C ON PC.CNUMBER = C.CNUMBER
+		                            GROUP BY PC.PNUMBER) C ON P.PNUMBER = C.PNUMBER
+		WHERE P.PNUMBER = #{PNUMBER}
+ 	</select>
+ 	
+ 	<select id="packageSchedule" parameterType="Package" resultType="PackageSchedule">
+ 		SELECT *
+		FROM PACKAGESCHEDULE
+		WHERE PNUMBER = #{PNUMBER}
+ 	</select>
+ 	
+ 	<select id="reviewList" parameterType="Package" resultType="ReviewList">
+ 		SELECT RV.*,
+		    M.MNICK
+		FROM REVIEW RV INNER JOIN MEMBER M ON RV.MID = M.MID
+		WHERE RV.PNUMBER = #{PNUMBER}
+ 	</select>
+ 	
+ 	<select id="refundlist" resultType="RefundList">
+ 		 
+ 		SELECT MID,
+      PNUMBER,
+      ODATE,
+      OADULT,
+      OCHILD,
+      OINFANT,
+      OAMOUNT,
+      OSTATE,
+      PSSTART
+FROM ORDERS
+WHERE PSSTART <![CDATA[<]]> SYSDATE
+  
+ 	</select>
+ 	
+ 	<select id="refundlistAjax" parameterType="RefundList" resultType="RefundList">
+ 		 
+ 	SELECT MID,
+      PNUMBER,
+      ODATE,
+      OADULT,
+      OCHILD,
+      OINFANT,
+      OAMOUNT,
+      OSTATE,
+      PSSTART
+FROM ORDERS
+WHERE MID=#{MID} AND PNUMBER=#{PNUMBER} AND ODATE=TO_DATE(#{ODATE},'YYYY-MM-DD HH24:MI:SS')
+  
+ 	</select>
+ 	
  </mapper>

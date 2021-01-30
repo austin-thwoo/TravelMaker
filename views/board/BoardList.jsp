@@ -49,7 +49,7 @@
 					<c:forEach items="${boardList}" var="i">
 						<tr>
 							<td>${i.getBNUMBER()}</td>
-							<td><a href="#">${i.getBTITLE()}</a></td>
+							<td><a href="goBoardDetail?BNUMBER=${i.getBNUMBER()}">${i.getBTITLE()}</a></td>
 							<td>${i.getMNICK()}</td>
 							<td>${fn:substring(i.getBDATE(),5,16)}</td>
 							<td>${i.getBOARDVIEWS()}</td>

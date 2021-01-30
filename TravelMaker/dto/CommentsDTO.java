@@ -3,15 +3,11 @@ package com.icia.TravelMaker.dto;
 import lombok.Data;
 
 @Data
-public class CommentsListDTO {
+public class CommentsDTO {
 
 	private int BNUMBER;
-	private String BTITLE;
 	private String MID;
-	private String MNICK;
 	private String CMDATE;
 	private String CMCONTENT;
-	private String CMSTATE;
-	private int COMMENTSCOMPLAINT;
-	private int COMMENTSLIKE;
+	private int CMSTATE;
 }

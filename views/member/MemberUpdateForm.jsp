@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <html>
@@ -27,45 +28,45 @@
 			</div>
 			<div class="row col container justify-content-start">
 				<div class="col-6">
-					<form action="#" method="POST">
+					<form action="memberUpdate" method="POST">
 						<label for="MEMAIL" class="form-label">이메일</label>
 						<div class="input-group">
-							<input type="email" class="form-control" id="MEMAIL" name="" value="test@test.com" readonly="readonly">
+							<input type="email" class="form-control" id="MID" name="MID" value="${memberInfo.getMID()}" readonly="readonly">
 						</div>
 									
 						<label for="MNAME" class="form-label">이름</label>
 						<div class="input-group">
-							<input type="text" class="form-control" id="MNAME" name="" value="누구인가?" readonly="readonly">
+							<input type="text" class="form-control" id="MNAME" value="${memberInfo.getMNAME()}" readonly="readonly">
 						</div>
 									
 						<label for="MGENDER" class="form-label">성별</label>
 						<div class="input-group">
-							<input type="text" class="form-control" id="MGENDER" name="" value="남" readonly="readonly">
+							<input type="text" class="form-control" id="MGENDER" value="${memberInfo.getMGENDER()}" readonly="readonly">
 						</div>
 									
 						<label for="MBIRTH" class="form-label">생년월일</label>
 						<div class="input-group">
-							<input type="date" class="form-control" id="MBIRTH" name="" value="2021-01-01" readonly="readonly">
+							<input type="date" class="form-control" id="MBIRTH" value="${fn:substring(memberInfo.getMBIRTH(),0,10)}" readonly="readonly">
 						</div>
 									
 						<label for="MNICK" class="form-label">현재 닉네임</label>
 						<div class="input-group">
-							<input type="text" class="form-control" id="MNICK" name="" value="기존닉네임" readonly="readonly">
+							<input type="text" class="form-control" id="MNICK" value="${memberInfo.getMNICK()}" readonly="readonly">
 						</div>
 									
-						<label for="MNICK" class="form-label">변경할 닉네임</label>
+						<label for="UPMNICK" class="form-label">변경할 닉네임</label>
 						<div class="input-group">
-							<input type="text" class="form-control" id="MNICK" name="" placeholder=" 변경할 닉네임을 입력">
+							<input type="text" class="form-control" id="UPMNICK" name="MNICK" placeholder=" 변경할 닉네임을 입력">
 						</div>
 									
 						<label for="MPHONE" class="form-label">현재 전화번호</label>
 						<div class="input-group">
-							<input type="text" class="form-control" id="MPHONE" name="" value="00000000000" readonly="readonly">
+							<input type="text" class="form-control" id="MPHONE" value="${memberInfo.getMPHONE()}" readonly="readonly">
 						</div>
 									
-						<label for="MPHONE" class="form-label">변경할 전화번호</label>
+						<label for="UPMPHONE" class="form-label">변경할 전화번호</label>
 						<div class="input-group">
-							<input type="text" class="form-control" id="MPHONE" name="" placeholder="변경할 전화번호입력">
+							<input type="text" class="form-control" id="UPMPHONE" name="MPHONE" placeholder="변경할 전화번호입력">
 						</div>
 				
 						<div class="mt-3 text-center">

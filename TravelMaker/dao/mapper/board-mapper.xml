@@ -4,34 +4,35 @@
  
  <mapper namespace="Board">
  	<insert id="boardInsert">
- 		INSERT INTO BOARD(BNUMBER, MID, BDATE, BTITLE, BCONTENT, BIMG, BCNUMBER)
- 		VALUES(BNUMBER_SEQ.NEXTVAL, #{MID}, SYSDATE, #{BTITLE}, #{BCONTENT}, #{BIMG}, #{BCNUMBER})
+ 		INSERT INTO BOARD(BNUMBER, MID, BDATE, BTITLE, BCONTENT, BIMG, BCNUMBER, BSTATE)
+ 		VALUES(BNUMBER_SEQ.NEXTVAL, #{MID}, SYSDATE, #{BTITLE}, #{BCONTENT}, #{BIMG}, #{BCNUMBER}, 1)
  	</insert>
  	
  	<select id="boardList" parameterType="BoardCategory" resultType="BoardList">
- 		SELECT BOARD.BNUMBER,
-    			BOARD.BTITLE,
-    			BOARD.BDATE,
-    			BOARD.BIMG,
-    			BOARDCATEGORY.BCNAME,
-    			MEMBER.MNICK,
+ 		SELECT B.BNUMBER,
+    			B.BTITLE,
+    			B.BDATE,
+    			B.BIMG,
+    			B.BSTATE,
+    			BC.BCNAME,
+    			M.MNICK,
     			BV.BOARDVIEWS,
     			BL.BOARDLIKE,
     			BC.BOARDCOMPLAINT
-		FROM BOARD INNER JOIN MEMBER ON BOARD.MID = MEMBER.MID
-            		INNER JOIN BOARDCATEGORY ON BOARD.BCNUMBER = BOARDCATEGORY.BCNUMBER
+		FROM BOARD B INNER JOIN MEMBER M ON B.MID = M.MID
+            		INNER JOIN BOARDCATEGORY BC ON B.BCNUMBER = BC.BCNUMBER
            			LEFT OUTER JOIN (SELECT BNUMBER,
                                 			COUNT(MID) AS "BOARDVIEWS"
                         			FROM BOARDVIEWS
-                        			GROUP BY BNUMBER) BV ON BOARD.BNUMBER = BV.BNUMBER
+                        			GROUP BY BNUMBER) BV ON B.BNUMBER = BV.BNUMBER
             		LEFT OUTER JOIN (SELECT BNUMBER,
                                     		COUNT(MID) AS "BOARDLIKE"
                             		FROM BOARDLIKE
-                            		GROUP BY BNUMBER) BL ON BOARD.BNUMBER = BL.BNUMBER
+                            		GROUP BY BNUMBER) BL ON B.BNUMBER = BL.BNUMBER
             		LEFT OUTER JOIN (SELECT BNUMBER,
                                     		COUNT(MID) AS "BOARDCOMPLAINT"
                             		FROM BOARDCOMPLAINT
-                            		GROUP BY BNUMBER) BC ON BOARD.BNUMBER = BC.BNUMBER
+                            		GROUP BY BNUMBER) BC ON B.BNUMBER = BC.BNUMBER
  		<include refid="boardCategory"></include>
  		ORDER BY BNUMBER DESC
  	</select>
@@ -39,7 +40,7 @@
  	<sql id="boardCategory">
  		<choose>
  			<when test="BCNUMBER != 0">
- 				WHERE BOARD.BCNUMBER = #{BCNUMBER}
+ 				WHERE B.BCNUMBER = #{BCNUMBER}
  			</when>
  		</choose>
  	</sql>
@@ -49,4 +50,71 @@
  		FROM BOARDCATEGORY
  		WHERE BCNUMBER = #{BCNUMBER}
  	</select>
+ 	
+ 	<select id="boardDetail" parameterType="Board" resultType="BoardDetail">
+ 		SELECT B.BNUMBER,
+		    B.MID,
+		    B.BDATE,
+		    B.BTITLE,
+		    B.BCONTENT,
+		    B.BIMG,
+		    M.MNICK,
+		    BV.BOARDVIEWS,
+		    BL.BOARDLIKE
+		FROM BOARD B INNER JOIN MEMBER M ON B.MID = M.MID
+		            LEFT OUTER JOIN (SELECT BNUMBER,
+		                                COUNT(*) AS "BOARDVIEWS"
+		                            FROM BOARDVIEWS
+		                            GROUP BY BNUMBER) BV ON B.BNUMBER = BV.BNUMBER
+		            LEFT OUTER JOIN (SELECT BNUMBER,
+		                                COUNT(MID) AS "BOARDLIKE"
+		                            FROM BOARDLIKE
+		                            GROUP BY BNUMBER) BL ON B.BNUMBER = BL.BNUMBER
+		WHERE B.BNUMBER = #{BNUMBER}
+ 	</select>
+ 	
+ 	<select id="commentsList" parameterType="Board" resultType="CommentsList">
+ 		SELECT CM.BNUMBER,
+		    CM.MID,
+		    CM.CMDATE,
+		    CM.CMCONTENT,
+		    CM.CMSTATE,
+		    B.BTITLE,
+		    M.MNICK,
+		    CL.COMMENTSLIKE,
+		    CC.COMMENTSCOMPLAINT
+		FROM COMMENTS CM INNER JOIN BOARD B ON CM.BNUMBER = B.BNUMBER
+		                INNER JOIN MEMBER M ON CM.MID = M.MID
+		                LEFT OUTER JOIN (SELECT CMBNUMBER,
+		                                    CMMID,
+		                                    CMDATE,
+		                                    COUNT(MID) AS "COMMENTSLIKE"
+		                                FROM COMMENTSLIKE
+		                                GROUP BY CMBNUMBER, CMMID, CMDATE) CL ON CM.BNUMBER = CL.CMBNUMBER AND CM.MID = CL.CMMID AND CM.CMDATE = CL.CMDATE
+		                LEFT OUTER JOIN (SELECT CMBNUMBER,
+		                                    CMMID,
+		                                    CMDATE,
+		                                    COUNT(MID) AS "COMMENTSCOMPLAINT"
+		                                FROM COMMENTSCOMPLAINT
+		                                GROUP BY CMBNUMBER, CMMID, CMDATE) CC ON CM.BNUMBER = CC.CMBNUMBER AND CM.MID = CC.CMMID AND CM.CMDATE = CC.CMDATE
+		WHERE CM.BNUMBER = #{BNUMBER}
+		ORDER BY CM.CMDATE DESC
+ 	</select>
+ 	
+ 	<insert id="commentsInsert" parameterType="Comments">
+ 		INSERT INTO COMMENTS(BNUMBER, MID, CMDATE, CMCONTENT, CMSTATE)
+		VALUES(#{BNUMBER}, #{MID}, DEFAULT, #{CMCONTENT}, 1)
+ 	</insert>
+ 	
+ 	<select id="boardCategoryList" resultType="BoardCategory">
+ 	SELECT *
+	FROM BOARDCATEGORY
+	ORDER BY BCNUMBER ASC
+ 	</select>
+ 	
+ 	<update id="boardUpdate" parameterType="Board">
+ 	UPDATE BOARD SET BTITLE=#{BTITLE}, BCONTENT=#{BCONTENT}, BCNUMBER=#{BCNUMBER}  WHERE BNUMBER = #{BNUMBER}
+ 	</update>
+ 	
+ 	
  </mapper>

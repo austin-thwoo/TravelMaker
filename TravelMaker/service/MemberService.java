@@ -11,10 +11,13 @@ import com.icia.TravelMaker.dao.MemberDAO;
 import com.icia.TravelMaker.dto.BoardListDTO;
 import com.icia.TravelMaker.dto.CartListDTO;
 import com.icia.TravelMaker.dto.CategoryDTO;
+import com.icia.TravelMaker.dto.CommentsListDTO;
 import com.icia.TravelMaker.dto.LikeListDTO;
 import com.icia.TravelMaker.dto.MemberDTO;
 import com.icia.TravelMaker.dto.MyInfoDTO;
 import com.icia.TravelMaker.dto.PointDTO;
+import com.icia.TravelMaker.dto.ReviewListDTO;
+import com.icia.TravelMaker.dto.ShoppingListDTO;
 
 @Service
 public class MemberService {
@@ -67,6 +70,34 @@ public class MemberService {
 
 	public List<PointDTO> pointHistory(MemberDTO dto) {
 		return dao.pointHistory(dto);
+	}
+
+	public List<ShoppingListDTO> shoppingList(MemberDTO dto) {
+		return dao.shoppingList(dto);
+	}
+
+	public String passwordCheck(MemberDTO dto) {
+		return dao.passwordCheck(dto);
+	}
+
+	public void passwordUpdate(MemberDTO dto) {
+		dao.passwordUpdate(dto);
+	}
+
+	public MemberDTO memberInfo(MemberDTO dto) {
+		return dao.memberInfo(dto);
+	}
+
+	public void memberUpdate(MemberDTO dto) {
+		dao.memberUpdate(dto);
+	}
+
+	public List<CommentsListDTO> myCommentsList(MemberDTO dto) {
+		return dao.myCommentsList(dto);
+	}
+
+	public List<ReviewListDTO> myReviewList(MemberDTO dto) {
+		return dao.myReviewList(dto);
 	}
 
 }

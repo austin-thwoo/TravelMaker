@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <html>
@@ -30,20 +31,26 @@
 				<table class="table table-hover text-center">
 					<thead>
 						<tr class="table-secondary">
-							<th>패키지번호</th>
+							<th>패키지 번호</th>
+							<th>패키지 이름</th>	
 							<th>작성자</th>
 							<th>리뷰별점</th>
 							<th>리뷰내용</th>
 							<th>리뷰작성일</th>
 						</tr>
 					</thead>
-					<tr>
-						<td>133</td>
-						<td>슈퍼마리오</td>
-						<td>벼리다서깨</td>
-						<td>이 여행 개꿀잼 가이드 누나가 >ㅂ< 예뻤어염뿌우</td>
-						<td>2021-01-21</td>
-					</tr>
+					<tbody>
+						<c:forEach items="${reviewList}" var="i">				
+							<tr>
+								<td>${i.getPNUMBER()}</td>
+								<td>${i.getPNAME()}</td>
+								<td>${i.getMNICK()}</td>
+								<td>${i.getRVSCORE()}</td>
+								<td>${i.getRVCONTENT()}</td>
+								<td>${fn:substring(i.getRVDATE(),5,16)}</td>
+							</tr>
+						</c:forEach>
+					</tbody>
 				</table>
 			</div>
 		</div>

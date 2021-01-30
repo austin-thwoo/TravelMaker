@@ -45,69 +45,190 @@
  	</insert>
  	
  	<select id="complaintBoardList" resultType="BoardList">
- 		SELECT BOARD.BNUMBER,
-    			BOARD.BTITLE,
-    			BOARD.BDATE,
-    			BOARD.BIMG,
-    			BOARDCATEGORY.BCNAME,
-    			MEMBER.MNICK,
+ 		SELECT B.BNUMBER,
+    			B.BTITLE,
+    			B.BDATE,
+    			B.BIMG,
+    			B.BSTATE,
+    			BC.BCNAME,
+    			M.MNICK,
     			BV.BOARDVIEWS,
     			BL.BOARDLIKE,
     			BC.BOARDCOMPLAINT
-		FROM BOARD INNER JOIN MEMBER ON BOARD.MID = MEMBER.MID
-            		INNER JOIN BOARDCATEGORY ON BOARD.BCNUMBER = BOARDCATEGORY.BCNUMBER
+		FROM BOARD B INNER JOIN MEMBER M ON B.MID = M.MID
+            		INNER JOIN BOARDCATEGORY BC ON B.BCNUMBER = BC.BCNUMBER
            			LEFT OUTER JOIN (SELECT BNUMBER,
                                 			COUNT(MID) AS "BOARDVIEWS"
                         			FROM BOARDVIEWS
-                        			GROUP BY BNUMBER) BV ON BOARD.BNUMBER = BV.BNUMBER
+                        			GROUP BY BNUMBER) BV ON B.BNUMBER = BV.BNUMBER
             		LEFT OUTER JOIN (SELECT BNUMBER,
                                     		COUNT(MID) AS "BOARDLIKE"
                             		FROM BOARDLIKE
-                            		GROUP BY BNUMBER) BL ON BOARD.BNUMBER = BL.BNUMBER
+                            		GROUP BY BNUMBER) BL ON B.BNUMBER = BL.BNUMBER
             		LEFT OUTER JOIN (SELECT BNUMBER,
                                     		COUNT(MID) AS "BOARDCOMPLAINT"
                             		FROM BOARDCOMPLAINT
-                            		GROUP BY BNUMBER) BC ON BOARD.BNUMBER = BC.BNUMBER
+                            		GROUP BY BNUMBER) BC ON B.BNUMBER = BC.BNUMBER
  		ORDER BY BNUMBER DESC
  	</select>
  	
  	<select id="travelerList" resultType="TravelerList">
- 		SELECT TRAVELER.OPNUMBER,
-		    TRAVELER.ODATE,
-		    PACKAGE.PNAME,
-		    TRAVELER.TNAME,
-		    TRAVELER.TENNAME,
-		    TRAVELER.TBIRTH,
-		    TRAVELER.TEMAIL,
-		    TRAVELER.TPHONE,
-		    ORDERS.PSSTART,
-		    ORDERS.PSEND
-		FROM TRAVELER INNER JOIN PACKAGE ON TRAVELER.OPNUMBER = PACKAGE.PNUMBER
-		                INNER JOIN ORDERS ON TRAVELER.OPNUMBER = ORDERS.PNUMBER AND TRAVELER.ODATE = ORDERS.ODATE AND TRAVELER.OMID = ORDERS.MID
+ 		SELECT T.OPNUMBER,
+		    T.ODATE,
+		    P.PNAME,
+		    T.TNAME,
+		    T.TENNAME,
+		    T.TBIRTH,
+		    T.TEMAIL,
+		    T.TPHONE,
+		    O.PSSTART,
+		    O.PSEND
+		FROM TRAVELER T INNER JOIN PACKAGE P ON T.OPNUMBER = P.PNUMBER
+		                INNER JOIN ORDERS O ON T.OPNUMBER = O.PNUMBER AND T.ODATE = O.ODATE AND T.OMID = O.MID
 		ORDER BY ODATE DESC
  	</select>
  	
  	<select id="complaintCommentsList" resultType="CommentsList">
- 		SELECT COMMENTS.BNUMBER,
-			    BOARD.BTITLE,
-			    COMMENTS.MID,
-			    COMMENTS.CMDATE,
-			    COMMENTS.CMCONTENT,
+ 		SELECT CM.BNUMBER,
+			    B.BTITLE,
+			    CM.MID,
+			    CM.CMDATE,
+			    CM.CMCONTENT,
+			    CM.CMSTATE,
+			    M.MNICK,
 			    CC.COMMENTSCOMPLAINT,
 			    CL.COMMENTSLIKE
-			FROM COMMENTS LEFT OUTER JOIN (SELECT CMBNUMBER,
+			FROM COMMENTS CM LEFT OUTER JOIN (SELECT CMBNUMBER,
 			                                    CMMID,
 			                                    CMDATE,
 			                                    COUNT(MID) AS "COMMENTSCOMPLAINT"
 			                                FROM COMMENTSCOMPLAINT
-			                                GROUP BY CMBNUMBER, CMMID, CMDATE) CC ON COMMENTS.BNUMBER = CC.CMBNUMBER AND COMMENTS.MID = CC.CMMID AND COMMENTS.CMDATE = CC.CMDATE
+			                                GROUP BY CMBNUMBER, CMMID, CMDATE) CC ON CM.BNUMBER = CC.CMBNUMBER AND CM.MID = CC.CMMID AND CM.CMDATE = CC.CMDATE
 			            LEFT OUTER JOIN (SELECT CMBNUMBER,
 			                                    CMMID,
 			                                    CMDATE,
 			                                    COUNT(MID) AS "COMMENTSLIKE"
 			                                FROM COMMENTSLIKE
-			                                GROUP BY CMBNUMBER, CMMID, CMDATE) CL ON COMMENTS.BNUMBER = CL.CMBNUMBER AND COMMENTS.MID = CL.CMMID AND COMMENTS.CMDATE = CL.CMDATE
-			            INNER JOIN BOARD ON COMMENTS.BNUMBER = BOARD.BNUMBER
+			                                GROUP BY CMBNUMBER, CMMID, CMDATE) CL ON CM.BNUMBER = CL.CMBNUMBER AND CM.MID = CL.CMMID AND CM.CMDATE = CL.CMDATE
+			            INNER JOIN BOARD B ON CM.BNUMBER = B.BNUMBER
+			            INNER JOIN MEMBER M ON CM.MID = M.MID
 		WHERE CC.COMMENTSCOMPLAINT > 0
  	</select>
+ 	
+ 	<select id="memberList" parameterType="Member" resultType="MemberList">
+ 		SELECT M.MID,
+		    M.MNICK,
+		    M.MNAME,
+		    M.MPHONE,
+		    M.MGENDER,
+		    M.MSTATE,
+		    M.MDATE,
+		    BC.BOARDCOMPLAINT,
+		    CC.COMMENTSCOMPLAINT,
+		    AB.ACCOUNTBAN
+		FROM MEMBER M LEFT OUTER JOIN (SELECT MID,
+		                                    COUNT(BNUMBER) AS "BOARDCOMPLAINT"
+		                                FROM(SELECT B.BNUMBER,
+		                                            B.MID,
+		                                            COUNT(BC.MID) AS "BOARDCOMPLAINT"
+		                                        FROM BOARD B LEFT OUTER JOIN BOARDCOMPLAINT BC ON B.BNUMBER = BC.BNUMBER
+		                                        GROUP BY B.BNUMBER, B.MID)
+		                                WHERE BOARDCOMPLAINT > 0
+		                                GROUP BY MID) BC ON M.MID = BC.MID
+		                LEFT OUTER JOIN (SELECT MID,
+		                                        COUNT(*) AS "COMMENTSCOMPLAINT"
+		                                FROM (SELECT CM.BNUMBER,
+		                                                CM.MID,
+		                                                CM.CMDATE,
+		                                                COUNT(CC.MID) AS "COMMENTSCOMPLAINT"
+		                                        FROM COMMENTS CM LEFT OUTER JOIN COMMENTSCOMPLAINT CC ON CM.BNUMBER = CC.CMBNUMBER AND CM.MID = CC.CMMID AND CM.CMDATE = CC.CMDATE
+		                                        GROUP BY CM.BNUMBER, CM.MID, CM.CMDATE)
+		                                WHERE COMMENTSCOMPLAINT > 0
+		                                GROUP BY MID) CC ON M.MID = CC.MID
+		                LEFT OUTER JOIN (SELECT MID,
+		                                    COUNT(ABDATE) AS "ACCOUNTBAN"
+		                                FROM ACCOUNTBAN
+		                                GROUP BY MID) AB ON M.MID = AB.MID
+		 WHERE M.MLEVEL = #{MLEVEL}
+ 	</select>
+ 	
+ 	<update id="memberStateUpdate" parameterType="Member">
+ 		UPDATE MEMBER SET MSTATE = #{MSTATE} WHERE MID = #{MID}
+ 	</update>
+ 	
+ 	<update id="commentsLock" parameterType="Comments">
+ 		UPDATE COMMENTS
+		SET CMSTATE = #{CMSTATE}
+		WHERE BNUMBER = #{BNUMBER} AND MID = #{MID} AND CMDATE = TO_DATE(#{CMDATE}, 'YYYY-MM-DD HH24:MI:SS')
+ 	</update>
+ 	
+ 	<update id="boardLock" parameterType="Board">
+ 		UPDATE BOARD
+ 		SET BSTATE = #{BSTATE}
+ 		WHERE BNUMBER = #{BNUMBER}
+ 	</update>
+ 	
+ 	<select id="packageDetail" parameterType="Package" resultType="Package">
+ 		SELECT * FROM PACKAGE WHERE PNUMBER = #{PNUMBER}
+ 	</select>
+ 	
+ 	<update id="packageUpdate">
+ 		UPDATE PACKAGE
+ 		SET PNAME = #{PNAME}, PADULT = #{PADULT}, PCHILD = #{PCHILD}, PINFANT = #{PINFANT}, PMIN = #{PMIN}, PMAX = #{PMAX},	PINFO = #{PINFO}, PPERIOD = #{PPERIOD}
+ 		WHERE PNUMBER = #{PNUMBER}
+ 	</update>
+ 	
+ 	<insert id="accountBanInsert" parameterType="Member">
+ 		INSERT INTO ACCOUNTBAN(MID, ABDATE)
+ 		VALUES(#{MID}, DEFAULT)
+ 	</insert>
+ 	
+ 	<select id="complaintBoardDetail" parameterType="Board" resultType="BoardComplaintDetail">
+ 		SELECT BC.*,
+		    B.MID,
+		    B.MNICK
+		FROM (SELECT BC.BNUMBER,
+		        BC.MID AS "BCMID",
+		        BC.BCREASON,
+		        BC.BCDATE,
+		        M.MNICK AS "BCMNICK"
+		    FROM BOARDCOMPLAINT BC INNER JOIN MEMBER M ON BC.MID = M.MID) BC
+		    INNER JOIN
+		    (SELECT B.BNUMBER,
+		        B.MID,
+		        M.MNICK
+		    FROM BOARD B INNER JOIN MEMBER M ON B.MID = M.MID) B ON BC.BNUMBER = B.BNUMBER
+		WHERE BC.BNUMBER = #{BNUMBER}
+ 	</select>
+ 	
+ 	<select id="complaintCommentsDetail" parameterType="Comments" resultType="CommentsComplaintDetail">
+ 		SELECT CC.*,
+			M.MNICK
+		FROM COMMENTSCOMPLAINT CC INNER JOIN MEMBER M ON CC.MID = M.MID
+		WHERE CC.CMBNUMBER = #{BNUMBER} AND CC.CMMID = #{MID} AND CC.CMDATE = TO_DATE(#{CMDATE}, 'YYYY-MM-DD HH24:MI:SS')
+ 	</select>
+ 	
+ 	<select id="boardCategoryCheck" parameterType="BoardCategory" resultType="String">
+ 		SELECT COUNT(BCNUMBER)
+ 		FROM BOARDCATEGORY
+ 		WHERE BCNAME = #{BCNAME}
+ 	</select>
+	
+ 	<update id="boardCategoryUpdate" parameterType="BoardCategory">
+ 		UPDATE BOARDCATEGORY
+		SET BCNAME = #{BCNAME}
+		WHERE BCNUMBER = #{BCNUMBER}
+ 	</update>
+ 	 	
+ 	<select id="categoryCheck" parameterType="Category" resultType="String">
+		SELECT COUNT(CNUMBER)
+		FROM CATEGORY
+		WHERE CNAME = #{CNAME}
+	</select>
+ 	
+ 	 <update id="categoryUpdate" parameterType="Category">
+ 		UPDATE CATEGORY
+		SET CNAME = #{CNAME}
+		WHERE CNUMBER = #{CNUMBER}
+ 	</update>
  </mapper>

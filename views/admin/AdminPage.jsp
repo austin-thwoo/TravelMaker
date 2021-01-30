@@ -73,7 +73,7 @@
 				var htmlResult = "";
 				for ( var i in result) {
 					htmlResult += "<tr>" +
-									"<th>" + result[i].ADATE + "</th>" +
+									"<th>" + result[i].ADATE.substring(0, 16) + "</th>" +
 									"<th>" + result[i].AJOB + "</th>" +
 								"</tr>";
 				}
