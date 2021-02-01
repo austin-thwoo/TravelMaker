@@ -79,7 +79,7 @@
 		</c:choose>
 		<div class="row container-fluid mb-1">
 			<div class="text-end">
-				<button class="btn btn-primary btn-md">글쓰기</button>
+				<button class="btn btn-primary btn-md" onclick="location.href = 'goBoardInsertForm'">글쓰기</button>
 			</div>
 		</div>
 		

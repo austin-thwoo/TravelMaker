@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -17,7 +18,13 @@ import com.icia.TravelMaker.dto.CategoryDTO;
 import com.icia.TravelMaker.dto.CommentsDTO;
 import com.icia.TravelMaker.dto.MemberDTO;
 import com.icia.TravelMaker.dto.PackageDTO;
+import com.icia.TravelMaker.dto.PointDTO;
+import com.icia.TravelMaker.dto.TravelerListDTO;
+import com.icia.TravelMaker.excelOnly.WriteListToExcelFile;
 import com.icia.TravelMaker.service.AdminService;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 @Controller
 public class Admincontroller {
@@ -198,7 +205,7 @@ public class Admincontroller {
 	}
 
 	@RequestMapping(value = "/packageUpdate")
-	public ModelAndView packageUpdate(@ModelAttribute PackageDTO dto) {
+	private ModelAndView packageUpdate(@ModelAttribute PackageDTO dto) {
 		mav();
 		service.packageUpdate(dto);
 		mav.setViewName("redirect:/goPackageList?to=admin");
@@ -206,7 +213,7 @@ public class Admincontroller {
 	}
 
 	@RequestMapping(value = "/complaintBoardDetail")
-	public ModelAndView complaintBoardDetail(@ModelAttribute BoardDTO dto) {
+	private ModelAndView complaintBoardDetail(@ModelAttribute BoardDTO dto) {
 		mav();
 		mav.addObject("complaintBoardDetail", service.complaintBoardDetail(dto));
 		mav.setViewName("admin/ComplaintBoardDetail");
@@ -214,7 +221,7 @@ public class Admincontroller {
 	}
 
 	@RequestMapping(value = "/complaintCommentsDetail")
-	public ModelAndView complaintCommentsDetail(@ModelAttribute CommentsDTO dto) {
+	private ModelAndView complaintCommentsDetail(@ModelAttribute CommentsDTO dto) {
 		mav();
 		mav.addObject("complaintCommentsDetail", service.complaintCommentsDetail(dto));
 		mav.setViewName("admin/ComplaintCommentsDetail");
@@ -230,4 +237,34 @@ public class Admincontroller {
 	private @ResponseBody String categoryCheck(@ModelAttribute CategoryDTO dto) {
 		return service.categoryCheck(dto);
 	}
+
+	@RequestMapping(value = "/goPointInsertForm")
+	private ModelAndView goPointInsertForm(@ModelAttribute MemberDTO dto) {
+		mav();
+		mav.addObject("memberInfo", service.memberInfo(dto));
+		mav.addObject("MLEVEL", dto.getMLEVEL());
+		mav.setViewName("admin/PointInsertForm");
+		return mav;
+	}
+
+	@RequestMapping(value = "/pointInsert")
+	private ModelAndView pointInsert(@ModelAttribute PointDTO dto,
+									@RequestParam("MLEVEL") int MLEVEL){
+		mav();
+		service.pointInsert(dto);
+		mav.setViewName("redirect:/goMemberList?MLEVEL="+MLEVEL);
+		return mav;
+	}
+	
+	@RequestMapping(value = "/excelview")
+	public ModelAndView excelview() throws Exception {
+		mav();
+		Date now =new Date();
+		List<TravelerListDTO> travelerlist=service.travelerList();
+		SimpleDateFormat simpledate = new SimpleDateFormat("yy-MM-dd-hh-mm-ss");
+		System.out.println("여기는 컨트롤러 : " +simpledate.format(now));
+        WriteListToExcelFile.writeNoticeListToFile(simpledate.format(now)+"travelerList.xlsx", travelerlist);
+        mav.setViewName("redirect:/goTravelerList");
+	return mav;
+}
 }

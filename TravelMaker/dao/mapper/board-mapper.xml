@@ -58,6 +58,7 @@
 		    B.BTITLE,
 		    B.BCONTENT,
 		    B.BIMG,
+		    B.BCNUMBER,
 		    M.MNICK,
 		    BV.BOARDVIEWS,
 		    BL.BOARDLIKE
@@ -106,15 +107,9 @@
 		VALUES(#{BNUMBER}, #{MID}, DEFAULT, #{CMCONTENT}, 1)
  	</insert>
  	
- 	<select id="boardCategoryList" resultType="BoardCategory">
- 	SELECT *
-	FROM BOARDCATEGORY
-	ORDER BY BCNUMBER ASC
- 	</select>
- 	
  	<update id="boardUpdate" parameterType="Board">
- 	UPDATE BOARD SET BTITLE=#{BTITLE}, BCONTENT=#{BCONTENT}, BCNUMBER=#{BCNUMBER}  WHERE BNUMBER = #{BNUMBER}
+ 		UPDATE BOARD
+		SET BTITLE = #{BTITLE}, BCONTENT = #{BCONTENT}, BCNUMBER = #{BCNUMBER}
+		WHERE BNUMBER = #{BNUMBER}
  	</update>
- 	
- 	
  </mapper>

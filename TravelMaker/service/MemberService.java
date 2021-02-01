@@ -14,7 +14,7 @@ import com.icia.TravelMaker.dto.CategoryDTO;
 import com.icia.TravelMaker.dto.CommentsListDTO;
 import com.icia.TravelMaker.dto.LikeListDTO;
 import com.icia.TravelMaker.dto.MemberDTO;
-import com.icia.TravelMaker.dto.MyInfoDTO;
+import com.icia.TravelMaker.dto.MemberInfoDTO;
 import com.icia.TravelMaker.dto.PointDTO;
 import com.icia.TravelMaker.dto.ReviewListDTO;
 import com.icia.TravelMaker.dto.ShoppingListDTO;
@@ -33,7 +33,7 @@ public class MemberService {
 		return result;
 	}
 
-	public MyInfoDTO myPage(MemberDTO dto) {
+	public MemberInfoDTO myPage(MemberDTO dto) {
 		return dao.myPage(dto);
 	}
 

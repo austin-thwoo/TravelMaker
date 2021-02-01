@@ -12,6 +12,7 @@ public class BoardDetailDTO {
 	private String BTITLE;
 	private String BCONTENT;
 	private String BIMG;
+	private int BCNUMBER;
 	private int BOARDVIEWS;
 	private int BOARDLIKE;
 }

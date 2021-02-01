@@ -48,14 +48,11 @@ public class BoardDAO {
 	}
 
 	public List<BoardCategoryDTO> boardCategoryList() {
-		
-		return sql.selectList("Board.boardCategoryList");
+		return sql.selectList("Admin.boardCategoryList");
 	}
 
-	public int boardUdate(BoardDTO dto) {
-		System.out.println("여기는 DAO boardUpdate메서드 : "+dto.toString());
-		
-		return sql.insert("Board.boardUpdate", dto);
+	public int boardUpdate(BoardDTO dto) {
+		return sql.update("Board.boardUpdate", dto);
 	}
 
 }

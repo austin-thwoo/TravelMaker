@@ -24,9 +24,9 @@
 		<form action="boardInsert" method="post" id="boardInsertform" enctype="multipart/form-data">
 			<div class="input-group mb-1">
 				<select class="from-select-sm rounded-start" id="BTITLE" name="BCNUMBER">
-					<option value="1">공지</option>
-					<option value="2">자유</option>
-					<option value="3">후기</option>
+		      		<c:forEach items="${boardCategoryList}" var="i">
+		      			<option value="${i.getBCNUMBER()}">${i.getBCNAME()}</option>
+		      		</c:forEach>
 				</select>
 				<input type="text" class="form-control" name="BTITLE" placeholder="제목을 입력하세요." aria-describedby="BTITLE">
 			</div>
@@ -48,6 +48,7 @@
 	<%@ include file="../Footer.jsp"%>
 </footer>
 <script type="text/javascript" src="resources/se2/js/HuskyEZCreator.js" charset="utf-8"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.0/jquery.js"></script>
 <script>
     function submitContents() {
         oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", []);

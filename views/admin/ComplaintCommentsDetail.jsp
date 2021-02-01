@@ -41,7 +41,6 @@
 			</div>
 		</div>
 	</div>
-	<%@ include file="../PageUp.jsp"%>
 </body>
 <footer>
 	<%@ include file="../Footer.jsp"%>

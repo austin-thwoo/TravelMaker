@@ -35,36 +35,36 @@
 		WHERE RV.PNUMBER = #{PNUMBER}
  	</select>
  	
- 	<select id="refundlist" resultType="RefundList">
- 		 
- 		SELECT MID,
-      PNUMBER,
-      ODATE,
-      OADULT,
-      OCHILD,
-      OINFANT,
-      OAMOUNT,
-      OSTATE,
-      PSSTART
-FROM ORDERS
-WHERE PSSTART <![CDATA[<]]> SYSDATE
-  
+ 	<select id="pointInfo" parameterType="Member" resultType="Point">
+	 	SELECT M.MID,
+		    PO.POAMOUNT
+		FROM MEMBER M LEFT OUTER JOIN (SELECT MID,
+		                                    SUM(POAMOUNT * POSTATE) AS "POAMOUNT"
+		                                FROM POINT
+		                                GROUP BY MID) PO ON M.MID = PO.MID
+		WHERE M.MID = #{MID}
  	</select>
  	
- 	<select id="refundlistAjax" parameterType="RefundList" resultType="RefundList">
- 		 
- 	SELECT MID,
-      PNUMBER,
-      ODATE,
-      OADULT,
-      OCHILD,
-      OINFANT,
-      OAMOUNT,
-      OSTATE,
-      PSSTART
-FROM ORDERS
-WHERE MID=#{MID} AND PNUMBER=#{PNUMBER} AND ODATE=TO_DATE(#{ODATE},'YYYY-MM-DD HH24:MI:SS')
-  
- 	</select>
+ 	<insert id="reviewInsert" parameterType="Review">
+ 		INSERT INTO REVIEW(PNUMBER, MID, RVSCORE, RVCONTENT, RVDATE)
+ 		VALUES(#{PNUMBER}, #{MID}, #{RVSCORE}, #{RVCONTENT}, DEFAULT)
+ 	</insert>
  	
+ 	<insert id="likeInsert" parameterType="LikeList">
+ 		INSERT INTO PACKAGELIKE(MID, PNUMBER)
+ 		VALUES(#{MID}, #{PNUMBER})
+ 	</insert>
+ 	
+ 	<delete id="likeDelete" parameterType="LikeList">
+ 		DELETE FROM PACKAGELIKE WHERE MID = #{MID} AND PNUMBER = #{PNUMBER}
+ 	</delete>
+
+ 	<insert id="cartInsert" parameterType="CartList">
+ 		INSERT INTO PACKAGECART(MID, PNUMBER, PSPNUMBER, PSSTART)
+ 		VALUES(#{MID}, #{PNUMBER}, #{PSPNUMBER}, TO_DATE(#{PSSTART}, 'YYYY-MM-DD HH24:MI:SS'))
+ 	</insert>
+ 	
+ 	<delete id="cartDelete" parameterType="CartList">
+ 		DELETE FROM PACKAGECART WHERE MID = #{MID} AND PNUMBER = #{PNUMBER} AND PSPNUMBER = #{PSPNUMBER} AND PSSTART = TO_DATE(#{PSSTART}, 'YYYY-MM-DD HH24:MI:SS')
+ 	</delete>
  </mapper>

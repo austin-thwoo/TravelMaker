@@ -10,7 +10,7 @@ public class MemberListDTO {
     private String MPHONE;
     private String MGENDER;
     private int MSTATE;
-    private String MDATE;
+	private int POAMOUNT;
     private int BOARDCOMPLAINT;
     private int COMMENTSCOMPLAINT;
     private int ACCOUNTBAN;

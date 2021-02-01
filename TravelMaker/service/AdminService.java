@@ -19,7 +19,9 @@ import com.icia.TravelMaker.dto.CommentsDTO;
 import com.icia.TravelMaker.dto.CommentsListDTO;
 import com.icia.TravelMaker.dto.MemberDTO;
 import com.icia.TravelMaker.dto.MemberListDTO;
+import com.icia.TravelMaker.dto.MemberInfoDTO;
 import com.icia.TravelMaker.dto.PackageDTO;
+import com.icia.TravelMaker.dto.PointDTO;
 import com.icia.TravelMaker.dto.TravelerListDTO;
 
 @Service
@@ -67,6 +69,7 @@ public class AdminService {
 	}
 
 	public List<TravelerListDTO> travelerList() {
+		
 		return dao.travelerList();
 	}
 
@@ -124,6 +127,14 @@ public class AdminService {
 
 	public String categoryCheck(CategoryDTO dto) {
 		return dao.categoryCheck(dto);
+	}
+
+	public MemberInfoDTO memberInfo(MemberDTO dto) {
+		return dao.memberInfo(dto);
+	}
+
+	public void pointInsert(PointDTO dto) {
+		dao.pointInsert(dto);
 	}
 
 }

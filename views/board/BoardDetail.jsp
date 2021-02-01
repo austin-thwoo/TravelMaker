@@ -51,7 +51,6 @@
 					신고
 				</div>
 			</div>
-			
 		</div>
 		<div class="row container-fluid mb-1">
 			<div class="text-end">
@@ -62,7 +61,7 @@
 		</div>
 		<div class="row container-fluid mb-1">
 			<div class="text-end">
-				<button type="button" class="btn btn-outline-warning btn-md" onclick="location.href='goBoardUpdateForm?BNUMBER=${boardDetail.getBNUMBER()}'" >수정</button>
+				<button type="button" class="btn btn-outline-warning btn-md" onclick="goBoardUpdateForm(${boardDetail.getBNUMBER()})">수정</button>
 				<button type="button" class="btn btn-outline-danger btn-md">삭제</button>
 			</div>
 		</div>
@@ -155,6 +154,10 @@
 				$("#commentsInsertResult").html(htmlResult);
 			}
 		});
+	}
+	
+	function goBoardUpdateForm(BNUMBER){
+		location.href = "goBoardUpdateForm?BNUMBER=" + BNUMBER;
 	}
 </script>
 </html>

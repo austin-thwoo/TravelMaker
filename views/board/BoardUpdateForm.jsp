@@ -21,37 +21,34 @@
 		<%@ include file="../MainNav.jsp" %>
 	</div>
 	<div class="container">
-	    <form action="boardUpdate" method="post" id="boardUpdateForm" enctype="multipart/form-data">
-	      <div class="input-group mb-1">
-	      	<select class="from-select-sm rounded-start" id="BTITLE" name="BCNUMBER">
-	      		<option>선택하세요</option>
-	      		<c:forEach items="${boardCategoryList}" var="i">
-	      		<option value="${i.getBCNUMBER()}">${i.getBCNAME()}</option>
-	      		</c:forEach>
-	      		
-	      		
-	      	</select>
-	        <input type="text" class="form-control" name="BTITLE" placeholder="제목을 입력하세요." aria-describedby="BTITLE" value="${boardDetail.getBTITLE()}">
-	      </div>
+	    <form action="boardUpdate" method="post">
+	    	<div class="input-group mb-1">
+	      		<select class="from-select-sm rounded-start" id="BTITLE" name="BCNUMBER">
+		      		<c:forEach items="${boardCategoryList}" var="i">
+		      			<c:choose>
+		      				<c:when test="${boardDetail.getBCNUMBER() == i.getBCNUMBER()}">
+		      					<option value="${i.getBCNUMBER()}" selected="selected">${i.getBCNAME()}</option>
+		      				</c:when>
+		      				<c:otherwise>
+		      					<option value="${i.getBCNUMBER()}">${i.getBCNAME()}</option>
+		      				</c:otherwise>
+		      			</c:choose>
+		      		</c:forEach>
+	      		</select>
+	        	<input type="text" class="form-control" name="BTITLE" placeholder="제목을 입력하세요." aria-describedby="BTITLE" value="${boardDetail.getBTITLE()}">
+	      	</div>
 	      
-	    <div class="input-group mb-1">
-				<!-- 크기 내 노트복 화면에 맞춘거라 다시 조절 필요 -->
-				<textarea name="BCONTENT" id="ir1" rows="20" cols="181">${boardDetail.getBCONTENT()} </textarea>
-
+	    	<div class="input-group mb-1">
+				<textarea name="BCONTENT" id="ir1" rows="20" cols="181">${boardDetail.getBCONTENT()}</textarea>
 			</div>
-	      
-	      <!-- <div class="input-group mb-1">
-	      	<input type="file" class="form-control" name="" value="기존파일" disabled="disabled">
-	      </div> -->
-	      <div class="text-end">
-	      	<input type="hidden" name="BNUMBER" value="${boardDetail.getBNUMBER()}">
-	      	
-	      	
-	      	
-	      	<button type="submit" class="btn btn-primary">수정</button>
-	      	<button type="submit" class="btn btn-danger">취소</button>
-	      </div>
-	      
+	      	<div class="input-group mb-1">
+	      		<input type="file" class="form-control" name="BIMGFILE" accept="image/*" disabled="disabled">
+	      	</div>
+	      	<div class="text-end">
+	      		<input type="hidden" name="BNUMBER" value="${boardDetail.getBNUMBER()}">
+		      	<button type="submit" class="btn btn-primary">수정</button>
+	      		<button type="reset" class="btn btn-danger">취소</button>
+	      	</div>
 	    </form>
 	</div>
 	<%@ include file="../PageUp.jsp" %>
@@ -59,31 +56,21 @@
 <footer>
 	<%@ include file="../Footer.jsp"%>
 </footer>
-
-</html>
-<!-- 이거 경로를 잘 맞춰 줘야함 나는 이미지폴더와 같은 레벨에 se2폴더를 만들어서 넣었음  -->
-<script type="text/javascript" src="resources/se2/js/HuskyEZCreator.js"
-	charset="utf-8"></script>
+<script type="text/javascript" src="resources/se2/js/HuskyEZCreator.js" charset="utf-8"></script>
 <script>
-//‘저장’ 버튼을 누르는 등 저장을 위한 액션을 했을 때 submitContents가 호출된다고 가정한다.
-function submitContents(elClickedObj) {
- // 에디터의 내용이 textarea에 적용된다.
- oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", [/* 이게 무엇일까...? */]);
+    function submitContents() {
+        oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", []);
+         try {
+             document.getElementById("boardInsertform").submit();
+         } catch(e) {}
+    }
 
- // 에디터의 내용에 대한 값 검증은 이곳에서
- // document.getElementById("ir1").value를 이용해서 처리한다.
-
- try {
-     elClickedObj.form.submit();
- } catch(e) {}
+    var oEditors = [];
+    nhn.husky.EZCreator.createInIFrame({
+         oAppRef: oEditors,
+         elPlaceHolder: "ir1",
+         sSkinURI: "resources/se2/SmartEditor2Skin.html",
+         fCreator: "createSEditor2"
+    });
 </script>
-<!-- 종원아 이거는 textarea밑에 있어야 오류가 안난대 html 태그 밖에 써야한대-->
-<script type="text/javascript">
-var oEditors = [];
-nhn.husky.EZCreator.createInIFrame({
- oAppRef: oEditors,
- elPlaceHolder: "ir1",
- sSkinURI: "resources/se2/SmartEditor2Skin.html",
- fCreator: "createSEditor2"
-});
-</script>
+</html>

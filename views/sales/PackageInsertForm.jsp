@@ -47,17 +47,17 @@
 	
 							<label class="form-label" for="PADULT">어른요금</label>
 							<div class="input-group">
-								<input class="form-control" type="text" id="PADULT" name="PADULT">
+								<input class="form-control" type="number" id="PADULT" name="PADULT">
 							</div>
 	
 							<label class="form-label" for="PCHILD">아동요금</label>
 							<div class="input-group">
-								<input class="form-control" type="text" id="PCHILD" name="PCHILD">
+								<input class="form-control" type="number" id="PCHILD" name="PCHILD">
 							</div>
 	
 							<label class="form-label" for="PINFANT">유아요금</label>
 							<div class="input-group">
-								<input class="form-control" type="text" id="PINFANT" name="PINFANT">
+								<input class="form-control" type="number" id="PINFANT" name="PINFANT">
 							</div>
 	
 							<label class="form-label" for="PMIN">최소인원</label>

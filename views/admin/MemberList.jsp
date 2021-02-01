@@ -37,7 +37,7 @@
 							<th>연락처</th>
 							<th>성별</th>
 							<th>상태</th>
-							<th>가입일</th>
+							<th>포인트</th>
 							<th>신고 게시글</th>
 							<th>신고  댓글</th>
 							<th>정지 횟수</th>
@@ -71,19 +71,22 @@
 										</c:when>
 									</c:choose>
 								</td>
-								<td>${fn:substring(i.getMDATE(),0,10)}</td>
+								<td>${i.getPOAMOUNT()}P</td>
 								<td><a href="#">${i.getBOARDCOMPLAINT()}</a></td>
 								<td><a href="#">${i.getCOMMENTSCOMPLAINT()}</a></td>
 								<td>${i.getACCOUNTBAN()}</td>
 								<td>
-									<c:choose>
-										<c:when test="${i.getMSTATE() == 1}">
-											<button class="btn btn-primary btn-sm" onclick="memberStateUpdate('${i.getMID()}', '${i.getMSTATE()}')">정지</button>
-										</c:when>
-										<c:when test="${i.getMSTATE() == -1}">
-											<button class="btn btn-primary btn-sm" onclick="memberStateUpdate('${i.getMID()}', '${i.getMSTATE()}')">복구</button>
-										</c:when>
-									</c:choose>
+									<div class="btn-group-vertical">
+										<button class="btn btn-outline-primary btn-sm" onclick="goPointInsertForm('${i.getMID()}')">포인트 지급</button>
+										<c:choose>
+											<c:when test="${i.getMSTATE() == 1}">
+												<button class="btn btn-outline-primary btn-sm" onclick="memberStateUpdate('${i.getMID()}', '${i.getMSTATE()}')">정지</button>
+											</c:when>
+											<c:when test="${i.getMSTATE() == -1}">
+												<button class="btn btn-outline-primary btn-sm" onclick="memberStateUpdate('${i.getMID()}', '${i.getMSTATE()}')">복구</button>
+											</c:when>
+										</c:choose>
+									</div>
 								</td>
 							</tr>
 						</c:forEach>
@@ -100,6 +103,9 @@
 <script type="text/javascript">
 	function memberStateUpdate(MID, MSTATE){
 		location.href = "memberStateUpdate?MID="+MID+"&MSTATE="+(MSTATE*-1)+"&MLEVEL="+${MLEVEL};
+	}
+	function goPointInsertForm(MID){
+		window.open("goPointInsertForm?MID="+MID+"&MLEVEL="+${MLEVEL}, "_blank", "menubar=0, scrollbars=1, status=0, titlebar=0, toolbar=0, left=30, top=30, width=700, height=500");
 	}
 </script>
 </html>

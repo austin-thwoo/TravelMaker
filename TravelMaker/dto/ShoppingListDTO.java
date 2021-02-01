@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ShoppingListDTO {
-	private String	MID;
+
 	private String PIMG;
 	private String ODATE;
 	private String PSSTART;

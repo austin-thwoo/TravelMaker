@@ -52,20 +52,11 @@ public class BoardService {
 	}
 
 	public List<BoardCategoryDTO> boardCategoryList() {
-
 		return dao.boardCategoryList();
 	}
 
-	public int boardUpdate(BoardDTO dto) throws IllegalStateException, IOException {
-		System.out.println("여기는 서비스입니다.");
-		/*
-		 * if(!dto.getBIMGFILE().equals(obj)) {
-		 * dto.setBIMG(System.currentTimeMillis()+"_"+dto.getBIMGFILE().
-		 * getOriginalFilename()); dto.getBIMGFILE().transferTo(new
-		 * File("D:\\ICIA\\Jong Won\\Team_404\\TravelMaker_Proj\\TravelMaker\\src\\main\\webapp\\resources\\boardFile\\"
-		 * +dto.getBIMG())); }else { dto.setBIMG("Not Exist"); }
-		 */
-		return dao.boardUdate(dto);
+	public int boardUpdate(BoardDTO dto) {
+		return dao.boardUpdate(dto);
 	}
 
 }

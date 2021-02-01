@@ -5,8 +5,8 @@
  <mapper namespace="Member">
  	<select id="login" parameterType="Member" resultType="Member">
  		SELECT MID,
-		MNICK,
-		MLEVEL
+			MNICK,
+			MLEVEL
 		FROM MEMBER
 		WHERE MID = #{MID} AND MPW = #{MPW} AND MSTATE = 1
  	</select>
@@ -16,7 +16,7 @@
  		VALUES(#{MID}, DEFAULT)
  	</insert>
  	
- 	<select id="myPage" parameterType="Member" resultType="MyInfo">
+ 	<select id="myPage" parameterType="Member" resultType="MemberInfo">
  		SELECT M.MID,
 				M.MNAME,
 				M.MNICK,

@@ -13,7 +13,7 @@ import com.icia.TravelMaker.dto.CategoryDTO;
 import com.icia.TravelMaker.dto.CommentsListDTO;
 import com.icia.TravelMaker.dto.LikeListDTO;
 import com.icia.TravelMaker.dto.MemberDTO;
-import com.icia.TravelMaker.dto.MyInfoDTO;
+import com.icia.TravelMaker.dto.MemberInfoDTO;
 import com.icia.TravelMaker.dto.PointDTO;
 import com.icia.TravelMaker.dto.ReviewListDTO;
 import com.icia.TravelMaker.dto.ShoppingListDTO;
@@ -32,7 +32,7 @@ public class MemberDAO {
 		sql.insert("Member.accessInsert", dto);
 	}
 
-	public MyInfoDTO myPage(MemberDTO dto) {
+	public MemberInfoDTO myPage(MemberDTO dto) {
 		return sql.selectOne("Member.myPage", dto);
 	}
 

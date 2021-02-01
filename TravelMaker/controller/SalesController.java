@@ -1,5 +1,7 @@
 package com.icia.TravelMaker.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -8,8 +10,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.icia.TravelMaker.dto.CartListDTO;
+import com.icia.TravelMaker.dto.LikeListDTO;
+import com.icia.TravelMaker.dto.MemberDTO;
+import com.icia.TravelMaker.dto.OrdersDTO;
 import com.icia.TravelMaker.dto.PackageDTO;
-import com.icia.TravelMaker.dto.RefundListDTO;
+import com.icia.TravelMaker.dto.PackageScheduleDTO;
+import com.icia.TravelMaker.dto.ReviewDTO;
+import com.icia.TravelMaker.dto.ReviewListDTO;
 import com.icia.TravelMaker.service.SalesService;
 
 @Controller
@@ -51,19 +59,55 @@ public class SalesController {
 		mav.setViewName("sales/PackageDetail");
 		return mav;
 	}
-	@RequestMapping(value = "/goRefundList")
-	public ModelAndView goRefundList() {
+	
+	@RequestMapping(value = "/goSaleForm")
+	private ModelAndView goSaleForm(@ModelAttribute OrdersDTO dto) {
 		mav();
-		mav.addObject("refundlist", service.refundlist());
-		mav.setViewName("sales/RefundList");
+		mav.addObject("ordersInfo", dto);
+		PackageDTO pdto = new PackageDTO();
+		pdto.setPNUMBER(dto.getPNUMBER());
+		mav.addObject("packageDetail", service.packageDetail(pdto));
+		for(PackageScheduleDTO i : service.packageSchedule(pdto)) {
+			if(i.getPNUMBER() == dto.getPNUMBER() && i.getPSSTART().equals(dto.getPSSTART())) {
+				mav.addObject("packageSchedule", i);
+			}
+		}
+		MemberDTO mdto = new MemberDTO();
+		mdto.setMID(dto.getMID());
+		mav.addObject("pointInfo", service.pointInfo(mdto));
+		mav.setViewName("sales/SaleForm");
 		return mav;
 	}
 	
-	@RequestMapping(value = "/goRefundListAjax")
-	public @ResponseBody RefundListDTO goRefundListAjax(@ModelAttribute RefundListDTO refunddto) {
-		System.out.println("여기는 컨트롤러");
-		RefundListDTO redto=service.refundlistAjax(refunddto);
-		System.out.println("여기는 컨트롤러2222");
-		return redto;
+	@RequestMapping(value="reviewInsert")
+	private @ResponseBody List<ReviewListDTO> reviewInsert(@ModelAttribute ReviewDTO dto){
+		service.reviewInsert(dto);
+		PackageDTO pdto = new PackageDTO();
+		pdto.setPNUMBER(dto.getPNUMBER());
+		return service.reviewList(pdto);
+	}
+	
+	@RequestMapping(value = "/likeInsert")
+	private @ResponseBody int likeInsert(@ModelAttribute LikeListDTO dto) {
+		mav();
+		return service.likeInsert(dto);
+	}
+	
+	@RequestMapping(value = "/likeDelete")
+	private @ResponseBody int likeDelete(@ModelAttribute LikeListDTO dto) {
+		mav();
+		return service.likeDelete(dto);
+	}
+	
+	@RequestMapping(value = "/cartInsert")
+	private @ResponseBody int cartInsert(@ModelAttribute CartListDTO dto) {
+		mav();
+		return service.cartInsert(dto);
+	}
+	
+	@RequestMapping(value = "/cartDelete")
+	private @ResponseBody int cartDelete(@ModelAttribute CartListDTO dto) {
+		mav();
+		return service.cartDelete(dto);
 	}
 }

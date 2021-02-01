@@ -1,6 +1,7 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -22,314 +23,130 @@
 	</div>
 	<div class="container">
 		<div class="row">
-			<div class="col-3">
-				<%@ include file="../MyPageNav.jsp"%>
-			</div>
-			<div class="col-6 container-fluid">
+			<div class="col-9 container-fluid">
 				<h2>예약정보</h2>
-				<form method="post">
-					<table class="table table-striped">
-						<tr>
-							<td>상품명</td>
-							<td>다낭/호이안/바나산 5일 #노쇼핑#스페셜특전#가이드경비포함 #가족맞춤여행 #하얏트리젠시/쉐라톤그랜드</td>
-						</tr>
-						<tr>
-							<td>여행기간</td>
-							<td>2021.07.01~2021.07.05 / 3박 5일</td>
-						</tr>
-						<tr>
-							<td>항공편</td>
-							<td>한국출발 : 2021.07.01 (목) 18:40 / 항공편 : KE0463 <br />한국도착 :
-								2021.07.05 (월) 05:25 / 항공편 : KE0464
-							</td>
-						</tr>
-					</table>
-				</form>
+				<table class="table table-striped">
+					<tr>
+						<td>상품명</td>
+						<td>${packageDetail.getPNAME()}</td>
+					</tr>
+					<tr>
+						<td>여행기간</td>
+						<td>${fn:substring(packageSchedule.getPSSTART(),0,10)} ~ ${fn:substring(packageSchedule.getPSSTART(),0,10)} / ${packageDetail.getPPERIOD()-1}박 ${packageDetail.getPPERIOD()}일</td>
+					</tr>
+				</table>
 				<hr />
-				<div class="col container-fluid">
-					<h2>예약자 정보</h2>
-					<p>
-						*표시는 필수 입력사항입니다.<br/>
-						※ 여행 대표자의 이메일 주소와 상담가능한 연락처를 입력해주세요. 자세한 사항은 예약확정 후 요청예정이며, 정보통신망법에 의거 고객의 주민등록번호를 수집하지 않습니다.
-					</p>
-					<div>
-						<form method="post">
-							<table class="table table-striped">
-								<tr>
-									<td>
-										<input type="text" class="form-control" id="" name="" placeholder="한글성명  ex)홍길동" required>
-										<input type="text" class="form-control" id="" name="" placeholder="법정생년월일  ex)19911223" required>
-										<input type="text" class="form-control" id="" name="" placeholder="이메일 주소 ex) Hong@naver.com" required>
-										<input type="email" class="form-control" id="" name="" placeholder="휴대폰 번호 ex) 01012345678" required>
-									</td>
-								</tr>
-							</table>
-						</form>
+				<h2>인원 정보</h2>
+				<table class="table table-striped">
+					<tr>
+						<td>성인</td>
+						<td>아동</td>
+						<td>유아</td>
+					</tr>
+					<tr>
+						<!-- 성인 -->
+						<td>
+							<div class="col-3">
+								<input class="form-control" id="OADULTE" type="number" min="0" value="0" onchange="addTravelerForm(this, document.getElementById('OCHILD'), document.getElementById('OINFANT'))">
+							</div>
+						</td>
+						<!-- 아동 -->
+						<td>
+							<div class="col-3">
+								<input class="form-control" id="OCHILD" type="number" min="0" value="0" onchange="addTravelerForm(document.getElementById('OADULTE'), this, document.getElementById('OINFANT'))">
+							</div>
+						</td>
+						<!-- 유아 -->
+						<td>
+							<div class="col-3">
+								<input class="form-control" id="OINFANT" type="number" min="0" value="0" onchange="addTravelerForm(document.getElementById('OADULTE'), document.getElementById('OCHILD'), this)">
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>${packageDetail.getPADULT()}원</td>
+						<td>${packageDetail.getPCHILD()}원</td>
+						<td>${packageDetail.getPINFANT()}원</td>
+					</tr>
+				</table>
+				<hr/>
+				<div>
+					<h2>여행자 정보</h2>
+					<div id="travelerForm">
 					</div>
-					<hr />
-					<h2>인원 정보</h2>
-					<form method="post">
-						<table class="table table-striped">
-							<tr>
-								<td>성인</td>
-								<td>아동</td>
-								<td>유아</td>
+				</div>
+				<hr />
+				<div class="container-fluid">
+					<div class="row container-fluid">
+						<h1 class="text-center">여행 약관</h1>
+						<div class="container-fluid text-center">
+							<h5>해외여행 표준약관 약관</h5>
+							<div class="input-group justify-content-center">
+								<textarea rows="20" cols="100" class="textarea" style="resize: none;" readonly>해외여행 표준약관 내용 이지롱</textarea>
+							</div>
+							<div class="text-center">
+								<input type="checkbox" required="required"> 해외여행 표준약관 동의합니다.
+							</div>
 
-							</tr>
-							<tr>
-								<!-- 성인 -->
-								<td>
-									<a class="text-decoration-none" href="?pnumber=${cart.pnumber }">
-										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-  											<path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
-										</svg>
-									</a>
-									1
-									<a class="text-decoration-none" href="javascript:checkQty('${cart.pnumber }',${cart.qty })">
-										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
-  											<path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
-										</svg>
-									</a>
-								</td>
-								<!-- 아동 -->
-								<td>
-									<a class="text-decoration-none" href="?pnumber=${cart.pnumber }">
-										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-  											<path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
-										</svg>
-									</a>
-									5
-									<a class="text-decoration-none" href="javascript:checkQty('${cart.pnumber }',${cart.qty })">
-										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
-  											<path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
-										</svg>
-									</a>
-								</td>
-								<!-- 유아 -->
-								<td>
-									<a class="text-decoration-none" href="?pnumber=${cart.pnumber }">
-										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-  											<path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
-										</svg>
-									</a>
-									3
-									<a class="text-decoration-none" href="javascript:checkQty('${cart.pnumber }',${cart.qty })">
-										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
-  											<path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
-										</svg>
-									</a>
-								</td>
-							</tr>
-							<tr>
-								<td>9,269,900원</td>
-								<td>3,320,000원</td>
-								<td>1,000,000원</td>
-							</tr>
-						</table>
-					</form>
-					<hr/>
-					<div>
-						<h2>여행자 정보</h2>
-						<form method="post">
-							<h5>성인1</h5>
-							<table class="table table-striped">
-								<tr>
-									<td>성명(한글)</td>
-									<td>
-										<input type="text" class="form-control" id="" name="" placeholder="한글성명  ex)홍길동" required>
-									</td>
-									<td colspan="2"></td>
-								</tr>
-								<tr>
-									<td>생년월일</td>
-									<td>
-										<input type="text" class="form-control" id="" name="" placeholder="법정생년월일  ex)19911223" required>
-									</td>
-									<td>성별</td>
-									<td>
-										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="radio" name="#" id="MGENDERM" value="">
-											<label class="form-check-label" for="MGENDERM">남</label>
-										</div>
-										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="radio" name="#" id="MGENDERF" value="">
-										<label class="form-check-label" for="MGENDERF">여</label>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td>영문 성</td>
-									<td>
-										<input type="text" class="form-control" id="" name="" placeholder="영문 성 ex) HONG" required>
-									</td>
-									<td>영문이름</td>
-									<td>
-										<input type="text" class="form-control" id="" name="" placeholder="영문 이름 ex) KILDONG " required>
-									</td>
-								</tr>
-								<tr>
-									<td>휴대폰 번호</td>
-									<td>
-										<input type="email" class="form-control" id="" name="" placeholder="휴대폰 번호 ex) 01012345678" required>
-									</td>
-									<td>이메일 주소</td>
-									<td>
-										<input type="text" class="form-control" id="" name="" placeholder="이메일 주소 ex) Hong@naver.com" required>
-									</td>
-								</tr>
-							</table>
-							<h5>아동1</h5>
-							<table class="table table-striped">
-								<tr>
-									<td>성명(한글)</td>
-									<td>
-										<input type="text" class="form-control" id="" name="" placeholder="한글성명  ex)홍길동" required>
-									</td>
-									<td colspan="2"></td>
-								</tr>
-								<tr>
-									<td>생년월일</td>
-									<td>
-										<input type="text" class="form-control" id="" name="" placeholder="법정생년월일  ex)19911223" required>
-									</td>
-									<td>성별</td>
-									<td>
-										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="radio" name="#" id="MGENDERM" value="">
-											<label class="form-check-label" for="MGENDERM">남</label>
-										</div>
-										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="radio" name="#" id="MGENDERF" value="">
-											<label class="form-check-label" for="MGENDERF">여</label>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td>영문 성</td>
-									<td>
-										<input type="text" class="form-control" id="" name="" placeholder="영문 성 ex) HONG" required>
-									</td>
-									<td>영문이름</td>
-									<td>
-										<input type="text" class="form-control" id="" name="" placeholder="영문 이름 ex) KILDONG " required>
-									</td>
-								</tr>
-							</table>
-							<h5>유아1</h5>
-							<table class="table table-striped">
-								<tr>
-									<td>성명(한글)</td>
-									<td>
-										<input type="text" class="form-control" id="" name="" placeholder="한글성명  ex)홍길동" required>
-									</td>
-									<td colspan="2"></td>
-								</tr>
-								<tr>
-									<td>생년월일</td>
-									<td>
-										<input type="text" class="form-control" id="" name="" placeholder="법정생년월일  ex)19911223" required>
-									</td>
-									<td>성별</td>
-									<td>
-										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="radio" name="#" id="MGENDERM" value="">
-											<label class="form-check-label" for="MGENDERM">남</label>
-										</div>
-										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="radio" name="#" id="MGENDERF" value="">
-											<label class="form-check-label" for="MGENDERF">여</label>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td>영문 성</td>
-									<td>
-										<input type="text" class="form-control" id="" name="" placeholder="영문 성 ex) HONG" required>
-									</td>
-									<td>영문이름</td>
-									<td>
-										<input type="text" class="form-control" id="" name="" placeholder="영문 이름 ex) KILDONG " required>
-									</td>
-								</tr>
-							</table>
-						</form>
-					</div>
-					<hr />
-					<div class="container-fluid">
-						<div class="row container-fluid">
-							<h1 class="text-center">여행 약관</h1>
-							<form action="#" method="POST">
-								<div class="container-fluid text-center">
-									<h5>해외여행 표준약관 약관</h5>
-									<div class="input-group justify-content-center">
-										<textarea rows="20" cols="100" class="textarea" style="resize: none;" readonly>해외여행 표준약관 내용 이지롱</textarea>
-									</div>
-									<div class="text-center">
-										<input type="checkbox"> 해외여행 표준약관 동의합니다.
-									</div>
-
-									<h5>국내여행표준약관</h5>
-									<div class="input-group justify-content-center">
-										<textarea rows="20" cols="100" class="textarea" style="resize: none;" readonly>국내여행표준약관 내용이지로옹</textarea>
-									</div>
-									<div class="text-center">
-										<input type="checkbox"> 국내여행표준약관 동의합니다.
-									</div>
-									<h5>개인정보 이용약관</h5>
-									<div class="input-group justify-content-center">
-										<textarea rows="20" cols="100" class="textarea" style="resize: none;" readonly>개인정보 이용약관</textarea>
-									</div>
-									<div class="text-center">
-										<input type="checkbox"> 개인정보 이용약관 동의합니다.
-									</div>
-									<div class="mt-2 text-center mb-1">
-										<input type="reset" class="btn btn-primary btn-md" value="모두 동의함">
-									</div>
-								</div>
-							</form>
+							<h5>국내여행표준약관</h5>
+							<div class="input-group justify-content-center">
+								<textarea rows="20" cols="100" class="textarea" style="resize: none;" readonly>국내여행표준약관 내용이지로옹</textarea>
+							</div>
+							<div class="text-center">
+								<input type="checkbox" required="required"> 국내여행표준약관 동의합니다.
+							</div>
+								
+							<h5>개인정보 이용약관</h5>
+							<div class="input-group justify-content-center">
+								<textarea rows="20" cols="100" class="textarea" style="resize: none;" readonly>개인정보 이용약관</textarea>
+							</div>
+							<div class="text-center">
+								<input type="checkbox" required="required"> 개인정보 이용약관 동의합니다.
+							</div>
 						</div>
 					</div>
-					<hr />
-				</div>
-				<div class="row col container-fluid justify-content-center">
-					<div class="col-6">
-						<form action="searchPassword" method="get" name="searchPasswordForm">
-							<label class="form-label" for="MPW">※ 예약확인을 위한 비밀번호를 입력해주세요.</label>
-							<div class="input-group mb-1">
-								<input class="form-control" type="password" aria-describedby="MPW" name="">
-								<button class="btn btn-primary btn-md" id="">확인</button>
-							</div>
-						</form>
-					</div>
-				</div>
-				<hr />
-				<div class="row col container-fluid justify-content-center">
-					<button class="btn btn-primary btn-md" id="">예약하기</button>
 				</div>
 			</div>
-			<div class="col-3">
-				<div class="border p-1">
+			<div class="col">
+				<div class="border p-1 sticky-top row text-center justify-content-center">
 					<h2>상품 결제 정보</h2>
-					<table>
+					<table class="text-center">
 						<tr>
-							<td>최종결제금액</td>
-							<td>성인 1</td>
-							<td>아동 0</td>
-							<td>유아 3</td>
+							<td id="adult">성인 0</td>
+							<td id="child">아동 0</td>
+							<td id="infant">유아 0</td>
 						</tr>
 						<tr>
-							<td colspan="4">계약금 69,900원</td>
+							<td colspan="3">남은 포인트 ${pointInfo.getPOAMOUNT()}</td>
 						</tr>
 						<tr>
-							<td colspan="4">총 액 12,269,900원</td>
+							<td colspan="3">
+								사용할 포인트 
+								<div class="row justify-content-center">
+									<div class="col-7">
+										<input class="form-control" id="POAMOUNT" type="number" min="0" max="${pointInfo.getPOAMOUNT()}" value="0">
+										<button class="btn btn-primary btn-sm" onclick="usePoint(document.getElementById('POAMOUNT'), document.getElementById('OADULTE'), document.getElementById('OCHILD'), document.getElementById('OINFANT'))">사용하기</button>
+									</div>
+								</div>
+							</td>
 						</tr>
-
 						<tr>
-							<td colspan="4">유류할증료&제세공과금 포함</td>
+							<td colspan="3" id="deposit">
+								계약금 0원
+							</td>
 						</tr>
 						<tr>
-							<td colspan="2"><button class="btn btn-primary btn-md" id="">계약금결제</button></td>
-							<td colspan="2"><button class="btn btn-primary btn-md" id="">전액결제</button></td>
+							<td colspan="3" id="total">
+								총 금액 0원
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3">
+								<div class="btn-group-vertical">
+									<button class="btn btn-outline-primary btn-md">계약금결제</button>
+									<button class="btn btn-outline-primary btn-md">전액결제</button>
+								</div>
+							</td>
 						</tr>
 					</table>
 				</div>
@@ -341,30 +158,87 @@
 <footer>
 	<%@ include file="../Footer.jsp"%>
 </footer>
-<script>
-	function checkQty(pnumber, qty) {
-		if (qty != 1) {
-			location.href = "?pnumber=" + pnumber
+<script type="text/javascript">
+	var formCount = 0;
+	var pointFlag = false;
+	function addTravelerForm(OADULT, OCHILD, OINFANT){
+		var sum = parseInt(OADULT.value)+parseInt(OCHILD.value)+parseInt(OINFANT.value);
+		var parent = document.getElementById("travelerForm");
+		
+		if(formCount < sum){
+			for (var i = formCount; i < sum; i++) {
+				var newNode = document.createElement("table");
+				newNode.setAttribute("id", "travelerForm"+formCount);
+				newNode.setAttribute("class", "table table-striped");
+				newNode.innerHTML = "<h4>여행객" + (i+1) + "</h4>" +
+									"<tr>" +
+										"<td>성명(한글)</td>" +
+										"<td>" +
+											"<input type='text' class='form-control' name='Travelers[" + i + "].TNAME' placeholder='한글성명  ex)홍길동' required>" +
+										"</td>" +
+										"<td>생년월일</td>" +
+										"<td>" +
+											"<input type='text' class='form-control' name='Travelers[" + i + "].TBIRTH' placeholder='법정생년월일  ex)19911223' required>" +
+										"</td>" +
+									"</tr>" +
+									"<tr>" +
+										"<td>영문 이름</td>" +
+										"<td colspan='3'>" +
+											"<div class='col-6'>" +
+											"<input type='text' class='form-control' name='Travelers[" + i + "].TENNAME' placeholder='영문 성 ex) HONG' required>" +
+											"</div>" +
+										"</td>" +
+									"</tr>" +
+									"<tr>" +
+										"<td>휴대폰 번호</td>" +
+										"<td>" +
+											"<input type='email' class='form-control' name='Travelers[" + i + "].TPHONE' placeholder='휴대폰 번호 ex) 01012345678' required>" +
+										"</td>" +
+										"<td>이메일 주소</td>" +
+										"<td>" +
+											"<input type='text' class='form-control' name='Travelers[" + i + "].TEMAIL' placeholder='이메일 주소 ex) Hong@naver.com' required>" +
+										"</td>" +
+									"</tr>";
+				parent.appendChild(newNode);
+				formCount++;
+			}
+		}else{
+			for (var i = formCount; i > sum; i--) {
+				formCount--;
+				var travelerForm = "travelerForm" + formCount;
+				var removedNode = document.getElementById(travelerForm);
+				parent.removeChild(removedNode);
+			}
+		}
+		
+		var total = parseInt(OADULT.value)*${packageDetail.getPADULT()}+parseInt(OCHILD.value)*${packageDetail.getPCHILD()}+parseInt(OINFANT.value)*${packageDetail.getPINFANT()}
+		document.getElementById("adult").innerHTML = "성인 " + OADULT.value;
+		document.getElementById("child").innerHTML = "아동 " + OCHILD.value;
+		document.getElementById("infant").innerHTML = "유아 " + OINFANT.value;
+		document.getElementById("deposit").innerHTML = "계약금 " + total*0.1 + "원";
+		document.getElementById("total").innerHTML = "총 금액 " + total + "원";
+	}
+	
+	function usePoint(POAMOUNT, OADULT, OCHILD, OINFANT){
+		var total = parseInt(OADULT.value)*${packageDetail.getPADULT()}+parseInt(OCHILD.value)*${packageDetail.getPCHILD()}+parseInt(OINFANT.value)*${packageDetail.getPINFANT()}
+		
+		if(POAMOUNT.value > 0){
+			pointFlag = true;
+		}else{
+			pointFlag = false;
+		}
+		
+		if(total*0.1-POAMOUNT.value < 0){
+			document.getElementById("deposit").innerHTML = "계약금 " + 0 + "원";
+		}else{
+			document.getElementById("deposit").innerHTML = "계약금 " + (total*0.1-POAMOUNT.value) + "원";
+		}
+		
+		if((total-POAMOUNT.value) < 0){
+			document.getElementById("total").innerHTML = "총 금액 " + 0 + "원";
+		}else{
+			document.getElementById("total").innerHTML = "총 금액 " + (total-POAMOUNT.value) + "원";
 		}
 	}
-</script>
-
-<script>
-	$(function() {
-		var offset = $("#sidebar").offset();
-		var topPadding = 300;
-		$(window).scroll(function() {
-			if ($(window).scrollTop() > offset.top) {
-				$("#sidebar").stop().animate({
-					marginTop : $(window).scrollTop() - offset.top + topPadding
-				});
-			} else {
-				$("#sidebar").stop().animate({
-					marginTop : 0
-				});
-			}
-			;
-		});
-	});
 </script>
 </html>

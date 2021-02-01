@@ -5,10 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.icia.TravelMaker.dao.SalesDAO;
+import com.icia.TravelMaker.dto.CartListDTO;
+import com.icia.TravelMaker.dto.LikeListDTO;
+import com.icia.TravelMaker.dto.MemberDTO;
 import com.icia.TravelMaker.dto.PackageDTO;
 import com.icia.TravelMaker.dto.PackageDetailDTO;
 import com.icia.TravelMaker.dto.PackageScheduleDTO;
-import com.icia.TravelMaker.dto.RefundListDTO;
+import com.icia.TravelMaker.dto.PointDTO;
+import com.icia.TravelMaker.dto.ReviewDTO;
 import com.icia.TravelMaker.dto.ReviewListDTO;
 
 @Service
@@ -33,17 +37,30 @@ public class SalesService {
 		return dao.reviewList(dto);
 	}
 
-	public List<RefundListDTO> refundlist() {
-		
-		return dao.refundlist();
+	public PointDTO pointInfo(MemberDTO dto) {
+		return dao.pointInfo(dto);
 	}
 
-	public RefundListDTO refundlistAjax(RefundListDTO refunddto) {
-		System.out.println("여기는 서비스");
-		
-		refunddto.setODATE(refunddto.getODATE().substring(0, 19));
-		return dao.refundlistAjax(refunddto);
+	public void reviewInsert(ReviewDTO dto) {
+		dao.reviewInsert(dto);
 	}
 
-	
+	public int likeInsert(LikeListDTO dto) {
+		return dao.likeInsert(dto);
+	}
+
+	public int likeDelete(LikeListDTO dto) {
+		return dao.likeDelete(dto);
+	}
+
+	public int cartInsert(CartListDTO dto) {
+		dto.setPSSTART(dto.getPSSTART().substring(0, 19));
+		return dao.cartInsert(dto);
+	}
+
+	public int cartDelete(CartListDTO dto) {
+		dto.setPSSTART(dto.getPSSTART().substring(0, 19));
+		return dao.cartDelete(dto);
+	}
+
 }

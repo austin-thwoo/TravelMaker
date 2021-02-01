@@ -41,7 +41,6 @@
 					<li><a class="dropdown-item" href="goPackageList?to=admin">상품 목록</a></li>
 					<li><a class="dropdown-item" href="#">판매 관리</a></li>
 					<li><a class="dropdown-item" href="goTravelerList">여행객 목록</a></li>
-					<li><a class="dropdown-item" href="goRefundList">환불신청 목록</a></li>
 				</ul>
 			</div>
 		</li>

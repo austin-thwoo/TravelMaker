@@ -16,8 +16,10 @@ import com.icia.TravelMaker.dto.CommentsComplaintDetailDTO;
 import com.icia.TravelMaker.dto.CommentsDTO;
 import com.icia.TravelMaker.dto.CommentsListDTO;
 import com.icia.TravelMaker.dto.MemberDTO;
+import com.icia.TravelMaker.dto.MemberInfoDTO;
 import com.icia.TravelMaker.dto.MemberListDTO;
 import com.icia.TravelMaker.dto.PackageDTO;
+import com.icia.TravelMaker.dto.PointDTO;
 import com.icia.TravelMaker.dto.TravelerListDTO;
 
 @Repository
@@ -117,6 +119,14 @@ public class AdminDAO {
 
 	public String categoryCheck(CategoryDTO dto) {
 		return sql.selectOne("Admin.categoryCheck", dto);
+	}
+
+	public MemberInfoDTO memberInfo(MemberDTO dto) {
+		return sql.selectOne("Admin.memberInfo", dto);
+	}
+
+	public void pointInsert(PointDTO dto) {
+		sql.insert("Admin.pointInsert", dto);
 	}
 
 }

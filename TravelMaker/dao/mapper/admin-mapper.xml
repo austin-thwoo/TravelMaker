@@ -74,45 +74,17 @@
  	
  	<select id="travelerList" resultType="TravelerList">
  		SELECT T.OPNUMBER,
-		    T.ODATE,
-		    P.PNAME,
-		    T.TNAME,
-		    T.TENNAME,
-		    T.TBIRTH,
-		    T.TEMAIL,
-		    T.TPHONE,
-		    O.PSSTART,
-		    O.PSEND
-		FROM TRAVELER T INNER JOIN PACKAGE P ON T.OPNUMBER = P.PNUMBER
-		                INNER JOIN ORDERS O ON T.OPNUMBER = O.PNUMBER AND T.ODATE = O.ODATE AND T.OMID = O.MID
-		ORDER BY ODATE DESC
- 	</select>
- 	
- 	<select id="complaintCommentsList" resultType="CommentsList">
- 		SELECT CM.BNUMBER,
-			    B.BTITLE,
-			    CM.MID,
-			    CM.CMDATE,
-			    CM.CMCONTENT,
-			    CM.CMSTATE,
-			    M.MNICK,
-			    CC.COMMENTSCOMPLAINT,
-			    CL.COMMENTSLIKE
-			FROM COMMENTS CM LEFT OUTER JOIN (SELECT CMBNUMBER,
-			                                    CMMID,
-			                                    CMDATE,
-			                                    COUNT(MID) AS "COMMENTSCOMPLAINT"
-			                                FROM COMMENTSCOMPLAINT
-			                                GROUP BY CMBNUMBER, CMMID, CMDATE) CC ON CM.BNUMBER = CC.CMBNUMBER AND CM.MID = CC.CMMID AND CM.CMDATE = CC.CMDATE
-			            LEFT OUTER JOIN (SELECT CMBNUMBER,
-			                                    CMMID,
-			                                    CMDATE,
-			                                    COUNT(MID) AS "COMMENTSLIKE"
-			                                FROM COMMENTSLIKE
-			                                GROUP BY CMBNUMBER, CMMID, CMDATE) CL ON CM.BNUMBER = CL.CMBNUMBER AND CM.MID = CL.CMMID AND CM.CMDATE = CL.CMDATE
-			            INNER JOIN BOARD B ON CM.BNUMBER = B.BNUMBER
-			            INNER JOIN MEMBER M ON CM.MID = M.MID
-		WHERE CC.COMMENTSCOMPLAINT > 0
+            T.ODATE,
+            P.PNAME,
+            T.TNAME,
+            T.TENNAME,
+            T.TBIRTH,
+            T.TEMAIL,
+            T.TPHONE,
+            O.PSSTART
+        FROM TRAVELER T INNER JOIN PACKAGE P ON T.OPNUMBER = P.PNUMBER
+                        INNER JOIN ORDERS O ON T.OPNUMBER = O.PNUMBER AND T.ODATE = O.ODATE AND T.OMID = O.MID
+        ORDER BY ODATE DESC
  	</select>
  	
  	<select id="memberList" parameterType="Member" resultType="MemberList">
@@ -122,10 +94,10 @@
 		    M.MPHONE,
 		    M.MGENDER,
 		    M.MSTATE,
-		    M.MDATE,
 		    BC.BOARDCOMPLAINT,
 		    CC.COMMENTSCOMPLAINT,
-		    AB.ACCOUNTBAN
+		    AB.ACCOUNTBAN,
+            PO.POAMOUNT
 		FROM MEMBER M LEFT OUTER JOIN (SELECT MID,
 		                                    COUNT(BNUMBER) AS "BOARDCOMPLAINT"
 		                                FROM(SELECT B.BNUMBER,
@@ -149,6 +121,10 @@
 		                                    COUNT(ABDATE) AS "ACCOUNTBAN"
 		                                FROM ACCOUNTBAN
 		                                GROUP BY MID) AB ON M.MID = AB.MID
+                        LEFT OUTER JOIN (SELECT MID,
+                                            SUM(POAMOUNT * POSTATE) AS "POAMOUNT"
+                                        FROM POINT
+                                        GROUP BY MID) PO ON M.MID = PO.MID
 		 WHERE M.MLEVEL = #{MLEVEL}
  	</select>
  	
@@ -231,4 +207,51 @@
 		SET CNAME = #{CNAME}
 		WHERE CNUMBER = #{CNUMBER}
  	</update>
+ 	
+ 	<select id="memberInfo" parameterType="Member" resultType="MemberInfo">
+ 		SELECT M.MID,
+				M.MNAME,
+				M.MNICK,
+				M.MPHONE,
+				M.MGENDER,
+				M.MBIRTH,
+				PO.POAMOUNT,
+		        AB.ABCOUNT,
+		        B.BCOUNT,
+		        CM.CMCOUNT,
+		        RV.RVCOUNT,
+		        RVB.RVBCOUNT
+		FROM MEMBER M LEFT OUTER JOIN (SELECT MID,
+		                            SUM(POAMOUNT * POSTATE) AS "POAMOUNT"
+		                        FROM POINT
+		                        GROUP BY MID) PO ON M.MID = PO.MID
+		            LEFT OUTER JOIN (SELECT MID,
+		                                COUNT(ABDATE) AS "ABCOUNT"
+		                            FROM ACCOUNTBAN
+		                            GROUP BY MID) AB ON M.MID = AB.MID
+		            LEFT OUTER JOIN (SELECT MID,
+		                                COUNT(BNUMBER) AS "BCOUNT"
+		                            FROM BOARD
+		                            WHERE BCNUMBER != 3
+		                            GROUP BY MID) B ON M.MID = B.MID
+		            LEFT OUTER JOIN (SELECT MID,
+		                                COUNT(*) AS "CMCOUNT"
+		                            FROM COMMENTS
+		                            GROUP BY MID) CM ON M.MID = CM.MID
+		            LEFT OUTER JOIN (SELECT MID,
+		                                COUNT(PNUMBER) AS "RVCOUNT"
+		                            FROM REVIEW
+		                            GROUP BY MID) RV ON M.MID = RV.MID
+		            LEFT OUTER JOIN (SELECT MID,
+		                                COUNT(BNUMBER) AS "RVBCOUNT"
+		                            FROM BOARD
+		                            WHERE BCNUMBER = 3
+		                            GROUP BY MID) RVB ON M.MID = RVB.MID
+		WHERE M.MID = #{MID}
+ 	</select>
+ 	
+ 	<insert id="pointInsert">
+ 		INSERT INTO POINT(MID, PODATE, POAMOUNT, POSTATE, POINFO)
+ 		VALUES(#{MID}, DEFAULT, #{POAMOUNT}, #{POSTATE}, #{POINFO})
+ 	</insert>
  </mapper>

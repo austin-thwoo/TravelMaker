@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
 	<div class="container-fluid">
 		<a class="navbar-brand" href="./"><img src="" alt="Logo"></a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
