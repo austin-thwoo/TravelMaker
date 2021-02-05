@@ -72,7 +72,7 @@
 		
 							<label class="form-label" for="PINFO">패키지상세</label>
 							<div class="input-group">
-								<textarea name="PINFO" id="ir1" rows="20" cols="100">${packageDetail.getPINFO()}</textarea>
+								<textarea name="PINFO" id="editor1" rows="20" cols="100">${packageDetail.getPINFO()}</textarea>
 							</div>
 						</div>
 						<input type="hidden" name="PNUMBER" value="${packageDetail.getPNUMBER()}">
@@ -88,21 +88,35 @@
 <footer>
 	<%@ include file="../Footer.jsp"%>
 </footer>
-<script type="text/javascript" src="resources/se2/js/HuskyEZCreator.js" charset="utf-8"></script>
-<script>
-	function submitContents() {
-		oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", []);
- 		try {
- 			document.getElementById("packageUpdateform").submit();
- 		} catch(e) {}
-	}
-	
-	var oEditors = [];
-	nhn.husky.EZCreator.createInIFrame({
- 		oAppRef: oEditors,
- 		elPlaceHolder: "ir1",
- 		sSkinURI: "resources/se2/SmartEditor2Skin.html",
- 		fCreator: "createSEditor2"
-	});
+<script type="text/javascript" src="resources/ckeditor/ckeditor.js"></script>
+<script type="text/javascript">
+	$(function(){
+		CKEDITOR.replace('editor1',{
+			width : '800px',
+			height : '600px',
+			filebrowserImageUploadUrl: './fileUpload'
+		});
+        
+        
+        CKEDITOR.on('dialogDefinition', function( ev ){
+            var dialogName = ev.data.name;
+            var dialogDefinition = ev.data.definition;
+         
+            switch (dialogName) {
+                case 'image': //Image Properties dialog
+                    //dialogDefinition.removeContents('info');
+                    dialogDefinition.removeContents('Link');
+                    dialogDefinition.removeContents('advanced');
+                    break;
+            }
+        });
+        
+    });
+    function submitContents() {
+    	editor.updateElement();
+         try {
+             document.getElementById("boardInsertform").submit();
+         } catch(e) {}
+    }
 </script>
 </html>

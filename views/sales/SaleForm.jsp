@@ -143,8 +143,8 @@
 						<tr>
 							<td colspan="3">
 								<div class="btn-group-vertical">
-									<button class="btn btn-outline-primary btn-md">계약금결제</button>
-									<button class="btn btn-outline-primary btn-md">전액결제</button>
+									<button class="btn btn-outline-primary btn-md" onclick="depositPay('${sessionScope.loginInfo.getMID()}', '${packageDetail.getPNUMBER()}', document.getElementById('OADULTE'), document.getElementById('OCHILD'), document.getElementById('OINFANT'), '${packageSchedule.getPSSTART()}', document.getElementById('POAMOUNT'))">계약금결제</button>
+									<button class="btn btn-outline-primary btn-md" onclick="totalPay('${sessionScope.loginInfo.getMID()}', '${packageDetail.getPNUMBER()}', document.getElementById('OADULTE'), document.getElementById('OCHILD'), document.getElementById('OINFANT'), '${packageSchedule.getPSSTART()}', document.getElementById('POAMOUNT'))">전액결제</button>
 								</div>
 							</td>
 						</tr>
@@ -221,23 +221,55 @@
 	
 	function usePoint(POAMOUNT, OADULT, OCHILD, OINFANT){
 		var total = parseInt(OADULT.value)*${packageDetail.getPADULT()}+parseInt(OCHILD.value)*${packageDetail.getPCHILD()}+parseInt(OINFANT.value)*${packageDetail.getPINFANT()}
+		var point = POAMOUNT.value;
 		
-		if(POAMOUNT.value > 0){
+		if(point > "${pointInfo.getPOAMOUNT()}"){
+			POAMOUNT.value = "${pointInfo.getPOAMOUNT()}";
+			point = ${pointInfo.getPOAMOUNT()};
+		}
+		
+		if(point > 0){
 			pointFlag = true;
 		}else{
 			pointFlag = false;
 		}
 		
-		if(total*0.1-POAMOUNT.value < 0){
+		if(total*0.1-point < 0){
 			document.getElementById("deposit").innerHTML = "계약금 " + 0 + "원";
 		}else{
-			document.getElementById("deposit").innerHTML = "계약금 " + (total*0.1-POAMOUNT.value) + "원";
+			document.getElementById("deposit").innerHTML = "계약금 " + (total*0.1-point) + "원";
 		}
 		
-		if((total-POAMOUNT.value) < 0){
+		if((total-point) < 0){
 			document.getElementById("total").innerHTML = "총 금액 " + 0 + "원";
 		}else{
-			document.getElementById("total").innerHTML = "총 금액 " + (total-POAMOUNT.value) + "원";
+			document.getElementById("total").innerHTML = "총 금액 " + (total-point) + "원";
+		}
+	}
+	
+	function depositPay(MID, PNUMBER, OADULT, OCHILD, OINFANT, PSSTART, POAMOUNT){
+		var total = parseInt(OADULT.value)*${packageDetail.getPADULT()}+parseInt(OCHILD.value)*${packageDetail.getPCHILD()}+parseInt(OINFANT.value)*${packageDetail.getPINFANT()};
+		total = total*0.1;
+		if(pointFlag){
+			total = total - POAMOUNT.value;
+			var to = "goPayApi?MID="+MID+"&PNUMBER="+PNUMBER+"&OADULT="+OADULT.value+"&OCHILD="+OCHILD.value+"&OINFANT="+OINFANT.value+"&OAMOUNT="+total+"&PSSTART="+PSSTART+"&POAMOUNT="+POAMOUNT.value+"&OSTATE=1";
+			window.open(to, "_blank", "menubar=0, scrollbars=1, status=0, titlebar=0, toolbar=0, left=30, top=30, width=900, height=600");
+		}else{
+			var to = "goPayApi?MID="+MID+"&PNUMBER="+PNUMBER+"&OADULT="+OADULT.value+"&OCHILD="+OCHILD.value+"&OINFANT="+OINFANT.value+"&OAMOUNT="+total+"&PSSTART="+PSSTART+"&POAMOUNT="+POAMOUNT.value+"&OSTATE=1";
+			window.open(to, "_blank", "menubar=0, scrollbars=1, status=0, titlebar=0, toolbar=0, left=30, top=30, width=900, height=600");
+		}
+	}
+	
+	function totalPay(MID, PNUMBER, OADULT, OCHILD, OINFANT, PSSTART, POAMOUNT){
+		var total = parseInt(OADULT.value)*${packageDetail.getPADULT()}+parseInt(OCHILD.value)*${packageDetail.getPCHILD()}+parseInt(OINFANT.value)*${packageDetail.getPINFANT()};
+		total = total;
+		if(pointFlag){
+			total = total - POAMOUNT.value;
+			var to = "goPayApi?MID="+MID+"&PNUMBER="+PNUMBER+"&OADULT="+OADULT.value+"&OCHILD="+OCHILD.value+"&OINFANT="+OINFANT.value+"&OAMOUNT="+total+"&PSSTART="+PSSTART+"&POAMOUNT="+POAMOUNT.value+"&OSTATE=2";
+			window.open(to, "_blank", "menubar=0, scrollbars=1, status=0, titlebar=0, toolbar=0, left=30, top=30, width=900, height=600");
+		}else{
+			var to = "goPayApi?MID="+MID+"&PNUMBER="+PNUMBER+"&OADULT="+OADULT.value+"&OCHILD="+OCHILD.value+"&OINFANT="+OINFANT.value+"&OAMOUNT="+total+"&PSSTART="+PSSTART+"&POAMOUNT="+POAMOUNT.value+"&OSTATE=2";
+			window.open(to, "_blank", "menubar=0, scrollbars=1, status=0, titlebar=0, toolbar=0, left=30, top=30, width=900, height=600");
 		}
 	}
 </script>

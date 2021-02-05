@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.icia.TravelMaker.dto.BoardCategoryDTO;
 import com.icia.TravelMaker.dto.BoardDTO;
 import com.icia.TravelMaker.dto.BoardDetailDTO;
+import com.icia.TravelMaker.dto.BoardLikeDTO;
 import com.icia.TravelMaker.dto.BoardListDTO;
 import com.icia.TravelMaker.dto.CommentsDTO;
 import com.icia.TravelMaker.dto.CommentsListDTO;
@@ -53,6 +54,30 @@ public class BoardDAO {
 
 	public int boardUpdate(BoardDTO dto) {
 		return sql.update("Board.boardUpdate", dto);
+	}
+
+	public int boardlikeinsert(BoardLikeDTO dto) {
+		System.out.println("여기는보드인서트DAO:"+dto);
+		return sql.insert("Board.boardlikeinsert", dto);
+	}
+
+	public int likelist(BoardLikeDTO dto) {
+		System.out.println("여기는 DAO1 :"+dto.toString());
+		return sql.selectOne("Board.boardlikelist", dto);
+		
+				
+	}
+
+	public int boardlikedelete(BoardLikeDTO dto) {
+		System.out.println("boardlikedeleteDAO"+dto);
+		return sql.delete("Board.boardLikeDelete", dto);
+	}
+
+	public String getmylike(BoardLikeDTO boardlike) {
+			System.out.println("여기는123 DAO:"+ boardlike.toString());
+		 String str=sql.selectOne("Board.getmylike", boardlike);
+		 System.out.println("여기는124 DAO :"+str);
+		 return str;
 	}
 
 }

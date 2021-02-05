@@ -1,6 +1,8 @@
 package com.icia.TravelMaker.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +18,14 @@ import com.icia.TravelMaker.dto.BoardCategoryDTO;
 import com.icia.TravelMaker.dto.BoardDTO;
 import com.icia.TravelMaker.dto.CategoryDTO;
 import com.icia.TravelMaker.dto.CommentsDTO;
+import com.icia.TravelMaker.dto.ExportExcelDTO;
 import com.icia.TravelMaker.dto.MemberDTO;
+import com.icia.TravelMaker.dto.OrdersDTO;
 import com.icia.TravelMaker.dto.PackageDTO;
 import com.icia.TravelMaker.dto.PointDTO;
 import com.icia.TravelMaker.dto.TravelerListDTO;
-import com.icia.TravelMaker.excelOnly.WriteListToExcelFile;
 import com.icia.TravelMaker.service.AdminService;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import com.icia.TravelMaker.util.ExportExcelUtil;
 
 @Controller
 public class Admincontroller {
@@ -248,23 +249,38 @@ public class Admincontroller {
 	}
 
 	@RequestMapping(value = "/pointInsert")
-	private ModelAndView pointInsert(@ModelAttribute PointDTO dto,
-									@RequestParam("MLEVEL") int MLEVEL){
+	private ModelAndView pointInsert(@ModelAttribute PointDTO dto, @RequestParam("MLEVEL") int MLEVEL){
 		mav();
 		service.pointInsert(dto);
 		mav.setViewName("redirect:/goMemberList?MLEVEL="+MLEVEL);
 		return mav;
 	}
 	
-	@RequestMapping(value = "/excelview")
-	public ModelAndView excelview() throws Exception {
+	@RequestMapping(value = "/goRefundList")
+	public ModelAndView goRefundList() {
+		mav();
+		mav.addObject("refundList", service.refundList());
+		mav.setViewName("admin/RefundList");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/refundDetail")
+	public ModelAndView refundDetail(@ModelAttribute OrdersDTO dto) {
+		mav();
+		mav.addObject("refundDetail", service.refundDetail(dto));
+		mav.setViewName("admin/RefundDetail");
+		return mav;
+	}
+	
+	//<!-- TransformIntoExcell -->
+	@RequestMapping(value = "/exportExcel")
+	public ModelAndView exportExcel(@ModelAttribute ExportExcelDTO dto) throws Exception {
 		mav();
 		Date now =new Date();
-		List<TravelerListDTO> travelerlist=service.travelerList();
+		/* List<TravelerListDTO> travelerlist=service.travelerList(); */
 		SimpleDateFormat simpledate = new SimpleDateFormat("yy-MM-dd-hh-mm-ss");
-		System.out.println("여기는 컨트롤러 : " +simpledate.format(now));
-        WriteListToExcelFile.writeNoticeListToFile(simpledate.format(now)+"travelerList.xlsx", travelerlist);
-        mav.setViewName("redirect:/goTravelerList");
+		ExportExcelUtil.writeNoticeListToFile(simpledate.format(now)+ "travelerList.xlsx", dto.getTravelerList());
+		mav.setViewName("redirect:/goTravelerList");
 	return mav;
-}
+	}
 }

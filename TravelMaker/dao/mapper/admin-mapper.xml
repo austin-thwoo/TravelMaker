@@ -74,17 +74,46 @@
  	
  	<select id="travelerList" resultType="TravelerList">
  		SELECT T.OPNUMBER,
-            T.ODATE,
-            P.PNAME,
-            T.TNAME,
-            T.TENNAME,
-            T.TBIRTH,
-            T.TEMAIL,
-            T.TPHONE,
-            O.PSSTART
-        FROM TRAVELER T INNER JOIN PACKAGE P ON T.OPNUMBER = P.PNUMBER
-                        INNER JOIN ORDERS O ON T.OPNUMBER = O.PNUMBER AND T.ODATE = O.ODATE AND T.OMID = O.MID
-        ORDER BY ODATE DESC
+		    T.ODATE,
+		    P.PNAME,
+		    T.TNAME,
+		    T.TENNAME,
+		    T.TBIRTH,
+		    T.TEMAIL,
+		    T.TPHONE,
+		    O.PSSTART,
+            PS.PSEND
+		FROM TRAVELER T INNER JOIN PACKAGE P ON T.OPNUMBER = P.PNUMBER
+                		INNER JOIN ORDERS O ON T.OPNUMBER = O.PNUMBER AND T.ODATE = O.ODATE AND T.OMID = O.MID
+                		INNER JOIN PACKAGESCHEDULE PS ON O.PSPNUMBER = PS.PNUMBER AND O.PSSTART = PS.PSSTART
+		ORDER BY ODATE DESC
+ 	</select>
+ 	
+ 	<select id="complaintCommentsList" resultType="CommentsList">
+ 		SELECT CM.BNUMBER,
+			    B.BTITLE,
+			    CM.MID,
+			    CM.CMDATE,
+			    CM.CMCONTENT,
+			    CM.CMSTATE,
+			    M.MNICK,
+			    CC.COMMENTSCOMPLAINT,
+			    CL.COMMENTSLIKE
+			FROM COMMENTS CM LEFT OUTER JOIN (SELECT CMBNUMBER,
+			                                    CMMID,
+			                                    CMDATE,
+			                                    COUNT(MID) AS "COMMENTSCOMPLAINT"
+			                                FROM COMMENTSCOMPLAINT
+			                                GROUP BY CMBNUMBER, CMMID, CMDATE) CC ON CM.BNUMBER = CC.CMBNUMBER AND CM.MID = CC.CMMID AND CM.CMDATE = CC.CMDATE
+			            LEFT OUTER JOIN (SELECT CMBNUMBER,
+			                                    CMMID,
+			                                    CMDATE,
+			                                    COUNT(MID) AS "COMMENTSLIKE"
+			                                FROM COMMENTSLIKE
+			                                GROUP BY CMBNUMBER, CMMID, CMDATE) CL ON CM.BNUMBER = CL.CMBNUMBER AND CM.MID = CL.CMMID AND CM.CMDATE = CL.CMDATE
+			            INNER JOIN BOARD B ON CM.BNUMBER = B.BNUMBER
+			            INNER JOIN MEMBER M ON CM.MID = M.MID
+		WHERE CC.COMMENTSCOMPLAINT > 0
  	</select>
  	
  	<select id="memberList" parameterType="Member" resultType="MemberList">
@@ -254,4 +283,38 @@
  		INSERT INTO POINT(MID, PODATE, POAMOUNT, POSTATE, POINFO)
  		VALUES(#{MID}, DEFAULT, #{POAMOUNT}, #{POSTATE}, #{POINFO})
  	</insert>
+ 	
+ 	<select id="refundList" resultType="Orders">
+ 		SELECT O.MID,
+		    O.PNUMBER,
+		    O.ODATE,
+		    O.OADULT,
+		    O.OCHILD,
+		    O.OINFANT,
+		    O.OAMOUNT,
+		    O.OSTATE,
+		    O.PSSTART,
+		    M.MNICK,
+		    PS.PSEND
+		FROM ORDERS O INNER JOIN PACKAGESCHEDULE PS ON O.PSPNUMBER = PS.PNUMBER AND O.PSSTART = PS.PSSTART
+            		INNER JOIN MEMBER M ON O.MID = M.MID
+		WHERE OSTATE <![CDATA[<]]> 0
+ 	</select>
+ 	
+ 	<select id="refundDetail" parameterType="Orders" resultType="Orders">
+ 		SELECT O.MID,
+		    O.PNUMBER,
+		    O.ODATE,
+		    O.OADULT,
+		    O.OCHILD,
+		    O.OINFANT,
+		    O.OAMOUNT,
+		    O.OSTATE,
+		    O.PSSTART,
+		    M.MNICK,
+		    PS.PSEND
+		FROM ORDERS O INNER JOIN PACKAGESCHEDULE PS ON O.PSPNUMBER = PS.PNUMBER AND O.PSSTART = PS.PSSTART
+            		INNER JOIN MEMBER M ON O.MID = M.MID
+		WHERE O.MID = #{MID} AND O.PNUMBER = #{PNUMBER} AND O.ODATE = TO_DATE(#{ODATE},'YYYY-MM-DD HH24:MI:SS')
+ 	</select>
  </mapper>

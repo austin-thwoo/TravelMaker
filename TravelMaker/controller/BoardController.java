@@ -3,17 +3,23 @@ package com.icia.TravelMaker.controller;
 import java.io.IOException;
 import java.util.List;
 
+import javax.mail.Session;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.icia.TravelMaker.dto.BoardCategoryDTO;
 import com.icia.TravelMaker.dto.BoardDTO;
+import com.icia.TravelMaker.dto.BoardLikeDTO;
 import com.icia.TravelMaker.dto.CommentsDTO;
 import com.icia.TravelMaker.dto.CommentsListDTO;
+import com.icia.TravelMaker.dto.LikeListDTO;
 import com.icia.TravelMaker.service.BoardService;
 
 @Controller
@@ -21,6 +27,9 @@ public class BoardController {
 	
 	@Autowired
 	private BoardService service;
+	@Autowired
+	private HttpSession session;
+	
 	private ModelAndView mav;
 	
 	private void mav() {
@@ -47,7 +56,7 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = "/boardInsert")
-	private ModelAndView boardInsert(@ModelAttribute BoardDTO dto) throws IllegalStateException, IOException {
+	private ModelAndView boardInsert(@ModelAttribute BoardDTO dto){
 		mav();
 		if(service.boardInsert(dto) == 1) {
 			mav.setViewName("redirect:/boardList");
@@ -58,10 +67,17 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = "/goBoardDetail")
-	private ModelAndView goBoardDetail(@ModelAttribute BoardDTO dto) {
+	private ModelAndView goBoardDetail(@ModelAttribute BoardDTO dto, @RequestParam("MID") String MID) {
 		mav();
+		BoardLikeDTO boardlike = new BoardLikeDTO();
+		boardlike.setBNUMBER(dto.getBNUMBER());
+		boardlike.setMID(MID);
+		
+		
+		mav.addObject("getmylike", service.getmylike(boardlike));
 		mav.addObject("boardDetail", service.boardDetail(dto));
 		mav.addObject("commentsList", service.commentsList(dto));
+					
 		mav.setViewName("board/BoardDetail");
 		return mav;
 	}
@@ -84,7 +100,7 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = "/boardUpdate")
-	private ModelAndView boardUpdate(@ModelAttribute BoardDTO dto) throws IllegalStateException, IOException {
+	private ModelAndView boardUpdate(@ModelAttribute BoardDTO dto){
 		mav();
 		if(service.boardUpdate(dto) == 1) {
 			mav.setViewName("redirect:/boardList");
@@ -94,4 +110,19 @@ public class BoardController {
 		return mav;
 	}
 
+	@RequestMapping(value = "/boardlikeInsert")
+	private @ResponseBody int likeInsert(@ModelAttribute BoardLikeDTO dto) {
+		mav();
+		service.boardlikeInsert(dto);
+		System.out.println("새로운 시작");
+		 return service.likelist(dto);
+	}
+	@RequestMapping(value = "/boardlikeDelete")
+	private @ResponseBody int boardlikeDelete(@ModelAttribute BoardLikeDTO dto) {
+		mav();
+		service.boardlikedelete(dto);
+		
+		 return service.likelist(dto);
+	}
+	
 }

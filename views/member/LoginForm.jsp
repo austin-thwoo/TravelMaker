@@ -40,7 +40,8 @@
 					</div>
 					
 					<div class="text-center mb-2">
-						<a href="goJoinForm">Join</a>
+						<a href="goIdSearch">아이디 찾기</a>
+						<a href="goPasswordSearch">비밀번호 찾기</a>
 					</div>
 				</div>
 			</form>

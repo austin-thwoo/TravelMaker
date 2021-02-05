@@ -31,7 +31,7 @@
 				<input type="text" class="form-control" name="BTITLE" placeholder="제목을 입력하세요." aria-describedby="BTITLE">
 			</div>
 			<div class="input-group mb-1">
-				<textarea name="BCONTENT" id="ir1" rows="20" cols="181"></textarea>
+				<textarea name="BCONTENT" id="editor1"></textarea>
 			</div>
 	      	<div class="input-group mb-1">
 	      		<input type="file" class="form-control" name="BIMGFILE" accept="image/*">
@@ -47,22 +47,35 @@
 <footer>
 	<%@ include file="../Footer.jsp"%>
 </footer>
-<script type="text/javascript" src="resources/se2/js/HuskyEZCreator.js" charset="utf-8"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.0/jquery.js"></script>
-<script>
+<script type="text/javascript" src="resources/ckeditor/ckeditor.js"></script>
+<script type="text/javascript">
+	$(function(){
+		CKEDITOR.replace('editor1',{
+			width : '1500px',
+			height : '600px',
+			filebrowserImageUploadUrl: './fileUpload'
+		});
+        
+        
+        CKEDITOR.on('dialogDefinition', function( ev ){
+            var dialogName = ev.data.name;
+            var dialogDefinition = ev.data.definition;
+         
+            switch (dialogName) {
+                case 'image': //Image Properties dialog
+                    //dialogDefinition.removeContents('info');
+                    dialogDefinition.removeContents('Link');
+                    dialogDefinition.removeContents('advanced');
+                    break;
+            }
+        });
+        
+    });
     function submitContents() {
-        oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", []);
+    	editor.updateElement();
          try {
              document.getElementById("boardInsertform").submit();
          } catch(e) {}
     }
-
-    var oEditors = [];
-    nhn.husky.EZCreator.createInIFrame({
-         oAppRef: oEditors,
-         elPlaceHolder: "ir1",
-         sSkinURI: "resources/se2/SmartEditor2Skin.html",
-         fCreator: "createSEditor2"
-    });
 </script>
 </html>

@@ -19,6 +19,7 @@ import com.icia.TravelMaker.dto.CommentsDTO;
 import com.icia.TravelMaker.dto.CommentsListDTO;
 import com.icia.TravelMaker.dto.MemberDTO;
 import com.icia.TravelMaker.dto.MemberListDTO;
+import com.icia.TravelMaker.dto.OrdersDTO;
 import com.icia.TravelMaker.dto.MemberInfoDTO;
 import com.icia.TravelMaker.dto.PackageDTO;
 import com.icia.TravelMaker.dto.PointDTO;
@@ -69,7 +70,6 @@ public class AdminService {
 	}
 
 	public List<TravelerListDTO> travelerList() {
-		
 		return dao.travelerList();
 	}
 
@@ -135,6 +135,15 @@ public class AdminService {
 
 	public void pointInsert(PointDTO dto) {
 		dao.pointInsert(dto);
+	}
+
+	public List<OrdersDTO> refundList() {
+		return dao.refundList();
+	}
+
+	public OrdersDTO refundDetail(OrdersDTO dto) {
+		dto.setODATE(dto.getODATE().substring(0, 19));
+		return dao.refundDetail(dto);
 	}
 
 }

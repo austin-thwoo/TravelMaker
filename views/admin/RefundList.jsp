@@ -29,33 +29,36 @@
 				<h1>환불 신청 List</h1>
 				<table border="1" bordercolor="blue" width ="100%" height="150" align = "center" >		
 					<tr>
-					 	<th>처리 현황</th>
+						<th>처리상태</th>
 					 	<th>신청인</th>
-					 	<th>결제 수단</th>
 					 	<th>결제 금액</th>
-					 	<th>환불 사유</th>
-					 	<th>결제 정보</th>
 					 	<th></th>
-					 </tr>
-					 <tr>
-					 	<th>처리 대기</th>
-					 	<th>하현수</th>
-					 	<th>카드 / 기업은행</th>
-					 	<th>10,000</th>
-					 	<th>탈주</th>
-					 	<th><input type="button" value="상세보기"></th>
-					 	<th><input type="button" value="처리완료"></th>
-					 </tr>
-					 <tr>
-					 	<th>처리 완료</th>
-					 	<th>하현수</th>
-					 	<th>현 금</th>
-					 	<th>10,000</th>
-					 	<th>욕 설</th>
-					 	<th><input type="button" value="상세보기"></th>
-					 	<th><input type="button" value="처리완료"></th>
-					 </tr>		 
-				</table> 
+					 	<th></th>
+					</tr>
+					<c:forEach items="${refundList}" var="i">
+						<tr>
+						 	<c:choose>
+	    						<c:when test="${i.getOSTATE() eq -2}">
+	        						<th>처리대기</th>
+	    						</c:when>
+							    <c:when test="${i.getOSTATE() eq -1}">
+	        						<th>처리완료</th>
+	        					</c:when>
+	        					<c:otherwise>
+	        						<th>유감이군</th>
+	    						</c:otherwise>
+							</c:choose>			 	
+						 	<th>${i.getMNICK()}</th>
+						 	<th>${i.getOAMOUNT()}</th>				 	
+						 	<th>
+						 		<button onclick="refundDetail('${i.getMID()}','${i.getPNUMBER()}','${i.getODATE()}')">상세보기</button>
+						 	</th>
+						 	<th>
+						 		<input type="button" value="처리완료">
+						 	</th>
+						</tr>
+					</c:forEach>		 
+				</table>
 				<br>
 			</div>
 		</div>
@@ -65,4 +68,9 @@
 <footer>
 	<%@ include file="../Footer.jsp" %>
 </footer>
+<script>
+	function refundDetail(MID, PNUMBER, ODATE){
+		window.open("refundDetail?MID="+MID+"&PNUMBER="+PNUMBER+"&ODATE="+ODATE, "_blank", "menubar=0, scrollbars=1, status=0, titlebar=0, toolbar=0, left=30, top=30, width=1000, height=300");
+	}
+</script>
 </html>

@@ -72,8 +72,16 @@
  	
  	<insert id="memberJoin" parameterType="Member">
  		INSERT INTO MEMBER(MID, MPW, MNAME, MPHONE, MGENDER, MBIRTH, MLEVEL, MSTATE, MNICK, MDATE)
- 		VALUES(#{MID}, #{MPW}, #{MNAME}, #{MPHONE}, #{MGENDER}, #{MBIRTH}, #{MLEVEL}, 1, #{MNICK}, DEFAULT)
+ 		VALUES(#{MID}, #{MPW}, #{MNAME}, #{MPHONE}, #{MGENDER}, #{MBIRTH}, #{MLEVEL}, 0, #{MNICK}, DEFAULT)
  	</insert>
+ 	
+ 	<update id="authKeyUpdate" parameterType="Member">
+ 		UPDATE MEMBER SET AUTHKEY = #{AUTHKEY} WHERE MID = #{MID}
+ 	</update>
+ 	
+ 	<update id="joinConfirm" parameterType="Member">
+ 		UPDATE MEMBER SET MSTATE = #{MSTATE} WHERE MID = #{MID} AND AUTHKEY = #{AUTHKEY}
+ 	</update>
  	
  	<select id="preferenceList" parameterType="Member" resultType="Category">
  		SELECT MP.CNUMBER,

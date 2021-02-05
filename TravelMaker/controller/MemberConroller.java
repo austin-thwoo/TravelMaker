@@ -1,7 +1,10 @@
 package com.icia.TravelMaker.controller;
 
-import java.io.InputStream;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.icia.TravelMaker.dto.MemberDTO;
+import com.icia.TravelMaker.service.MailSendService;
 import com.icia.TravelMaker.service.MemberService;
 
 @Controller
@@ -38,14 +42,21 @@ public class MemberConroller {
 	}
 
 	@RequestMapping(value="/login")
-	private ModelAndView login(@ModelAttribute MemberDTO dto) {
+	private ModelAndView login(@ModelAttribute MemberDTO dto, HttpServletResponse response) throws IOException {
 		mav();
 		MemberDTO result = service.login(dto);
 		if(result != null) {
 			session.setAttribute("loginInfo", result);
 			mav.setViewName("Main");
 		}else {
-			mav.setViewName("redirect:/goLoginForm");
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("alert('아이디 혹은 비밀번호가 틀렸습니다.');");
+			out.println("history.go(-1);");
+			out.println("</script>");
+			out.flush();
+			out.close();
 		}
 		return mav;
 	}
@@ -84,13 +95,32 @@ public class MemberConroller {
 	}
 	
 	@RequestMapping(value = "/memberJoin")
-	private ModelAndView signup(@ModelAttribute MemberDTO dto){
+	private ModelAndView signup(@ModelAttribute MemberDTO dto, HttpServletResponse response) throws IOException{
 		mav();
 		if(service.memberJoin(dto) == 1) {
-			mav.setViewName("member/LoginForm");
+			MailSendService msService = new MailSendService();
+			String authKey = msService.sendAuthMail(dto.getMID());
+			dto.setAUTHKEY(authKey);
+			service.authKeyUpdate(dto);
+			mav.setViewName("member/MailSend");
 		}else {
-			mav.setViewName("member/JoinForm");
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("alert('회원가입에 실패 했습니다. 다시 시도 해주세요');");
+			out.println("history.go(-1);");
+			out.println("</script>");
+			out.flush();
+			out.close();
 		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/joinConfirm")
+	private ModelAndView joinConfirm(@ModelAttribute MemberDTO dto){
+		mav();
+		service.joinConefirm(dto);
+		mav.setViewName("member/LoginForm");
 		return mav;
 	}
 
@@ -160,8 +190,7 @@ public class MemberConroller {
 	}
 	
 	@RequestMapping(value = "/passwordUpdate")
-	private ModelAndView passwordUpdate(@ModelAttribute MemberDTO dto,
-										@RequestParam("UPMPW") String MPW) {
+	private ModelAndView passwordUpdate(@ModelAttribute MemberDTO dto, @RequestParam("UPMPW") String MPW) {
 		mav();
 		if(service.passwordCheck(dto).equals("1")) {
 			dto.setMPW(MPW);
@@ -183,8 +212,7 @@ public class MemberConroller {
 	}
 	
 	@RequestMapping(value="/passwordCheck")
-	private ModelAndView passwordCheck(@ModelAttribute MemberDTO dto,
-										@RequestParam("to") String to) {
+	private ModelAndView passwordCheck(@ModelAttribute MemberDTO dto, @RequestParam("to") String to) {
 		mav();
 		if(service.passwordCheck(dto).equals("1")) {
 			mav.setViewName("redirect:/"+to+"?MID="+dto.getMID());
@@ -224,6 +252,42 @@ public class MemberConroller {
 		mav();
 		mav.addObject("reviewList", service.myReviewList(dto));
 		mav.setViewName("member/ReviewList");
+		return mav;
+	}
+
+	@RequestMapping(value = "/goIdSearch")
+	private String goIdSearch() {
+		return "member/IdSearch";
+	}
+
+	@RequestMapping(value = "/goPasswordSearch")
+	private String goPasswordSearch() {
+		return "member/PasswordSearch";
+	}
+
+	@RequestMapping(value = "/passwordSearch")
+	private ModelAndView passwordSearch(@ModelAttribute MemberDTO dto, HttpServletResponse response) throws IOException {
+		mav();
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		if(service.idCheck(dto).equals("1")) {
+			MailSendService msService = new MailSendService();
+			dto.setMPW(msService.sendTempPassword(dto.getMID()));
+			service.passwordUpdate(dto);
+			out.println("<script>");
+			out.println("alert('해당 이메일로 임시비밀번호를 전송 했습니다.');");
+			out.println("</script>");
+			out.flush();
+			out.close();
+			mav.setViewName("member/LoginForm");
+		}else {
+			out.println("<script>");
+			out.println("alert('이메일이 틀렸습니다. 다시 한번 확인해 주세요');");
+			out.println("history.go(-1);");
+			out.println("</script>");
+			out.flush();
+			out.close();
+		}
 		return mav;
 	}
 

@@ -4,8 +4,8 @@
  
  <mapper namespace="Board">
  	<insert id="boardInsert">
- 		INSERT INTO BOARD(BNUMBER, MID, BDATE, BTITLE, BCONTENT, BIMG, BCNUMBER, BSTATE)
- 		VALUES(BNUMBER_SEQ.NEXTVAL, #{MID}, SYSDATE, #{BTITLE}, #{BCONTENT}, #{BIMG}, #{BCNUMBER}, 1)
+ 		INSERT INTO BOARD(BNUMBER, MID, BDATE, BTITLE, BCONTENT, BCNUMBER, BSTATE)
+ 		VALUES(BNUMBER_SEQ.NEXTVAL, #{MID}, SYSDATE, #{BTITLE}, #{BCONTENT}, #{BCNUMBER}, 1)
  	</insert>
  	
  	<select id="boardList" parameterType="BoardCategory" resultType="BoardList">
@@ -112,4 +112,23 @@
 		SET BTITLE = #{BTITLE}, BCONTENT = #{BCONTENT}, BCNUMBER = #{BCNUMBER}
 		WHERE BNUMBER = #{BNUMBER}
  	</update>
+ 	
+ 	<insert id="boardlikeinsert" parameterType="BoardLike">
+ 		INSERT INTO BOARDLIKE(BNUMBER, MID, BLDATE)
+ 		VALUES(#{BNUMBER}, #{MID}, SYSDATE)
+ 	</insert>
+ 	
+ 	<select id="boardlikelist" parameterType="BoardLike" resultType="int">
+ 	SELECT COUNT(MID) FROM BOARDLIKE
+	WHERE BNUMBER = #{BNUMBER}
+ 	</select>
+ 	<delete id="boardLikeDelete" parameterType="BoardLike">
+ 	DELETE FROM BOARDLIKE WHERE MID = #{MID} AND BNUMBER=#{BNUMBER}
+ 	</delete>
+ 	
+ 	<select id="getmylike" parameterType="BoardLike" resultType="String">
+ 		SELECT COUNT(BNUMBER)
+		FROM BOARDLIKE
+		WHERE BNUMBER=#{BNUMBER} AND MID=#{MID}
+ 	</select>
  </mapper>

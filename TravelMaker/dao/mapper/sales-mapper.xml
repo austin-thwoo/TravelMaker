@@ -67,4 +67,9 @@
  	<delete id="cartDelete" parameterType="CartList">
  		DELETE FROM PACKAGECART WHERE MID = #{MID} AND PNUMBER = #{PNUMBER} AND PSPNUMBER = #{PSPNUMBER} AND PSSTART = TO_DATE(#{PSSTART}, 'YYYY-MM-DD HH24:MI:SS')
  	</delete>
+ 	
+ 	<insert id="insertOrders" parameterType="Orders">
+ 		INSERT INTO ORDERS(PSSTART, PSPNUMBER, PNUMBER, OSTATE, OINFANT, ODATE, OCHILD, OAMOUNT, OADULT, MID)
+		VALUES (TO_DATE(#{PSSTART}, 'YYYY-MM-DD HH24:MI:SS'), #{PSPNUMBER}, #{PNUMBER}, #{OSTATE}, #{OINFANT}, DEFAULT, #{OCHILD}, #{OAMOUNT}, #{OADULT}, #{MID})
+ 	</insert>
  </mapper>

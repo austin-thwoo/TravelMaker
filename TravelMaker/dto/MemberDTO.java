@@ -15,4 +15,5 @@ public class MemberDTO {
 	private int MSTATE;
 	private String MNICK;
 	private String MDATE;
+	private String AUTHKEY;
 }

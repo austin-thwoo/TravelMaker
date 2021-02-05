@@ -21,23 +21,16 @@
 		<%@ include file="../MainNav.jsp" %>
 	</div>
 	<div class="container">
-		<div class="row">
-			<div class="col-3">
-				<%@ include file="../MyPageNav.jsp"%>
-			</div>
-			<div class="col">	
-				<div class="justify-content-start text-start">
-					<h1>비밀번호 찾기</h1>
-					<div class="col-7">
-					<form action="searchPassword" method="get" name="searchPasswordForm">
-						<label for="MEMAIL" class="form-label">이메일</label>
-						<div class="input-group">
-							<input class="form-control" type="email" name="" id="MEMAIL" aria-describedby="emailButton">
-							<button class="btn btn-primary btm-md" id="emailButton">임시 비밀번호 전송</button>
-						</div>
-					</form>
+		<div class="row justify-content-center">
+			<div class="col-6">
+				<h1>비밀번호 찾기</h1>
+				<form action="passwordSearch" method="POST">
+					<label for="MID" class="form-label">이메일</label>
+					<div class="input-group">
+						<input class="form-control" type="email" name="MID" id="MID" aria-describedby="emailButton">
+						<button class="btn btn-primary btm-md" id="emailButton">임시 비밀번호 전송</button>
 					</div>
-				</div>
+				</form>
 			</div>
 		</div>
 	</div>

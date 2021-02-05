@@ -21,11 +21,7 @@
 		<%@ include file="../MainNav.jsp" %>
 	</div>
 	<div class="container">
-		<div class="row">
-			<div class="col-3">
-				<%@ include file="../MyPageNav.jsp" %>
-			</div>
-			<div class="row col justify-content-start" >
+		<div class="row justify-content-center">
 				<div class="col-6">
 				<h1>아이디 찾기</h1>
 					<form action="#" method="get">
@@ -44,7 +40,6 @@
 							</div>		
 					</form>
 				</div>
-			</div>
 		</div>
 	</div>
 	<%@ include file="../PageUp.jsp" %>

@@ -18,6 +18,7 @@ import com.icia.TravelMaker.dto.CommentsListDTO;
 import com.icia.TravelMaker.dto.MemberDTO;
 import com.icia.TravelMaker.dto.MemberInfoDTO;
 import com.icia.TravelMaker.dto.MemberListDTO;
+import com.icia.TravelMaker.dto.OrdersDTO;
 import com.icia.TravelMaker.dto.PackageDTO;
 import com.icia.TravelMaker.dto.PointDTO;
 import com.icia.TravelMaker.dto.TravelerListDTO;
@@ -127,6 +128,14 @@ public class AdminDAO {
 
 	public void pointInsert(PointDTO dto) {
 		sql.insert("Admin.pointInsert", dto);
+	}
+
+	public List<OrdersDTO> refundList() {
+		return sql.selectList("Admin.refundList");
+	}
+
+	public OrdersDTO refundDetail(OrdersDTO dto) {
+		return sql.selectOne("Admin.refundDetail", dto);
 	}
 
 }

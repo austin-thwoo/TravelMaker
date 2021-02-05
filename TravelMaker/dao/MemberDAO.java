@@ -96,4 +96,12 @@ public class MemberDAO {
 		return sql.selectList("Member.myReviewList", dto);
 	}
 
+	public void authKeyUpdate(MemberDTO dto) {
+		sql.update("Member.authKeyUpdate", dto);
+	}
+
+	public void joinConfirm(MemberDTO dto) {
+		sql.update("Member.joinConfirm", dto);
+	}
+
 }

@@ -110,4 +110,24 @@ public class SalesController {
 		mav();
 		return service.cartDelete(dto);
 	}
+
+	@RequestMapping(value = "/goPayApi")
+	public ModelAndView goPayApi(@ModelAttribute OrdersDTO dto, @RequestParam(value = "POAMOUNT", required = false, defaultValue = "0") int POAMOUNT) {
+		mav();
+		mav.addObject("POAMOUNT", POAMOUNT);
+		mav.addObject("orders", dto);
+		mav.setViewName("sales/PayApi");
+		return mav;
+	}
+	
+	@RequestMapping(value="insertOrders")
+	private ModelAndView insertOrders(@ModelAttribute OrdersDTO dto, @RequestParam(value = "POAMOUNT", required = false, defaultValue = "0") int POAMOUNT){
+		mav();
+		if(POAMOUNT == 0) {
+			service.insertOrders(dto);
+		}else {
+			
+		}
+		return mav;
+	}
 }

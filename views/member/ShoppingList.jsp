@@ -3,6 +3,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<jsp:useBean id="sysdate" class="java.util.Date" />
+<fmt:formatDate value='${sysdate}' pattern='yyyyMMdd' var="sysdate"/>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -64,8 +66,6 @@
 					      <td class="text-end">
 					      	<div class="btn-group-vertical">
 						      	<button class="btn btn-outline-primary btn-sm">리뷰쓰러가기</button>
-								<jsp:useBean id="sysdate" class="java.util.Date" />
-								<fmt:formatDate value='${sysdate}' pattern='yyyyMMdd' var="sysdate"/>
 								<c:choose>
 									<c:when test="${i.getPSSTART() > sysdate}">
 										<button class="btn btn-outline-primary btn-sm">환불하기 or 환불불가</button>
@@ -78,8 +78,6 @@
 				  	</c:forEach>
 				  </tbody>
 				</table>
-				<div class="row justify-content-end text-end">
-				</div>
 			</div>
 		</div>
 	</div>

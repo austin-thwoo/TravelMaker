@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.icia.TravelMaker.dto.CartListDTO;
 import com.icia.TravelMaker.dto.LikeListDTO;
 import com.icia.TravelMaker.dto.MemberDTO;
+import com.icia.TravelMaker.dto.OrdersDTO;
 import com.icia.TravelMaker.dto.PackageDTO;
 import com.icia.TravelMaker.dto.PackageDetailDTO;
 import com.icia.TravelMaker.dto.PackageScheduleDTO;
@@ -60,6 +61,10 @@ public class SalesDAO {
 
 	public int cartDelete(CartListDTO dto) {
 		return sql.delete("Sales.cartDelete", dto);
+	}
+
+	public void insertOrders(OrdersDTO dto) {
+		sql.insert("Sales.insertOrders", dto);
 	}
 
 }

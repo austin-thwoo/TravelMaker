@@ -6,6 +6,7 @@ import lombok.Data;
 public class OrdersDTO {
 
 	private String MID;
+	private String MNICK;
 	private int PNUMBER;
 	private String ODATE;
 	private int OADULT;
@@ -15,4 +16,12 @@ public class OrdersDTO {
 	private int OSTATE;
 	private int PSPNUMBER;
 	private String PSSTART;
+	private String PSEND;
+	
+	private String imp_uid;	//고유아이디
+	private String merchant_uid;	//상점 거래아이디
+	private String paid_amount;	//결제 금액
+	private String apply_num;	//카드 승인번호
+	private String status;	//결제상태
+	private String name;	//주문 명
 }

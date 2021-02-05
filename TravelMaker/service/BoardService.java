@@ -11,9 +11,11 @@ import com.icia.TravelMaker.dao.BoardDAO;
 import com.icia.TravelMaker.dto.BoardCategoryDTO;
 import com.icia.TravelMaker.dto.BoardDTO;
 import com.icia.TravelMaker.dto.BoardDetailDTO;
+import com.icia.TravelMaker.dto.BoardLikeDTO;
 import com.icia.TravelMaker.dto.BoardListDTO;
 import com.icia.TravelMaker.dto.CommentsDTO;
 import com.icia.TravelMaker.dto.CommentsListDTO;
+import com.icia.TravelMaker.dto.LikeListDTO;
 
 @Service
 public class BoardService {
@@ -21,13 +23,7 @@ public class BoardService {
 	@Autowired
 	private BoardDAO dao;
 	
-	public int boardInsert(BoardDTO dto) throws IllegalStateException, IOException {
-		if(!dto.getBIMGFILE().isEmpty()) {
-			dto.setBIMG(System.currentTimeMillis()+"_"+dto.getBIMGFILE().getOriginalFilename());
-			dto.getBIMGFILE().transferTo(new File("D:\\ICIA\\Jong Won\\Team_404\\TravelMaker_Proj\\TravelMaker\\src\\main\\webapp\\resources\\boardFile\\"+dto.getBIMG()));
-		}else {
-			dto.setBIMG("test");
-		}
+	public int boardInsert(BoardDTO dto){
 		return dao.boardInsert(dto);
 	}
 
@@ -57,6 +53,25 @@ public class BoardService {
 
 	public int boardUpdate(BoardDTO dto) {
 		return dao.boardUpdate(dto);
+	}
+
+	public int boardlikeInsert(BoardLikeDTO dto) {
+ 
+		return dao.boardlikeinsert(dto);
+	}
+
+	public int likelist(BoardLikeDTO dto) {
+		return dao.likelist(dto);
+	}
+
+	public int boardlikedelete(BoardLikeDTO dto) {
+		return dao.boardlikedelete(dto); 
+		
+	}
+
+	public String getmylike(BoardLikeDTO boardlike) {
+		return dao.getmylike(boardlike);
+		
 	}
 
 }

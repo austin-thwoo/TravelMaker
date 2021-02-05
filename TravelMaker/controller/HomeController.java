@@ -1,26 +1,32 @@
 package com.icia.TravelMaker.controller;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.icia.TravelMaker.dto.SmartEditor;
+import com.icia.TravelMaker.dto.CKEditorDTO;
+
 
 /**
  * Handles requests for the application home page.
  */
 @Controller
 public class HomeController {
-	
+
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -32,16 +38,6 @@ public class HomeController {
 	@RequestMapping(value = "/goPreferenceForm")
 	public String goPreferenceForm() {
 		return "member/PreferenceForm";
-	}
-
-	@RequestMapping(value = "/idSearch")
-	public String idSearch() {
-		return "member/IdSearch";
-	}
-
-	@RequestMapping(value = "/passwordSearch")
-	public String passwordSearch() {
-		return "member/PasswordSearch";
 	}
 
 	@RequestMapping(value = "/goSearchResult")
@@ -59,16 +55,6 @@ public class HomeController {
 		return "board/CommentsComplaintForm";
 	}
 
-	@RequestMapping(value = "/goPayApi")
-	public String goPayApi() {
-		return "sales/PayApi";
-	}
-
-	@RequestMapping(value = "/goRefundList")
-	public String goRefundList() {
-		return "admin/RefundList";
-	}
-
 	@RequestMapping(value = "/goSalesManagement")
 	public String goSalesManagement() {
 		return "admin/SalesManagement";
@@ -84,37 +70,36 @@ public class HomeController {
 		return "sales/PackageCategoryForm";
 	}
 	
-	@RequestMapping("/fileUploader")
-	public String fileUploader(HttpServletRequest request, SmartEditor editor) throws UnsupportedEncodingException{
-		String callback = editor.getCallback();
-		String callback_func = editor.getCallback_func();
-		String file_result = "";
-		String result = "";
-		MultipartFile multiFile = editor.getFileData();
-		try {
-			if(multiFile != null && multiFile.getSize() > 0 && StringUtils.isNotBlank(multiFile.getName())) {
-				if(multiFile.getContentType().toLowerCase().startsWith("image/")) {
-					String oriName = multiFile.getName();
-					/* String uploadPath = request.getServletContext().getRealPath("/img"); */
-					String path = "D:/ICIA/Jong Won/Team_404/TravelMaker_Proj/TravelMaker/src/main/webapp/resources/imgFile/";
-					File file = new File(path);
-					if(!file.exists()) {
-						file.mkdirs();
-					}
-					String fileName = UUID.randomUUID().toString();
-					editor.getFileData().transferTo(new File(path + fileName));
-					file_result += "&bNewLine=true&sFileName=" + oriName + "&sFileURL=resources/imgFile/" + fileName;
-				}else {
-					file_result += "&errstr=error";
-				}
-			}else {
-				file_result += "&errstr=error";
+	/**
+	 * 이미지 업로드
+	 * @param request
+	 * @param response
+	 * @param upload
+	 */
+	@RequestMapping(value = "/fileUpload")
+	private String fileUpload(HttpServletRequest req, CKEditorDTO dto, Model model) {
+		MultipartFile upload = dto.getUpload();
+		String oriFileName = upload.getOriginalFilename();
+		String fileName = "";
+		String CKEditorFuncNum = "";
+		String root_path = "D:/ICIA/Jong Won/Team_404/TravelMaker_Proj/TravelMaker/src/main/webapp/resources/upload/";//저장경로
+		String file_path = "resources/upload/";//url경로
+		
+		if(upload != null) {
+			fileName = UUID.randomUUID().toString() + oriFileName.substring(oriFileName.lastIndexOf("."));
+			dto.setFilename(fileName);
+			CKEditorFuncNum = dto.getCKEditorFuncNum();
+			try {
+				File file = new File(root_path + fileName);
+				upload.transferTo(file);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
-		result = "redirect:" + callback + "?callback_func=" + URLEncoder.encode(callback_func, "UTF-8") + file_result;
-		return result;
+		model.addAttribute("file_path", file_path + fileName);
+		model.addAttribute("CKEditorFuncNum", CKEditorFuncNum);
+	 
+	    return "FileUpload";
 	}
-	
+
 }
