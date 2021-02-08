@@ -74,10 +74,17 @@ public class BoardDAO {
 	}
 
 	public String getmylike(BoardLikeDTO boardlike) {
-			System.out.println("여기는123 DAO:"+ boardlike.toString());
-		 String str=sql.selectOne("Board.getmylike", boardlike);
-		 System.out.println("여기는124 DAO :"+str);
-		 return str;
+		
+		 return sql.selectOne("Board.getmylike", boardlike);
+		
 	}
+
+	public int boardlock(BoardListDTO boardlist) {
+			System.out.println("여기는 baordlistDAO1 : "+boardlist);
+		 int i=sql.update("Board.boardlock", boardlist);
+		 System.out.println("여기는 baordlistDAO2 : "+i);
+		 return i;
+	}
+
 
 }

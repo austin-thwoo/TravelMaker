@@ -74,4 +74,13 @@ public class BoardService {
 		
 	}
 
+	public int boardlock(BoardListDTO boardlist) {
+		 return dao.boardlock(boardlist);
+		
+	}
+
+	
+
+
+
 }

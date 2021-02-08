@@ -131,4 +131,15 @@
 		FROM BOARDLIKE
 		WHERE BNUMBER=#{BNUMBER} AND MID=#{MID}
  	</select>
+ 	
+ 	<update id="boardlock" parameterType="BoardList">
+ 	UPDATE BOARD SET BSTATE = CASE
+   WHEN BSTATE= 1 THEN -1 
+   WHEN BSTATE= -1 THEN 1 
+   ELSE BSTATE END
+WHERE BNUMBER = #{BNUMBER}
+	
+ 	</update>
+ 	
+ 	
  </mapper>

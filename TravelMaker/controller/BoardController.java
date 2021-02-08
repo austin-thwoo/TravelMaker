@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.icia.TravelMaker.dto.BoardCategoryDTO;
 import com.icia.TravelMaker.dto.BoardDTO;
 import com.icia.TravelMaker.dto.BoardLikeDTO;
+import com.icia.TravelMaker.dto.BoardListDTO;
 import com.icia.TravelMaker.dto.CommentsDTO;
 import com.icia.TravelMaker.dto.CommentsListDTO;
 import com.icia.TravelMaker.dto.LikeListDTO;
@@ -44,6 +45,7 @@ public class BoardController {
 		mav.addObject("boardList", service.boardList(dto));
 		mav.addObject("boardCategory", service.boardCategory(dto));
 		mav.setViewName("board/BoardList");
+		
 		return mav;
 	}
 	
@@ -123,6 +125,17 @@ public class BoardController {
 		service.boardlikedelete(dto);
 		
 		 return service.likelist(dto);
+	}
+	@RequestMapping(value = "/boardlock")
+	private @ResponseBody int boardlock(@ModelAttribute BoardListDTO boardlist) {
+				
+	 return service.boardlock(boardlist);
+		/*
+		 * if (i==1) { BoardCategoryDTO dto= new BoardCategoryDTO(); return
+		 * service.boardList(dto); }else { return null; }
+		 */
+	
+	
 	}
 	
 }
